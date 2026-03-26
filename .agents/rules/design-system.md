@@ -59,10 +59,16 @@ trigger: always_on
 ### 3.2. Thẻ thông tin (Cards / Flashcards)
 *   **Thiết kế:** Nền Trắng hoặc Vàng Sao, viền Đen 2px, góc bo 12px. 
 *   **Shadow:** Tuyệt đối KHÔNG có Drop Shadow (bóng mờ). Dùng "Hard Shadow" (bóng đổ khối đặc màu đen chéo xuống góc phải) nếu muốn thẻ nổi bật.
+*   **Component tiêu chuẩn (`FlashcardItem`):**
+    *   Nền: `Color-Brand-Secondary` (Vàng Sao).
+    *   Bo góc: 12px.
+    *   Tối ưu hóa: Sử dụng `React.memo` cho danh sách lớn.
+    *   Tính năng: Tích hợp sẵn tiêu đề (h2), mô tả và nút phát âm thanh (Lucide `Volume2`).
 
 ### 3.3. Trường nhập liệu (Inputs & Forms)
-*   **Normal:** Nền trắng, viền Đen 1px, bo góc 8px. Text Đen, Placeholder Xám (`#666666`).
-*   **Focused:** Viền Đỏ Cờ (`#DA251D`), độ dày 2px.
+*   **Normal:** Nền trắng, viền Đen 2px, bo góc 8px, **Hard Shadow đen 4px offset**.
+*   **Focused:** Viền Đỏ Cờ (`#DA251D`), độ dày 2px. Shadow giữ nguyên 4px để duy trì chiều sâu.
+*   **Component tiêu chuẩn (`ThemedInput`):** Wrapper tùy chỉnh cho `TextInput`, hỗ trợ đầy đủ các thuộc tính React Native kèm trạng thái focus tự động.
 
 ### 3.4. Navigation (Điều hướng)
 *   **Header (Top Nav):** Nền trắng tuyệt đối, phân cách nội dung bên dưới bằng line đen 1px mỏng. (Trái: Icon Back / Giữa: Tiêu đề Bold Đen / Phải: Icon Streak ngọn lửa Đỏ).

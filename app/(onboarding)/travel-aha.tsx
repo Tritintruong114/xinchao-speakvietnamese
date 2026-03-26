@@ -1,3 +1,4 @@
+import { Volume2, Trophy } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -33,13 +34,15 @@ export default function TravelAhaScreen() {
           </ThemedText>
 
           <Pressable onPress={handlePlay} style={styles.speakerButton}>
-            <ThemedText style={styles.speakerIcon}>📢</ThemedText>
+            <Volume2 size={24} color="#FFFFFF" strokeWidth={2.5} />
           </Pressable>
         </Pressable>
 
         {isPlayed ? (
           <View style={styles.resultCard}>
-            <ThemedText style={styles.coinBuddy}>🧮🪙</ThemedText>
+            <View style={styles.rewardIconWrapper}>
+              <Trophy size={32} color="#1A1A1A" strokeWidth={2.5} />
+            </View>
             <ThemedText type="body" style={styles.resultText}>
               Save this win to your account?
             </ThemedText>
@@ -126,10 +129,9 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     elevation: 4,
   },
-  coinBuddy: {
-    fontSize: 32,
+  rewardIconWrapper: {
+    alignItems: 'center',
     marginBottom: 8,
-    textAlign: 'center',
   },
   resultText: {
     textAlign: 'center',

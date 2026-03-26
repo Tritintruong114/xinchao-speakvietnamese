@@ -144,7 +144,7 @@ export default function AhaScreen() {
 
           {hasClaimedReward && (
             <Animated.View style={styles.rewardBadge}>
-              <ThemedText style={styles.rewardText}>+10 XP 🎉</ThemedText>
+              <ThemedText style={styles.rewardText}>+10 XP</ThemedText>
             </Animated.View>
           )}
         </View>

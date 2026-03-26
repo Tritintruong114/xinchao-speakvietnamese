@@ -22,7 +22,7 @@ export function ThemedText({ style, type = 'body', color, ...rest }: ThemedTextP
         getTextStyle(),
         { fontFamily: 'BeVietnamPro_400Regular' }, // Will update to match bold/thin if needed
         type === 'h1' && { fontFamily: 'BeVietnamPro_800ExtraBold' },
-        type === 'h2' && { fontFamily: 'BeVietnamPro_700Bold' },
+        type === 'h2' && { fontFamily: 'BeVietnamPro_800ExtraBold' }, // High-fidelity headings
         type === 'button' && { fontFamily: 'BeVietnamPro_700Bold' },
         color ? { color } : {},
         style

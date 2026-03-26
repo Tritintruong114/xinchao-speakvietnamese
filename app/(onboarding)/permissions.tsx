@@ -59,7 +59,7 @@ export default function PermissionsScreen() {
 
       <View style={styles.infoCard}>
         <ThemedText style={styles.infoText}>
-          🚀 Your data is secure and only used to improve your learning experience.
+          Your data is secure and only used to improve your learning experience.
         </ThemedText>
       </View>
     </OnboardingLayout>

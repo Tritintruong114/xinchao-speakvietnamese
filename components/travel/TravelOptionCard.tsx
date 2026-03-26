@@ -1,6 +1,5 @@
-import React from 'react';
 import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
-
+import { LucideIcon } from 'lucide-react-native';
 import { Colors } from '@/constants/Theme';
 import { ThemedText } from '@/components/ThemedText';
 
@@ -8,7 +7,7 @@ interface TravelOptionCardProps {
   title: string;
   subtitle: string;
   image?: ImageSourcePropType;
-  emoji?: string;
+  icon?: LucideIcon;
   onPress?: () => void;
   highlighted?: boolean;
 }
@@ -17,7 +16,7 @@ export function TravelOptionCard({
   title,
   subtitle,
   image,
-  emoji,
+  icon: Icon,
   onPress,
   highlighted = false,
 }: TravelOptionCardProps) {
@@ -33,8 +32,8 @@ export function TravelOptionCard({
       {image ? (
         <Image source={image} style={styles.image} resizeMode="contain" />
       ) : (
-        <View style={styles.emojiBadge}>
-          <ThemedText style={styles.emoji}>{emoji ?? '✨'}</ThemedText>
+        <View style={styles.iconBadge}>
+          {Icon && <Icon size={32} color="#1A1A1A" strokeWidth={2.5} />}
         </View>
       )}
       <View style={styles.textBlock}>
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: 'rgba(255,255,255,0.25)',
   },
-  emojiBadge: {
+  iconBadge: {
     width: 72,
     height: 72,
     borderRadius: 8,
@@ -86,9 +85,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brandSecondary,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  emoji: {
-    fontSize: 28,
   },
   textBlock: {
     flex: 1,

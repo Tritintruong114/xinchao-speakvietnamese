@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import { Car, Utensils, ShoppingBag } from 'lucide-react-native';
 import { BrutalistTooltip } from '@/components/travel/BrutalistTooltip';
 import { TravelOptionCard } from '@/components/travel/TravelOptionCard';
 import { Colors } from '@/constants/Theme';
@@ -20,13 +21,13 @@ export default function TravelDashboardScreen() {
         <TravelOptionCard
           title="Call a Ride"
           subtitle="Get from airport to city without stress."
-          emoji="🚕"
+          icon={Car}
         />
 
         <TravelOptionCard
           title="Order Food"
           subtitle="Point, speak, and order in seconds."
-          emoji="🍜"
+          icon={Utensils}
         />
 
         <BrutalistTooltip text="Try your first bargaining phrase." />
@@ -34,7 +35,7 @@ export default function TravelDashboardScreen() {
         <TravelOptionCard
           title="Bargaining"
           subtitle="Learn the must-know line before you shop."
-          emoji="🛍️"
+          icon={ShoppingBag}
           highlighted
           onPress={() => router.push('/(onboarding)/travel-aha')}
         />
