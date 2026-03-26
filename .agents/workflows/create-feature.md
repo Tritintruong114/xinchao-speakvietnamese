@@ -1,30 +1,44 @@
 ---
-description: Quy trình phát triển tính năng mới (TDD & Clean Architecture)
+description: Quy trình phát triển tính năng mới (A2A Optimized: PRD -> API -> DB -> QC -> Docs)
 ---
 
-# /create-feature SOP
+# /create-feature SOP (A2A Version)
 
-Quy trình này BẮT BUỘC phải được tuân thủ khi bắt đầu phát triển bất kỳ tính năng mới nào trong dự án **XinChao**.
+Quy trình này được thiết kế để các AI Agents phối hợp nhịp nhàng. **Mỗi tính năng phải có một thư mục riêng trong `brain/<feature-name>/` để chứa các artifact.**
 
-## 1. Phân tích & Đặc tả (Architect & PO)
-- **Product Owner MUST** xác nhận yêu cầu trong backlog và đảm bảo tính năng phù hợp với chiến lược LiveOps.
-- **Frontend Architect SHOULD** thiết kế cấu trúc dữ liệu và các Hooks cần thiết.
+## 1. Define PRD (Product Requirement Document)
+- **Primary Agent:** `product-owner` + `uiux-designer`
+- **Skills:** [PO SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/product-owner/SKILL.md), [UIUX SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/uiux/SKILL.md)
+- **A2A Output (Artifact):** `brain/<feature-name>/srs.md`
+  - **Required Content:** User Stories, Acceptance Criteria (Given/When/Then), Mobile UX Flow Map (Mermaid).
 
-## 2. Thiết kế Cơ sở dữ liệu (Backend & AI)
-- **Backend Engineer MUST** cập nhật schema trên Supabase (nếu cần) và thiết lập RLS Policies.
-- **MUST NOT** tạo bảng mà không có chính sách bảo mật RLS rõ ràng.
+## 2. Define API Spec
+- **Primary Agent:** `backend-ai` + `ai-engineer`
+- **Skills:** [Backend SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/backend/SKILL.md), [AI SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/ai-engineer/SKILL.md)
+- **Input:** `brain/<feature-name>/srs.md`
+- **A2A Output (Artifact):** `brain/<feature-name>/api-spec.md`
+  - **Required Content:** REST/Edge Function endpoints, Request/Response payloads (JSON Schema), AI Prompt Templates.
 
-## 3. Phát triển hướng Kiểm thử (TDD)
-- **Coder MUST** viết Unit Test cho logic nghiệp vụ (Business Logic) TRƯỚC khi viết mã thực thi.
-- **React Native Architect** yêu cầu tách biệt logic này vào các thư mục `logic/` hoặc custom hooks.
+## 3. Define Database Schema
+- **Primary Agent:** `backend-ai`
+- **Skills:** [Backend SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/backend/SKILL.md)
+- **Input:** `brain/<feature-name>/api-spec.md`
+- **A2A Output (Artifact):** `supabase/migrations/[timestamp]_feature_name.sql`
+  - **Required Content:** DDL for tables/columns, **RLS Policies**, and Indexing.
 
-## 4. Triển khai UI (Frontend)
-- **Frontend Engineer MUST** sử dụng các Design Tokens từ `[.agents/rules/design-system.md](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/rules/design-system.md)`.
-- **TUYỆT ĐỐI KHÔNG** sử dụng mã màu ad-hoc.
+## 4. QC Test Cases (Manual/Automation Prep)
+- **Primary Agent:** `qa-engineer`
+- **Skills:** [QA SKILL](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/skills/qa-engineer/SKILL.md)
+- **Input:** `brain/<feature-name>/srs.md` + `brain/<feature-name>/api-spec.md`
+- **A2A Output (Artifact):** `brain/<feature-name>/test-plan.md`
+  - **Required Content:** Functional Test Matrix, Edge Case Scenarios, and API verification steps.
 
-## 5. Kiểm tra & Tuân thủ (Compliance & Auditor)
-- **Mobile Performance Auditor SHOULD** rà soát render loops.
-- **Compliance Agent MUST** kiểm tra các yêu cầu về quyền riêng tư (Privacy Consent) nếu tính năng có sử dụng AI hoặc Camera.
+## 5. Documentations
+- **Primary Agent:** `product-owner` + `mobile-frontend`
+- **Reference:** [Design System](file:///Users/truongtritin/Github/xinchao%20-%20speak%20vietnamese/.agents/rules/design-system.md)
+- **Input:** All artifacts in `brain/<feature-name>/`.
+- **A2A Output (Artifact):** `brain/<feature-name>/walkthrough.md`
+  - **Required Content:** Proof of work, screenshots/recordings, and mapping of features to User Stories.
 
 ---
-*Ghi chú: Mọi vi phạm quy trình này SHOULD được Debugger Agent ghi nhận và yêu cầu sửa đổi.*
+*Ghi chú cho Agent: Luôn tạo thư mục `brain/<feature-name>/` trước khi bắt đầu và kiểm tra artifacts cũ tại đó.*

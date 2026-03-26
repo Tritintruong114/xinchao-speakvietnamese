@@ -41,11 +41,20 @@ trigger: always_on
 
 ## 3. UI COMPONENTS (THÀNH PHẦN GIAO DIỆN)
 
+### 3.0. CTA Semantics & Consistency (Bắt buộc)
+*   **Semantic mapping cố định toàn app:** `Primary CTA = Đỏ Cờ`, `Secondary CTA = Vàng Sao`, `Ghost/Neutral = Trắng`.
+*   **Không đổi ý nghĩa theo màn hình:** Đỏ luôn mang nghĩa "đi tiếp / xác nhận hành động chính", KHÔNG dùng Đỏ cho trạng thái lỗi trong ngữ cảnh nút CTA chính.
+*   **Mỗi màn hình chỉ có 1 Primary CTA:** Các hành động còn lại phải là Secondary hoặc Ghost để tránh cạnh tranh thị giác.
+*   **Ưu tiên tương phản hơn màu đơn lẻ:** phân cấp bằng cả màu + viền + đổ bóng (visual weight), không dựa duy nhất vào hue.
+
 ### 3.1. Nút bấm (Buttons)
-*   **Primary Button:** Nền Đỏ Cờ (`#DA251D`), viền Đen 2px, chữ Trắng (`#FFFFFF`). Dùng cho hành động quan trọng nhất ("BẮT ĐẦU HỌC").
-*   **Secondary Button:** Nền Vàng Sao (`#FFC62F`), viền Đen 2px, chữ Đen (`#1A1A1A`).
-*   **Ghost/Outline Button:** Nền Trắng (`#FFFFFF`), viền Đen 2px, chữ Đen. Dùng cho "Hủy", "Bỏ qua".
-*   **Trạng thái Pressed:** Không đổ bóng. Nút dịch chuyển nhẹ xuống dưới 2px hoặc nền tối đi 10% tạo phản hồi vật lý.
+*   **Primary Button (`primary`):** Nền Đỏ Cờ (`#DA251D`), viền Đen 2px, chữ Trắng (`#FFFFFF`), **Hard Shadow đen lệch phải 4px**. Dùng cho hành động quan trọng nhất.
+*   **Secondary Button (`secondary`):** Nền Vàng Sao (`#FFC62F`), viền Đen 2px, chữ Đen (`#1A1A1A`), không shadow hoặc shadow rất mỏng.
+*   **Ghost Button (`ghost`):** Nền Trắng (`#FFFFFF`), viền Đen 2px, chữ Đen. Dùng cho "Bỏ qua", "Để sau", "Hủy".
+*   **Pressed state:**
+    *   `primary`: dịch chuyển `(+2, +2)` và giảm shadow còn 2px để tạo cảm giác "nhấn xuống".
+    *   `secondary/ghost`: dịch chuyển nhẹ theo trục Y, giảm opacity nhẹ.
+*   **Accessibility:** Touch target tối thiểu 44x44pt; text CTA phải đủ tương phản (AA trở lên).
 
 ### 3.2. Thẻ thông tin (Cards / Flashcards)
 *   **Thiết kế:** Nền Trắng hoặc Vàng Sao, viền Đen 2px, góc bo 12px. 
@@ -77,8 +86,12 @@ trigger: always_on
 ## 5. CREATIVE ASSETS & ICONOGRAPHY
 
 ### 5.1. Hình minh họa (Illustrations) & Biểu tượng (Icons)
-*   **Phong cách:** Line-art nét đậm (Thick bold lines) 2px. Không tô màu toàn bộ, chỉ tô mảng màu Đỏ hoặc Vàng ở các điểm nhấn, chừa lại nhiều khoảng trắng.
-*   **Biểu tượng văn hóa:** Cà phê phin, Bát phở, Biển báo giao thông, Nón lá, Xe máy (được vẽ phẳng, hiện đại).
+*   **Phong cách:** Line-art nét đậm (Thick bold lines). 
+*   **Thư viện:** Sử dụng **Lucide Icons** (`lucide-react-native`).
+*   **Thông số:** Stroke width mặc định là **2px** hoặc **2.5px** để đảm bảo độ dày và tính nhất quán với font chữ `Be Vietnam Pro`.
+*   **Màu sắc:** Không tô màu toàn bộ, chỉ tô mảng màu Đỏ hoặc Vàng ở các điểm nhấn (hoặc dùng prop `color` của Lucide), chừa lại nhiều khoảng trắng.
+*   **Tuyệt đối không dùng Emoji:** Không sử dụng Emoji cho các biểu tượng chức năng hoặc điều hướng chính để giữ vẻ chuyên nghiệp và cao cấp.
+*   **Biểu tượng văn hóa:** Cà phê phin, Bát phở... (được vẽ phẳng, hiện đại theo phong cách Lucide).
 
 ### 5.2. App Icon (Biểu tượng trên Store)
 *   **Thiết kế:** Background màu Vàng Sao (`#FFC62F`) phẳng. Hình trung tâm là bong bóng chat (Speech bubble) viền đen dày, chữ "Xin" màu Đen, "Chào" màu Đỏ Cờ (hoặc icon Nón lá tối giản viền đen). Tuyệt đối không có inner shadow.
