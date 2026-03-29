@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAppStore } from '@/store/useAppStore';
 
 export default function TravelAhaScreen() {
@@ -34,14 +34,14 @@ export default function TravelAhaScreen() {
           </ThemedText>
 
           <Pressable onPress={handlePlay} style={styles.speakerButton}>
-            <Volume2 size={24} color="#FFFFFF" strokeWidth={2.5} />
+            <Volume2 size={24} color={Colors.white} strokeWidth={2.5} />
           </Pressable>
         </Pressable>
 
         {isPlayed ? (
           <View style={styles.resultCard}>
             <View style={styles.rewardIconWrapper}>
-              <Trophy size={32} color="#1A1A1A" strokeWidth={2.5} />
+              <Trophy size={32} color={Colors.black} strokeWidth={2.5} />
             </View>
             <ThemedText type="body" style={styles.resultText}>
               Save this win to your account?
@@ -61,7 +61,7 @@ export default function TravelAhaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.bgPrimary,
   },
   content: {
     flex: 1,
@@ -70,19 +70,19 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   flashCard: {
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: Colors.black,
+    borderRadius: BorderRadius.card,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     backgroundColor: Colors.brandSecondary,
     minHeight: 260,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    shadowColor: '#000000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   viPhrase: {
     color: Colors.black,
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    borderWidth: 2,
-    borderColor: Colors.black,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     backgroundColor: Colors.brandPrimary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -118,16 +118,16 @@ const styles = StyleSheet.create({
   },
   resultCard: {
     marginTop: 16,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: Colors.black,
+    borderRadius: BorderRadius.card,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     backgroundColor: Colors.white,
     padding: 14,
-    shadowColor: '#000000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   rewardIconWrapper: {
     alignItems: 'center',

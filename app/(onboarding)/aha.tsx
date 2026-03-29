@@ -2,7 +2,7 @@ import { OnboardingLayout } from '@/components/OnboardingLayout';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedIcon } from '@/components/ThemedIcon';
 import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
@@ -164,28 +164,27 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
     backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 8, height: 8 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset * 2, height: Shadow.offset * 2 },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 10,
+    elevation: Shadow.offset * 2,
   },
   vietnameseText: {
     fontSize: 36,
     marginBottom: 8,
     textAlign: 'center',
-    fontWeight: '900',
   },
   englishText: {
     fontSize: 18,
-    color: '#1A1A1A',
+    color: Colors.black,
     opacity: 0.7,
     textAlign: 'center',
     marginBottom: 32,
@@ -194,19 +193,19 @@ const styles = StyleSheet.create({
   audioIcon: {
     width: 96,
     height: 96,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
     // Little shadow for the button itself
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   speakerWrapper: {
     width: '100%',
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 2,
     borderWidth: 1,
-    borderColor: '#1A1A1A',
+    borderColor: Stroke.color,
   },
   rewardBadge: {
     position: 'absolute',
@@ -246,16 +245,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     transform: [{ rotate: '12deg' }],
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
   },
   rewardText: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontWeight: '900',
     fontSize: 16,
   },
@@ -266,7 +265,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'center',
     marginBottom: 20,
-    color: '#666666',
+    color: Colors.textMuted,
     fontWeight: '500',
   },
 });

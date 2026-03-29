@@ -1,16 +1,23 @@
+import { useNavigation, useRouter } from 'expo-router';
+import { Flame, Zap } from 'lucide-react-native';
 import React, { useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from 'expo-router';
-import { Flame, Zap, Car, Utensils, ShoppingBag, AlertCircle } from 'lucide-react-native';
 import { HomeHero } from '../../components/HomeHero';
 import { ModuleCard } from '../../components/ModuleCard';
 import { StatusBadge } from '../../components/StatusBadge';
 import { ThemedText } from '../../components/ThemedText';
+import { Colors } from '../../constants/Theme';
+
+// Import images
+const TaxiImage = require('../../assets/screens/home/[Call Taxi].jpg');
+const BargainingImage = require('../../assets/screens/home/[Bargaining].jpg');
+const RestaurantImage = require('../../assets/screens/home/[Restaurant].jpg');
+// Using TaxiImage as fallback for now
+const FallbackImage = TaxiImage;
 
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -21,22 +28,22 @@ export default function HomeScreen() {
         <StatusBadge
           label="12 STREAK"
           icon={Flame}
-          backgroundColor="#FFC62F"
+          backgroundColor={Colors.brandSecondary}
+          onPress={() => router.push('/streak')}
         />
       ),
       headerRight: () => (
         <StatusBadge
           label="OFFLINE"
           icon={Zap}
-          backgroundColor="#FFFFFF"
+          backgroundColor={Colors.white}
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, router]);
 
   return (
     <View style={styles.outerContainer}>
-      {/* 2. Scrollable Content */}
       <ScrollView
         style={styles.container}
         contentContainerStyle={[
@@ -45,36 +52,36 @@ export default function HomeScreen() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* 3. Hero Section (Main Action) */}
+        {/* Hero Section */}
         <HomeHero onPress={() => console.log('Hero Pressed')} />
 
-        {/* 4. Section Title */}
+        {/* Section Title */}
         <ThemedText style={styles.sectionTitle}>SURVIVAL MODULES</ThemedText>
 
-        {/* 5. Content Grid (2-column) */}
+        {/* Content Grid (2-column) */}
         <View style={styles.grid}>
           <ModuleCard
             title="CALL TAXI"
-            icon={Car}
-            backgroundColor="#FFFFFF"
+            image={TaxiImage}
+            backgroundColor={Colors.white}
             onPress={() => console.log('Taxi')}
           />
           <ModuleCard
             title="RESTAURANT"
-            icon={Utensils}
-            backgroundColor="#FFC62F"
+            image={RestaurantImage}
+            backgroundColor={Colors.white}
             onPress={() => console.log('Food')}
           />
           <ModuleCard
             title="BARGAINING"
-            icon={ShoppingBag}
-            backgroundColor="#FFFFFF"
+            image={BargainingImage}
+            backgroundColor={Colors.white}
             onPress={() => console.log('Shopping')}
           />
           <ModuleCard
             title="EMERGENCY"
-            icon={AlertCircle}
-            backgroundColor="#FFC62F"
+            image={FallbackImage}
+            backgroundColor={Colors.white}
             onPress={() => console.log('Emergency')}
           />
         </View>
@@ -89,7 +96,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
   },
   container: {
     flex: 1,
@@ -97,15 +104,10 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
   sectionTitle: {
     fontSize: 14,
     fontFamily: 'BeVietnamPro_800ExtraBold',
-    color: '#1A1A1A',
+    color: Colors.black,
     marginBottom: 16,
     textTransform: 'uppercase',
   },

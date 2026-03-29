@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
-import { Colors, Spacing } from '../constants/Theme';
+import { Colors, Spacing, Stroke, Shadow, BorderRadius } from '../constants/Theme';
 import { ThemedText } from './ThemedText';
 import { Camera } from 'lucide-react-native';
 
@@ -21,7 +21,7 @@ export function HomeHero({ onPress }: HomeHeroProps) {
           <ThemedText style={styles.subtext}>Camera translation & AI scoring</ThemedText>
         </View>
         <View style={styles.iconContainer}>
-          <Camera color="#FFFFFF" size={48} strokeWidth={2.5} />
+          <Camera color={Colors.white} size={48} strokeWidth={2.5} />
         </View>
       </View>
     </Pressable>
@@ -30,26 +30,25 @@ export function HomeHero({ onPress }: HomeHeroProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingRight: 6,
-    paddingBottom: 6,
     marginBottom: 24,
     position: 'relative',
+    width: '100%',
   },
   shadow: {
     position: 'absolute',
-    top: 4,
-    left: 4,
+    top: Shadow.offset,
+    left: Shadow.offset,
     right: 0,
     bottom: 0,
-    borderRadius: 12,
-    backgroundColor: '#1A1A1A',
+    borderRadius: BorderRadius.card,
+    backgroundColor: Shadow.color,
     zIndex: -1,
   },
   hero: {
-    backgroundColor: '#DA251D',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: Colors.brandPrimary,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     padding: 24,
     flexDirection: 'row',
     alignItems: 'center',
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontFamily: 'BeVietnamPro_900Black',
-    color: '#FFFFFF',
+    color: Colors.white,
     lineHeight: 34,
   },
   subtext: {

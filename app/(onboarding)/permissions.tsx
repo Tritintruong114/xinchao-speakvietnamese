@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedButton } from '@/components/ThemedButton';
-import { Colors } from '@/constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAppStore } from '@/store/useAppStore';
 import { OnboardingLayout } from '@/components/OnboardingLayout';
 import { Camera, MapPin } from 'lucide-react-native';
@@ -69,28 +69,28 @@ export default function PermissionsScreen() {
 const styles = StyleSheet.create({
   permissionBox: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     padding: 16,
     marginBottom: 20,
     alignItems: 'center',
     width: '100%',
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   iconCircle: {
     width: 60,
     height: 60,
     borderRadius: 30,
     backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -100,14 +100,14 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: '#666666',
+    color: Colors.textMuted,
     marginTop: 4,
     lineHeight: 20,
   },
   infoCard: {
     backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: 8,
     padding: 16,
     marginTop: 10,
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     lineHeight: 20,
+    color: Colors.black,
   },
   footerInner: {
     width: '100%',

@@ -1,6 +1,6 @@
 import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
 import { LucideIcon } from 'lucide-react-native';
-import { Colors } from '@/constants/Theme';
+import { Colors, Stroke, Shadow } from '@/constants/Theme';
 import { ThemedText } from '@/components/ThemedText';
 
 interface TravelOptionCardProps {
@@ -33,7 +33,7 @@ export function TravelOptionCard({
         <Image source={image} style={styles.image} resizeMode="contain" />
       ) : (
         <View style={styles.iconBadge}>
-          {Icon && <Icon size={32} color="#1A1A1A" strokeWidth={2.5} />}
+          {Icon && <Icon size={32} color={Colors.black} strokeWidth={2.5} />}
         </View>
       )}
       <View style={styles.textBlock}>
@@ -53,16 +53,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: Colors.black,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     paddingHorizontal: 14,
     paddingVertical: 12,
     minHeight: 96,
-    shadowColor: '#000000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   defaultCard: {
     backgroundColor: Colors.white,
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 8,
-    borderWidth: 2,
-    borderColor: Colors.black,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     backgroundColor: Colors.brandSecondary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -100,7 +100,9 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   pressed: {
-    transform: [{ translateX: 1 }, { translateY: 1 }],
+    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    elevation: Shadow.offset / 2,
   },
 });
 

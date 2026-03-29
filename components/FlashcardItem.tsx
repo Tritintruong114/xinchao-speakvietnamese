@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
-import { Colors, Spacing, BorderRadius } from '../constants/Theme';
+import { Colors, Spacing, BorderRadius, Stroke, Shadow } from '../constants/Theme';
 import { ThemedText } from './ThemedText';
 import { Volume2 } from 'lucide-react-native';
 
@@ -42,7 +42,7 @@ export const FlashcardItem = React.memo(({
               pressed && styles.pressed
             ]}
           >
-            <Volume2 color="#1A1A1A" strokeWidth={2.5} size={24} />
+            <Volume2 color={Colors.black} strokeWidth={2.5} size={24} />
           </Pressable>
         )}
       </View>
@@ -53,17 +53,17 @@ export const FlashcardItem = React.memo(({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: BorderRadius.card,
     padding: Spacing.m,
     marginVertical: Spacing.s,
-    // Add a subtle hard shadow as per design-system.md Section 3.2
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    // Add a hard shadow as per design-system.md
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   header: {
     flexDirection: 'row',
@@ -76,10 +76,10 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 4,
-    color: '#1A1A1A',
+    color: Colors.black,
   },
   description: {
-    color: '#1A1A1A',
+    color: Colors.black,
     opacity: 0.8,
   },
   audioButton: {
@@ -87,20 +87,20 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: Colors.white,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     alignItems: 'center',
     justifyContent: 'center',
     // Micro-shadow for the button itself
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 2,
+    elevation: Shadow.offset / 2,
   },
   pressed: {
-    transform: [{ translateX: 1 }, { translateY: 1 }],
-    shadowOffset: { width: 1, height: 1 },
-    elevation: 1,
+    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
+    shadowOffset: { width: Shadow.offset / 4, height: Shadow.offset / 4 },
+    elevation: Shadow.offset / 4,
   },
 });

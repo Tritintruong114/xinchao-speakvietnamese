@@ -1,31 +1,36 @@
-import React, { useLayoutEffect } from 'react';
-import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
-import { Colors } from '../../constants/Theme';
-import { ThemedText } from '../../components/ThemedText';
-import { Settings, ChevronRight, Flame, Star, User } from 'lucide-react-native';
 import { useNavigation } from 'expo-router';
+import { ChevronRight, Flame, Settings, Star, User } from 'lucide-react-native';
+import React, { useLayoutEffect } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { StatusBadge } from '../../components/StatusBadge';
+import { ThemedText } from '../../components/ThemedText';
+import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'PROFILE',
+      headerTitle: 'HO SO',
       headerHideBorder: true,
       titleAlignment: 'left',
+      headerTitleStyle: {
+        fontSize: 30,
+        fontFamily: 'BeVietnamPro_900Black',
+        color: Colors.black,
+      },
       headerRight: () => (
         <Pressable style={styles.headerSettingsBtn}>
-          <Settings color="#1A1A1A" size={22} strokeWidth={2.5} />
+          <Settings color={Colors.black} size={22} strokeWidth={2.5} />
         </Pressable>
       ),
     });
   }, [navigation]);
 
   const settingsItems = [
-    { title: 'Restore Purchases', color: '#1A1A1A' },
-    { title: 'Privacy Policy', color: '#1A1A1A' },
-    { title: 'Contact Support', color: '#1A1A1A' },
+    { title: 'Restore Purchases', color: Colors.black },
+    { title: 'Privacy Policy', color: Colors.black },
+    { title: 'Contact Support', color: Colors.black },
     { title: 'Delete Account', color: Colors.brandPrimary, isLast: true },
   ];
 
@@ -40,7 +45,7 @@ export default function ProfileScreen() {
         <View style={styles.statsCard}>
           <View style={styles.userRow}>
             <View style={styles.avatar}>
-               <User size={40} color="#1A1A1A" strokeWidth={2.5} />
+               <User size={40} color={Colors.black} strokeWidth={2.5} />
             </View>
             <View style={styles.userInfo}>
                <ThemedText style={styles.userLabel}>GUEST LEARNER</ThemedText>
@@ -50,11 +55,11 @@ export default function ProfileScreen() {
 
           <View style={styles.statGrid}>
             <View style={styles.statBox}>
-               <Flame size={20} color="#1A1A1A" strokeWidth={2.5} />
+               <Flame size={20} color={Colors.black} strokeWidth={2.5} />
                <ThemedText style={styles.statValue}>12 DAY STREAK</ThemedText>
             </View>
             <View style={styles.statBox}>
-               <Star size={20} color="#1A1A1A" strokeWidth={2.5} />
+               <Star size={20} color={Colors.black} strokeWidth={2.5} />
                <ThemedText style={styles.statValue}>150 XP</ThemedText>
             </View>
           </View>
@@ -84,7 +89,7 @@ export default function ProfileScreen() {
               <ThemedText style={[styles.listItemText, { color: item.color }]}>
                 {item.title}
               </ThemedText>
-              <ChevronRight size={18} color="#1A1A1A" strokeWidth={2.5} />
+              <ChevronRight size={18} color={Colors.black} strokeWidth={2.5} />
             </Pressable>
           ))}
         </View>
@@ -98,7 +103,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.bgPrimary,
   },
   container: {
     flex: 1,
@@ -110,32 +115,32 @@ const styles = StyleSheet.create({
   headerSettingsBtn: {
     width: 44,
     height: 44,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   statsCard: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: '#FAFAF8',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     padding: 12,
     marginBottom: 20,
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   userRow: {
     flexDirection: 'row',
@@ -146,15 +151,12 @@ const styles = StyleSheet.create({
   avatar: {
     width: 76,
     height: 76,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  avatarFace: {
-    fontSize: 34,
   },
   userInfo: {
     flex: 1,
@@ -163,11 +165,11 @@ const styles = StyleSheet.create({
   userLabel: {
     fontSize: 20,
     fontFamily: 'BeVietnamPro_900Black',
-    color: '#1A1A1A',
+    color: Colors.black,
   },
   userSub: {
     fontSize: 12,
-    color: '#1A1A1A',
+    color: Colors.black,
     opacity: 0.6,
   },
   statGrid: {
@@ -178,50 +180,50 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 74,
     backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 10,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.button,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
     gap: 4,
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   statValue: {
     fontSize: 10,
     fontFamily: 'BeVietnamPro_900Black',
-    color: '#1A1A1A',
+    color: Colors.black,
     textAlign: 'center',
   },
   ctaCard: {
     backgroundColor: Colors.brandPrimary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     padding: 24,
     marginBottom: 24,
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   ctaTitle: {
     fontSize: 28,
     fontFamily: 'BeVietnamPro_900Black',
-    color: '#FFFFFF',
+    color: Colors.white,
     lineHeight: 32,
     marginBottom: 8,
   },
   ctaSub: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: Colors.white,
     marginBottom: 20,
     opacity: 0.9,
     lineHeight: 18,
@@ -229,36 +231,36 @@ const styles = StyleSheet.create({
   },
   ctaBtn: {
     height: 52,
-    backgroundColor: Colors.brandSecondary,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.brandMint,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   ctaBtnText: {
     fontSize: 16,
     fontFamily: 'BeVietnamPro_900Black',
-    color: '#1A1A1A',
+    color: Colors.black,
   },
   legalBlock: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
+    backgroundColor: '#FAFAF8',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
     overflow: 'hidden',
     // Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   listItem: {
     height: 52,
@@ -268,8 +270,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   listItemBorder: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#1A1A1A',
+    borderBottomWidth: Stroke.width,
+    borderBottomColor: Stroke.color,
   },
   listItemText: {
     fontSize: 14,

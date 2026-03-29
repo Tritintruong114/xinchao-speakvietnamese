@@ -1,8 +1,8 @@
+import { BookMarked, House, LucideIcon, UserRound } from 'lucide-react-native';
 import React from 'react';
-import { StyleSheet, Pressable, View } from 'react-native';
-import { Colors, Spacing } from '../../constants/Theme';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Colors, Shadow, Stroke } from '../../constants/Theme';
 import { ThemedText } from '../ThemedText';
-import { House, LucideIcon, BookMarked, UserRound } from 'lucide-react-native';
 
 interface BrutalTabItemProps {
   isFocused: boolean;
@@ -18,15 +18,15 @@ const ICON_MAP: Record<string, LucideIcon> = {
   profile: UserRound,
 };
 
-export function BrutalTabItem({ 
-  isFocused, 
-  onPress, 
-  onLongPress, 
-  routeName, 
-  label 
+export function BrutalTabItem({
+  isFocused,
+  onPress,
+  onLongPress,
+  routeName,
+  label
 }: BrutalTabItemProps) {
   const Icon = ICON_MAP[routeName] || House;
-  
+
   return (
     <Pressable
       onPress={onPress}
@@ -37,9 +37,9 @@ export function BrutalTabItem({
         styles.iconWrapper,
         isFocused && styles.activeWrapper
       ]}>
-        <Icon 
-          size={isFocused ? 20 : 24} 
-          color="#1A1A1A" 
+        <Icon
+          size={isFocused ? 20 : 24}
+          color={Colors.black}
           strokeWidth={2.5}
         />
       </View>
@@ -65,24 +65,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   activeWrapper: {
-    backgroundColor: '#FFC62F',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.brandSecondary,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     // Hard shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   label: {
     fontSize: 11,
     fontFamily: 'BeVietnamPro_800ExtraBold',
-    color: '#666666',
+    color: Colors.textMuted,
     marginTop: 6,
   },
   activeLabel: {
-    color: '#1A1A1A',
+    color: Colors.black,
     fontFamily: 'BeVietnamPro_900Black',
   },
 });

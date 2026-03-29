@@ -1,56 +1,77 @@
-import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ViewStyle, Pressable } from 'react-native';
 import { LucideIcon } from 'lucide-react-native';
 import { ThemedText } from './ThemedText';
-import { Colors } from '../constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '../constants/Theme';
 
 interface StatusBadgeProps {
   label: string;
   backgroundColor: string;
   icon?: LucideIcon;
   style?: ViewStyle;
+  onPress?: () => void;
 }
 
-export function StatusBadge({ label, backgroundColor, icon: Icon, style }: StatusBadgeProps) {
+export function StatusBadge({ label, backgroundColor, icon: Icon, style, onPress }: StatusBadgeProps) {
+  const [isPressed, setIsPressed] = useState(false);
+
   return (
-    <View style={[styles.container, style]}>
-      {/* Shadow layer */}
-      <View style={[styles.shadow, { backgroundColor: '#1A1A1A' }]} />
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
+      disabled={!onPress}
+      style={[styles.container, style]}
+    >
+      {/* Shadow layer - hidden when pressed to simulate sinking */}
+      {!isPressed && (
+        <View style={[styles.shadow, { backgroundColor: Shadow.color }]} />
+      )}
       
       {/* Badge layer */}
-      <View style={[styles.badge, { backgroundColor }]}>
+      <View style={[
+        styles.badge, 
+        { backgroundColor },
+        isPressed && styles.badgePressed
+      ]}>
         <View style={styles.content}>
-          {Icon && <Icon size={14} color="#1A1A1A" strokeWidth={2.5} style={{ marginRight: 6 }} />}
+          {Icon && <Icon size={14} color={Colors.black} strokeWidth={2.5} style={{ marginRight: 6 }} />}
           <ThemedText style={styles.text}>{label.toUpperCase()}</ThemedText>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingRight: 4,
-    paddingBottom: 4,
+    paddingRight: Shadow.offset,
+    paddingBottom: Shadow.offset,
     position: 'relative',
   },
   shadow: {
     position: 'absolute',
-    top: 4,
-    left: 4,
+    top: Shadow.offset,
+    left: Shadow.offset,
     right: 0,
     bottom: 0,
-    borderRadius: 12,
+    borderRadius: BorderRadius.card,
     zIndex: -1,
   },
   badge: {
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderRadius: BorderRadius.card,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  badgePressed: {
+    transform: [
+      { translateX: Shadow.offset / 2 },
+      { translateY: Shadow.offset / 2 }
+    ],
   },
   content: {
     flexDirection: 'row',
@@ -59,7 +80,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     fontFamily: 'BeVietnamPro_800ExtraBold',
-    color: '#1A1A1A',
+    color: Colors.black,
     letterSpacing: 0.5,
   },
 });

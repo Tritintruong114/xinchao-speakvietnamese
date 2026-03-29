@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { Colors } from '../../constants/Theme';
+import { Colors, Stroke, Shadow } from '../../constants/Theme';
 import { ThemedText } from '../ThemedText';
 
 interface DialectSwitcherProps {
@@ -40,18 +40,18 @@ export function DialectSwitcher({ dialect, onToggle, style }: DialectSwitcherPro
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: 8,
     padding: 2,
     alignItems: 'center',
     // Hard shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   segment: {
     paddingHorizontal: 8,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   activeSegment: {
     backgroundColor: Colors.brandSecondary,
-    borderColor: '#1A1A1A',
+    borderColor: Stroke.color,
   },
   inactiveSegment: {
     backgroundColor: 'transparent',
@@ -76,14 +76,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   activeLabel: {
-    color: '#1A1A1A',
+    color: Colors.black,
   },
   inactiveLabel: {
-    color: '#666666',
+    color: Colors.textMuted,
   },
   pressed: {
-    transform: [{ translateX: 2 }, { translateY: 2 }],
-    shadowOffset: { width: 2, height: 2 },
-    elevation: 2,
+    transform: [{ translateX: Shadow.offset / 2 }, { translateY: Shadow.offset / 2 }],
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    elevation: Shadow.offset / 2,
   },
 });

@@ -20,9 +20,9 @@ export function ThemedText({ style, type = 'body', color, ...rest }: ThemedTextP
     <RNText 
       style={[
         getTextStyle(),
-        { fontFamily: 'BeVietnamPro_400Regular' }, // Will update to match bold/thin if needed
-        type === 'h1' && { fontFamily: 'BeVietnamPro_800ExtraBold' },
-        type === 'h2' && { fontFamily: 'BeVietnamPro_800ExtraBold' }, // High-fidelity headings
+        { fontFamily: 'BeVietnamPro_400Regular' },
+        type === 'h1' && { fontFamily: 'BeVietnamPro_900Black' },
+        type === 'h2' && { fontFamily: 'BeVietnamPro_800ExtraBold' },
         type === 'button' && { fontFamily: 'BeVietnamPro_700Bold' },
         color ? { color } : {},
         style

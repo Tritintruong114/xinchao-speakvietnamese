@@ -3,7 +3,8 @@ import {
   useFonts,
   BeVietnamPro_400Regular,
   BeVietnamPro_700Bold,
-  BeVietnamPro_800ExtraBold 
+  BeVietnamPro_800ExtraBold,
+  BeVietnamPro_900Black
 } from '@expo-google-fonts/be-vietnam-pro';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -85,6 +86,7 @@ export default function RootLayout() {
     BeVietnamPro_400Regular,
     BeVietnamPro_700Bold,
     BeVietnamPro_800ExtraBold,
+    BeVietnamPro_900Black,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.

@@ -1,5 +1,5 @@
 import { StyleSheet, ViewStyle, Pressable } from 'react-native';
-import { Colors, Spacing, BorderRadius, Stroke } from '../constants/Theme';
+import { Colors, Spacing, BorderRadius, Stroke, Shadow } from '../constants/Theme';
 import { ThemedText } from './ThemedText';
 import React from 'react';
 
@@ -51,42 +51,39 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.m,
     paddingHorizontal: Spacing.l,
     borderRadius: BorderRadius.button,
-    borderWidth: 2, // Strict 2px border
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44, // Touch-Target-Min
+    minHeight: 44,
   },
   primary: {
     backgroundColor: Colors.brandPrimary,
-    // 4px Hard Shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   secondary: {
     backgroundColor: Colors.brandSecondary,
-    // 2px Hard Shadow for secondary
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 2,
+    elevation: Shadow.offset / 2,
   },
   ghost: {
     backgroundColor: Colors.white,
-    // Ghost usually has no shadow or very subtle
   },
   pressedPrimary: {
-    transform: [{ translateX: 2 }, { translateY: 2 }],
-    shadowOffset: { width: 2, height: 2 },
-    opacity: 1, // Keep opacity solid for Neo-brutalism
+    transform: [{ translateX: Shadow.offset / 2 }, { translateY: Shadow.offset / 2 }],
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    opacity: 1,
   },
   pressedSecondary: {
-    transform: [{ translateX: 1 }, { translateY: 1 }],
-    shadowOffset: { width: 1, height: 1 },
+    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
+    shadowOffset: { width: Shadow.offset / 4, height: Shadow.offset / 4 },
     opacity: 1,
   },
   pressedGhost: {

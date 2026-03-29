@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
-import { Colors, Spacing, BorderRadius } from '../constants/Theme';
+import { Colors, Spacing, BorderRadius, Stroke, Shadow } from '../constants/Theme';
 
 interface ThemedInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
@@ -9,8 +9,8 @@ interface ThemedInputProps extends TextInputProps {
 /**
  * ThemedInput - A custom TextInput wrapper designed for "XinChao".
  * Features:
- * - 2px solid black border.
- * - 4px hard offset shadow for depth (Neo-brutalism).
+ * - strokeWidth solid black border.
+ * - shadowOffset hard offset shadow for depth (Neo-brutalism).
  * - Focused state with brandPrimary (Red) border.
  */
 export function ThemedInput({ containerStyle, onFocus, onBlur, style, ...props }: ThemedInputProps) {
@@ -46,19 +46,19 @@ export function ThemedInput({ containerStyle, onFocus, onBlur, style, ...props }
 
 const styles = StyleSheet.create({
   shadowContainer: {
-    // 4px Hard Shadow offset
-    backgroundColor: '#1A1A1A',
+    // Hard Shadow offset
+    backgroundColor: Shadow.color,
     borderRadius: BorderRadius.button,
     marginBottom: Spacing.m,
   },
   inputContainer: {
     backgroundColor: Colors.white,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     borderRadius: BorderRadius.button,
     minHeight: 48,
     // Negative margin to offset from the "shadow" background
-    transform: [{ translateX: -4 }, { translateY: -4 }],
+    transform: [{ translateX: -Shadow.offset }, { translateY: -Shadow.offset }],
   },
   focusedContainer: {
     borderColor: Colors.brandPrimary,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.m,
     paddingVertical: Spacing.s,
     fontSize: 16,
-    color: '#1A1A1A',
+    color: Colors.black,
     fontFamily: 'BeVietnamPro_400Regular',
   },
 });

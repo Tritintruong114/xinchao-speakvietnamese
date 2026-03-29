@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Pressable, View } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
-import { Colors } from '../../constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
 
 interface BrutalBackButtonProps {
   onPress: () => void;
@@ -17,7 +17,7 @@ export function BrutalBackButton({ onPress }: BrutalBackButtonProps) {
       ]}
     >
       <View style={styles.iconContainer}>
-        <ChevronLeft size={24} color="#1A1A1A" strokeWidth={2.5} />
+        <ChevronLeft size={24} color={Colors.black} strokeWidth={2.5} />
       </View>
     </Pressable>
   );
@@ -27,26 +27,26 @@ const styles = StyleSheet.create({
   container: {
     width: 44,
     height: 44,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 8,
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.button,
     alignItems: 'center',
     justifyContent: 'center',
     // Hard shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
   },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   pressed: {
-    transform: [{ translateX: 2 }, { translateY: 2 }],
-    shadowOffset: { width: 2, height: 2 },
-    elevation: 2,
+    transform: [{ translateX: Shadow.offset / 2 }, { translateY: Shadow.offset / 2 }],
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    elevation: Shadow.offset / 2,
   },
 });

@@ -1,19 +1,20 @@
 import React from 'react';
-import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
-import { LucideIcon } from 'lucide-react-native';
+import { Dimensions, Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from './ThemedText';
+import { Colors, Stroke, Shadow, BorderRadius } from '../constants/Theme';
 
 interface ModuleCardProps {
   title: string;
-  icon: LucideIcon;
+  image: ImageSourcePropType;
   backgroundColor: string;
   onPress: () => void;
 }
 
 const { width } = Dimensions.get('window');
-const CARD_SIZE = (width - 48) / 2; // (TotalWidth - padding * 2 - gap) / 2
+const CARD_WIDTH = (width - 48) / 2; // (TotalWidth - padding * 2 - gap) / 2
+const IMAGE_HEIGHT = CARD_WIDTH * (2 / 3); // 3:2 Aspect Ratio
 
-export function ModuleCard({ title, icon: Icon, backgroundColor, onPress }: ModuleCardProps) {
+export function ModuleCard({ title, image, backgroundColor, onPress }: ModuleCardProps) {
   return (
     <Pressable onPress={onPress} style={styles.container}>
       {/* Shadow layer */}
@@ -21,10 +22,18 @@ export function ModuleCard({ title, icon: Icon, backgroundColor, onPress }: Modu
 
       {/* Card layer */}
       <View style={[styles.card, { backgroundColor }]}>
-        <View style={styles.iconContainer}>
-          <Icon size={28} color="#1A1A1A" strokeWidth={2.5} />
+        <View style={styles.imageContainer}>
+          <Image 
+            source={image} 
+            style={styles.image}
+            resizeMode="cover"
+          />
         </View>
-        <ThemedText style={styles.title}>{title.toUpperCase()}</ThemedText>
+        <View style={styles.textContainer}>
+          <ThemedText style={styles.title} numberOfLines={2}>
+            {title.toUpperCase()}
+          </ThemedText>
+        </View>
       </View>
     </Pressable>
   );
@@ -32,43 +41,46 @@ export function ModuleCard({ title, icon: Icon, backgroundColor, onPress }: Modu
 
 const styles = StyleSheet.create({
   container: {
-    paddingRight: 4,
-    paddingBottom: 4,
-    width: CARD_SIZE + 4,
-    height: CARD_SIZE + 4,
-    marginBottom: 16,
+    width: CARD_WIDTH + Shadow.offset,
+    marginBottom: 20,
   },
   shadow: {
     position: 'absolute',
-    top: 4,
-    left: 4,
+    top: Shadow.offset,
+    left: Shadow.offset,
     right: 0,
     bottom: 0,
-    borderRadius: 12,
-    backgroundColor: '#1A1A1A',
+    borderRadius: BorderRadius.card,
+    backgroundColor: Shadow.color,
     zIndex: -1,
   },
   card: {
-    width: CARD_SIZE,
-    height: CARD_SIZE,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 16,
-    justifyContent: 'space-between',
+    width: CARD_WIDTH,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    borderRadius: BorderRadius.card,
+    overflow: 'hidden', // Contain the image within borders
   },
-  iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    alignItems: 'center',
+  imageContainer: {
+    width: '100%',
+    height: IMAGE_HEIGHT,
+    backgroundColor: '#F5F5F5',
+    borderBottomWidth: Stroke.width,
+    borderBottomColor: Stroke.color,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  textContainer: {
+    padding: 12,
+    minHeight: 54,
     justifyContent: 'center',
   },
   title: {
-    fontSize: 16,
-    fontFamily: 'BeVietnamPro_800ExtraBold',
-    color: '#1A1A1A',
-    lineHeight: 20,
+    fontSize: 14,
+    fontFamily: 'BeVietnamPro_900Black',
+    color: Colors.black,
+    lineHeight: 18,
   },
 });

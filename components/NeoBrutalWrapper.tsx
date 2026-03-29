@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
+import { Colors, Stroke, Shadow, BorderRadius as AppBorderRadius } from '../constants/Theme';
 
 interface NeoBrutalWrapperProps {
   children: React.ReactNode;
@@ -17,10 +18,10 @@ interface NeoBrutalWrapperProps {
 export function NeoBrutalWrapper({ 
   children, 
   style, 
-  offset = 4, 
-  backgroundColor = '#FFFFFF', 
-  borderRadius = 12,
-  shadowColor = '#1A1A1A'
+  offset = Shadow.offset, 
+  backgroundColor = Colors.white, 
+  borderRadius = AppBorderRadius.card,
+  shadowColor = Shadow.color
 }: NeoBrutalWrapperProps) {
   return (
     <View style={[styles.container, style]}>
@@ -40,8 +41,8 @@ export function NeoBrutalWrapper({
         { 
           backgroundColor, 
           borderRadius,
-          borderWidth: 2,
-          borderColor: '#1A1A1A'
+          borderWidth: Stroke.width,
+          borderColor: Stroke.color
         }
       ]}>
         {children}

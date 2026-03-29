@@ -1,3 +1,4 @@
+import { Colors, Stroke } from '../../constants/Theme';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -21,7 +22,7 @@ export function BrutalHeader({
   leftAction,
   rightAction,
   hideBorder = false,
-  backgroundColor = '#FFFFFF',
+  backgroundColor = Colors.white,
   titleAlignment = 'center'
 }: BrutalHeaderProps) {
   const insets = useSafeAreaInsets();
@@ -48,19 +49,25 @@ export function BrutalHeader({
     <View style={[
       styles.safeContainer,
       { 
-        paddingTop: insets.top > 0 ? insets.top : 16,
-        borderBottomWidth: hideBorder ? 0 : 1,
+        paddingTop: Math.max(insets.top, 16),
+        borderBottomWidth: hideBorder ? 0 : Stroke.width,
         backgroundColor: backgroundColor
       }
     ]}>
-      <View style={[styles.header, isLeft && { justifyContent: 'flex-start', gap: 12 }]}>
-        <View style={isLeft ? styles.leftSlotCompact : styles.leftSlot}>
+      <View style={[
+        styles.header, 
+        isLeft ? styles.headerLeft : styles.headerCenter
+      ]}>
+        <View style={styles.leftSlot}>
           {renderLeft()}
         </View>
 
-        <View style={isLeft ? styles.leftTitleSlot : styles.centerSlot}>
+        <View style={styles.contentSlot}>
           {title && (
-            <ThemedText style={[styles.title, isLeft && styles.titleLeft]}>
+            <ThemedText style={[
+              styles.title, 
+              isLeft && styles.titleLeft
+            ]}>
               {title.toUpperCase()}
             </ThemedText>
           )}
@@ -76,51 +83,50 @@ export function BrutalHeader({
 
 const styles = StyleSheet.create({
   safeContainer: {
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#1A1A1A',
+    backgroundColor: Colors.white,
+    borderBottomWidth: Stroke.width,
+    borderBottomColor: Stroke.color,
     zIndex: 1000,
   },
   header: {
-    height: 72,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingBottom: 16,
+    minHeight: 64,
+  },
+  headerCenter: {
+    justifyContent: 'space-between',
+  },
+  headerLeft: {
+    justifyContent: 'flex-start',
+    gap: 16,
   },
   leftSlot: {
     minWidth: 44,
+    minHeight: 44,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  leftSlotCompact: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  centerSlot: {
+  contentSlot: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  leftTitleSlot: {
-    flex: 1,
-    alignItems: 'flex-start',
     justifyContent: 'center',
   },
   rightSlot: {
     minWidth: 44,
+    minHeight: 44,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
   title: {
     fontFamily: 'BeVietnamPro_900Black',
     fontSize: 18,
-    color: '#1A1A1A',
+    color: Colors.black,
     textAlign: 'center',
   },
   titleLeft: {
     fontSize: 30,
     textAlign: 'left',
+    lineHeight: 34, // Added to prevent cutting
   },
 });

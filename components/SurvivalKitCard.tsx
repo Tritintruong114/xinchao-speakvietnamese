@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
-import { ThemedText } from './ThemedText';
+import { Colors, Stroke, Shadow, BorderRadius } from '../constants/Theme';
 import { Trash2 } from 'lucide-react-native';
+import { ThemedText } from './ThemedText';
 
 interface SurvivalKitCardProps {
   title: string;
@@ -17,7 +18,7 @@ interface SurvivalKitCardProps {
 export function SurvivalKitCard({ 
   title, 
   backgroundColor, 
-  textColor = '#1A1A1A', 
+  textColor = Colors.black, 
   onDelete 
 }: SurvivalKitCardProps) {
   return (
@@ -35,7 +36,7 @@ export function SurvivalKitCard({
               pressed && styles.pressed
             ]}
           >
-            <Trash2 size={16} color="#1A1A1A" strokeWidth={2.5} />
+            <Trash2 size={16} color={Colors.black} strokeWidth={2.5} />
           </Pressable>
         )}
       </View>
@@ -47,17 +48,17 @@ const styles = StyleSheet.create({
   container: {
     width: 220,
     height: 136,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    borderRadius: BorderRadius.card,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     padding: 12,
     justifyContent: 'space-between',
     // Hard shadow
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: Shadow.offset,
     marginRight: 12,
     marginBottom: 8, // Space for shadow
   },
@@ -74,20 +75,20 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
+    backgroundColor: Colors.white,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
     alignItems: 'center',
     justifyContent: 'center',
     // Micro hard shadow for the button
-    shadowColor: '#1A1A1A',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
+    shadowColor: Shadow.color,
+    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
+    shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
-    elevation: 2,
+    elevation: Shadow.offset / 2,
   },
   pressed: {
-    transform: [{ translateX: 1 }, { translateY: 1 }],
-    shadowOffset: { width: 1, height: 1 },
+    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
+    shadowOffset: { width: Shadow.offset / 4, height: Shadow.offset / 4 },
   },
 });
