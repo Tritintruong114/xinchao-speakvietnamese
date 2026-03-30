@@ -4,7 +4,7 @@ import { ThemedText } from '../../components/ThemedText';
 import { Backpack, Zap, Flame } from 'lucide-react-native';
 import { useNavigation } from 'expo-router';
 import { SurvivalKitCard } from '../../components/SurvivalKitCard';
-import { SavedPhraseItem } from '../../components/SavedPhraseItem';
+import { FlashcardItem } from '../../components/FlashcardItem';
 import { StatusBadge } from '../../components/StatusBadge';
 
 export default function PocketScreen() {
@@ -72,20 +72,20 @@ export default function PocketScreen() {
       <View style={styles.section}>
         <ThemedText style={styles.sectionHeading}>SAVED PHRASES</ThemedText>
         <View style={styles.flashList}>
-          <SavedPhraseItem 
+          <FlashcardItem 
             vietnamese="Không đá, không đường" 
             english="No ice, no sugar" 
-            onPlay={() => {}}
+            audioUri="khong_da_khong_duong"
           />
-          <SavedPhraseItem 
+          <FlashcardItem 
             vietnamese="Bao nhiêu tiền?" 
             english="How much is it?" 
-            onPlay={() => {}}
+            audioUri="bao_nhieu_tien"
           />
-          <SavedPhraseItem 
+          <FlashcardItem 
             vietnamese="Cho tôi gọi taxi" 
             english="Call me a taxi" 
-            onPlay={() => {}}
+            audioUri="cho_toi_goi_taxi"
           />
         </View>
       </View>

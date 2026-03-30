@@ -7,13 +7,16 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAppStore } from '@/store/useAppStore';
+import { useAudio } from '@/hooks/useAudio';
 
 export default function TravelAhaScreen() {
   const router = useRouter();
   const { setHasOnboarded } = useAppStore();
   const [isPlayed, setIsPlayed] = useState(false);
+  const { playSound } = useAudio();
 
   const handlePlay = () => {
+    playSound('bot_di');
     setIsPlayed(true);
   };
 

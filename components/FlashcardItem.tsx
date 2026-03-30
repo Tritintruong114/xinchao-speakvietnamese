@@ -1,106 +1,148 @@
-import React from 'react';
-import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
-import { Colors, Spacing, BorderRadius, Stroke, Shadow } from '../constants/Theme';
-import { ThemedText } from './ThemedText';
 import { Volume2 } from 'lucide-react-native';
+import React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { BorderRadius, Colors, Shadow, Stroke } from '../constants/Theme';
+import { useAudio } from '../hooks/useAudio';
+import { ThemedText } from './ThemedText';
 
 interface FlashcardItemProps {
-  title: string;
-  description: string;
-  onPlayAudio?: () => void;
-  style?: ViewStyle;
+  vietnamese: string;
+  english: string;
+  audioUri?: string;
+  onPlay?: () => void;
+  backgroundColor?: string;
+  primaryColor?: string;
+  tag?: string;
 }
 
 /**
- * FlashcardItem - Optimized learning card component.
- * Features:
- * - brandSecondary (Star Yellow) background.
- * - 2px solid black border and 12px border radius.
- * - Integrated h2 title and body description.
- * - Audio play button with Lucide icon.
- * - React.memo for list performance.
+ * FlashcardItem - Global reusable component for vocabulary items.
+ * Supports multiple color variants while maintaining Neo-brutalism design.
  */
-export const FlashcardItem = React.memo(({ 
-  title, 
-  description, 
-  onPlayAudio, 
-  style 
-}: FlashcardItemProps) => {
+export function FlashcardItem({
+  vietnamese,
+  english,
+  audioUri,
+  onPlay,
+  backgroundColor = Colors.white,
+  primaryColor = Colors.black,
+  tag
+}: FlashcardItemProps) {
+  const { playSound } = useAudio();
+
+  const handlePlay = () => {
+    if (onPlay) {
+      onPlay();
+    } else if (audioUri) {
+      playSound(audioUri);
+    }
+  };
+
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.header}>
-        <View style={styles.textContainer}>
-          <ThemedText type="h2" style={styles.title}>{title}</ThemedText>
-          <ThemedText type="body" style={styles.description}>{description}</ThemedText>
-        </View>
-        
-        {onPlayAudio && (
-          <Pressable 
-            onPress={onPlayAudio}
+    <View style={[styles.container, { backgroundColor }]}>
+      <View style={styles.content}>
+        {tag && (
+          <View style={styles.tagWrapper}>
+            <ThemedText style={styles.tagText}>{tag.toUpperCase()}</ThemedText>
+          </View>
+        )}
+        <ThemedText style={[styles.vietnamese, { color: primaryColor }]}>
+          {vietnamese}
+        </ThemedText>
+        <ThemedText style={styles.english}>
+          {english}
+        </ThemedText>
+      </View>
+
+      {(onPlay || audioUri) && (
+        <View style={styles.buttonWrapper}>
+          <Pressable
+            onPress={handlePlay}
             style={({ pressed }) => [
-              styles.audioButton,
+              styles.playButton,
               pressed && styles.pressed
             ]}
           >
-            <Volume2 color={Colors.black} strokeWidth={2.5} size={24} />
+            <Volume2 size={24} color={Stroke.color} strokeWidth={2.5} />
           </Pressable>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
-});
+}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.brandSecondary,
+    minHeight: 88,
     borderWidth: Stroke.width,
     borderColor: Stroke.color,
     borderRadius: BorderRadius.card,
-    padding: Spacing.m,
-    marginVertical: Spacing.s,
-    // Add a hard shadow as per design-system.md
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // Hard shadow
     shadowColor: Shadow.color,
     shadowOffset: { width: Shadow.offset, height: Shadow.offset },
     shadowOpacity: Shadow.opacity,
     shadowRadius: 0,
     elevation: Shadow.offset,
+    marginBottom: 16,
+    marginRight: Shadow.offset,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  textContainer: {
+  content: {
     flex: 1,
-    marginRight: Spacing.m,
+    marginRight: 8,
   },
-  title: {
-    marginBottom: 4,
-    color: Colors.black,
+  vietnamese: {
+    fontSize: 22,
+    fontFamily: 'BeVietnamPro_800ExtraBold',
+    lineHeight: 30, // Prevents accent clipping
+    marginBottom: 2,
   },
-  description: {
-    color: Colors.black,
-    opacity: 0.8,
+  english: {
+    fontSize: 14,
+    fontFamily: 'BeVietnamPro_600SemiBold',
+    color: Colors.white,
+    fontStyle: 'italic',
   },
-  audioButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.white,
+  buttonWrapper: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  playButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: Colors.brandSecondary,
     borderWidth: Stroke.width,
     borderColor: Stroke.color,
     alignItems: 'center',
     justifyContent: 'center',
-    // Micro-shadow for the button itself
+    // Smaller hard shadow for the button itself
     shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
-    shadowOpacity: Shadow.opacity,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: Shadow.offset / 2,
+    elevation: 2,
+  },
+  tagWrapper: {
+    backgroundColor: Colors.brandSecondary,
+    borderWidth: 1.5,
+    borderColor: Stroke.color,
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    alignSelf: 'flex-start',
+    marginBottom: 4,
+  },
+  tagText: {
+    fontSize: 10,
+    fontFamily: 'BeVietnamPro_900Black',
+    color: Colors.black,
   },
   pressed: {
-    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
-    shadowOffset: { width: Shadow.offset / 4, height: Shadow.offset / 4 },
-    elevation: Shadow.offset / 4,
+    transform: [{ translateX: 2 }, { translateY: 2 }],
+    shadowOffset: { width: 0, height: 0 },
   },
 });

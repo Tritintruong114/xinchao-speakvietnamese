@@ -1,0 +1,63 @@
+{
+  "id": "money_count",
+  "title": "MONEY COUNT",
+  "category": "Beginner",
+  "visuals": {
+    "hero": "assets/screens/home/money_count.png",
+    "notes": [
+      { 
+        "value": 500000, 
+        "color": "Blue/Cyan", 
+        "risk": "High",
+        "front": "https://iazpvkobzxuxabecngzt.supabase.co/storage/v1/object/public/currencies/500000/F-500000.png",
+        "back": "https://iazpvkobzxuxabecngzt.supabase.co/storage/v1/object/public/currencies/500000/B-500000.png"
+      },
+      { 
+        "value": 20000, 
+        "color": "Blue/Cyan", 
+        "risk": "High",
+        "front": "https://iazpvkobzxuxabecngzt.supabase.co/storage/v1/object/public/currencies/20000/F-20000.png",
+        "back": "https://iazpvkobzxuxabecngzt.supabase.co/storage/v1/object/public/currencies/20000/B-20000.png"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "onboarding",
+      "content": "You've just landed! Handed $100 to the clerk. Now, verify your millions.",
+      "audio": "welcome_airport.mp3"
+    },
+    {
+      "id": "visual_trap",
+      "type": "quiz",
+      "question": "Which note is 500.000 (approx. $20)?",
+      "options": ["The one with 5 zeros", "The one with 4 zeros"],
+      "correct": 0,
+      "fact": "Don't get fooled by the blue color! 20k and 500k are both blue."
+    },
+    {
+      "id": "counting_hack",
+      "type": "teaching",
+      "content": "Rule: Drop last 3 zeros. 500,000 becomes 500. Divide by 25 = $20.",
+      "audio": "hack_rule.mp3"
+    },
+    {
+      "id": "ruoi_rule",
+      "type": "listening",
+      "phrase": "Hai triệu rưỡi",
+      "translation": "2.5 million",
+      "explanation": "Rưỡi means a half."
+    },
+    {
+      "id": "roleplay_airport",
+      "type": "dialogue",
+      "lines": [
+        { "speaker": "Clerk", "text": "Chào bạn! Bạn đổi bao nhiêu?", "translation": "How much do you exchange?" },
+        { "speaker": "Tourist", "text": "Tôi muốn đổi 100 Đô.", "translation": "I want to exchange 100 USD." },
+        { "speaker": "Clerk", "text": "Của bạn là Hai triệu rưỡi.", "translation": "Yours is 2.5 million." },
+        { "speaker": "Tourist", "text": "Xin đổi tiền lẻ giúp tôi.", "translation": "Please give me some small change." }
+      ]
+    }
+  ]
+}

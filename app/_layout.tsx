@@ -13,6 +13,8 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { useAppStore } from '@/store/useAppStore';
+import { GlobalToast } from '@/components/GlobalToast';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -26,8 +28,6 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-import { useAppStore } from '@/store/useAppStore';
 
 function RootLayoutNav({ loaded }: { loaded: boolean }) {
   const colorScheme = useColorScheme();
@@ -77,6 +77,7 @@ function RootLayoutNav({ loaded }: { loaded: boolean }) {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
+      <GlobalToast />
     </ThemeProvider>
   );
 }
@@ -100,5 +101,3 @@ export default function RootLayout() {
     </AuthProvider>
   );
 }
-
-

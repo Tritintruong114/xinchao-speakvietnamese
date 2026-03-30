@@ -4,6 +4,7 @@ import { ThemedIcon } from '@/components/ThemedIcon';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAuth } from '@/context/AuthContext';
+import { useAudio } from '@/hooks/useAudio';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
 import { Volume2 } from 'lucide-react-native';
@@ -53,6 +54,7 @@ export default function AhaScreen() {
   const [showEffects, setShowEffects] = useState(false);
   const [hasClaimedReward, setHasClaimedReward] = useState(false);
   const [isUpdatingXp, setIsUpdatingXp] = useState(false);
+  const { playSound } = useAudio();
 
   const handleNext = () => {
     router.push('/(onboarding)/permissions');
@@ -64,6 +66,9 @@ export default function AhaScreen() {
     // Trigger visual effects
     setShowEffects(true);
     setTimeout(() => setShowEffects(false), 2000);
+
+    // Play audio
+    playSound('bao_nhieu_tien');
 
     // Update XP if not already claimed
     if (!hasClaimedReward && user) {
