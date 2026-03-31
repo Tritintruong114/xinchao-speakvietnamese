@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { FlashcardItem } from '../../components/FlashcardItem';
 import { ThemedButton } from '../../components/ThemedButton';
 import { ThemedText } from '../../components/ThemedText';
@@ -11,6 +11,7 @@ import { SurvivalQuiz } from '../../components/survival/SurvivalQuiz';
 import { SurvivalSuccess } from '../../components/survival/SurvivalSuccess';
 import { SurvivalTeaching } from '../../components/survival/SurvivalTeaching';
 import { VoicePractice } from '../../components/survival/VoicePractice';
+import { useAudio } from '../../hooks/useAudio';
 import { SURVIVAL_MODULES } from '../../constants/SurvivalData';
 import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
 
@@ -20,6 +21,7 @@ export default function SurvivalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const module = SURVIVAL_MODULES[id as string];
+  const { playSound } = useAudio();
   const [stepIndex, setStepIndex] = useState(0);
 
   if (!module) {
@@ -65,7 +67,7 @@ export default function SurvivalScreen() {
                   primaryColor={Colors.brandPrimary}
                   tag={v.tag}
                   audioUri={v.audioUri}
-                  onPlay={() => console.log('Playing audio for:', v.phrase)}
+                  onPlay={() => v.audioUri && playSound(v.audioUri)}
                 />
               ))}
             </View>
@@ -102,6 +104,7 @@ export default function SurvivalScreen() {
           <SurvivalQuiz
             question={currentStep.question || ''}
             image={currentStep.image}
+            images={currentStep.images}
             options={currentStep.options || []}
             correctIndex={currentStep.correctIndex || 0}
             fact={currentStep.fact}
@@ -322,5 +325,9 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     width: '100%',
+  },
+  scrollContent: {
+    paddingBottom: 40,
+    flexGrow: 1,
   },
 });

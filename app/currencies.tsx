@@ -17,15 +17,15 @@ import { Colors } from '../constants/Theme';
 const { width } = Dimensions.get('window');
 
 const DENOMINATIONS = [
-  { value: '1.000', id: '1000', color: '#BDBDBD', viet: 'Một nghìn đồng', eng: 'One thousand dong', audio: 'mot_nghin' },
-  { value: '2.000', id: '2000', color: '#8D6E63', viet: 'Hai nghìn đồng', eng: 'Two thousand dong', audio: 'hai_nghin' },
-  { value: '5.000', id: '5000', color: '#4DB6AC', viet: 'Năm nghìn đồng', eng: 'Five thousand dong', audio: 'nam_nghin' },
-  { value: '10.000', id: '10000', color: '#FBC02D', viet: 'Mười nghìn đồng', eng: 'Ten thousand dong', audio: 'muoi_nghin' },
-  { value: '20.000', id: '20000', color: '#1E88E5', viet: 'Hai mươi nghìn đồng', eng: 'Twenty thousand dong', audio: 'hai_muoi_nghin' },
-  { value: '50.000', id: '50000', color: '#EC407A', viet: 'Năm mươi nghìn đồng', eng: 'Fifty thousand dong', audio: 'nam_muoi_nghin' },
-  { value: '100.000', id: '100000', color: '#66BB6A', viet: 'Một trăm nghìn đồng', eng: 'One hundred thousand dong', audio: 'mot_tram_nghin' },
-  { value: '200.000', id: '200000', color: '#D84315', viet: 'Hai trăm nghìn đồng', eng: 'Two hundred thousand dong', audio: 'hai_tram_nghin' },
-  { value: '500.000', id: '500000', color: '#0277BD', viet: 'Năm trăm nghìn đồng', eng: 'Five hundred thousand dong', audio: 'nam_tram_nghin' },
+  { value: '1.000', id: '1000', color: '#BDBDBD', viet: 'Một nghìn đồng', eng: 'One thousand dong', audio: require('../assets/audio/currencies/2k.mp3') },
+  { value: '2.000', id: '2000', color: '#8D6E63', viet: 'Hai nghìn đồng', eng: 'Two thousand dong', audio: require('../assets/audio/currencies/1k.mp3') },
+  { value: '5.000', id: '5000', color: '#4DB6AC', viet: 'Năm nghìn đồng', eng: 'Five thousand dong', audio: require('../assets/audio/currencies/5k.mp3') },
+  { value: '10.000', id: '10000', color: '#FBC02D', viet: 'Mười nghìn đồng', eng: 'Ten thousand dong', audio: require('../assets/audio/currencies/10k.mp3') },
+  { value: '20.000', id: '20000', color: '#1E88E5', viet: 'Hai mươi nghìn đồng', eng: 'Twenty thousand dong', audio: require('../assets/audio/currencies/20k.mp3') },
+  { value: '50.000', id: '50000', color: '#EC407A', viet: 'Năm mươi nghìn đồng', eng: 'Fifty thousand dong', audio: require('../assets/audio/currencies/50k.mp3') },
+  { value: '100.000', id: '100000', color: '#66BB6A', viet: 'Một trăm nghìn đồng', eng: 'One hundred thousand dong', audio: require('../assets/audio/currencies/100k.mp3') },
+  { value: '200.000', id: '200000', color: '#D84315', viet: 'Hai trăm nghìn đồng', eng: 'Two hundred thousand dong', audio: require('../assets/audio/currencies/200k.mp3') },
+  { value: '500.000', id: '500000', color: '#0277BD', viet: 'Năm trăm nghìn đồng', eng: 'Five hundred thousand dong', audio: require('../assets/audio/currencies/500k.mp3') },
 ];
 
 const CURRENCY_IMAGES: Record<string, { F: any; B: any }> = {
@@ -98,6 +98,7 @@ export default function CurrenciesScreen() {
               tag={`${item.value} VND ĐỒNG`}
               backgroundColor={item.color}
               primaryColor={Colors.white}
+              secondaryColor={Colors.white}
               audioUri={item.audio}
             />
 

@@ -8,6 +8,7 @@ import { LucideIcon, CheckCircle2, XCircle, Info } from 'lucide-react-native';
 interface SurvivalQuizProps {
   question: string;
   image?: any;
+  images?: any[];
   options: string[];
   correctIndex: number;
   fact?: string;
@@ -17,6 +18,7 @@ interface SurvivalQuizProps {
 export const SurvivalQuiz = ({
   question,
   image,
+  images,
   options,
   correctIndex,
   fact,
@@ -44,9 +46,18 @@ export const SurvivalQuiz = ({
         <ThemedText type="h2" style={styles.questionText}>
           {question}
         </ThemedText>
-        {image && (
+        {image && !images && (
           <View style={styles.imageContainer}>
             <Image source={image} style={styles.quizImage} resizeMode="contain" />
+          </View>
+        )}
+        {images && images.length > 0 && (
+          <View style={styles.multiImageContainer}>
+            {images.map((img, idx) => (
+              <View key={idx} style={styles.imageWrapper}>
+                <Image source={img} style={styles.quizImage} resizeMode="contain" />
+              </View>
+            ))}
           </View>
         )}
       </Animated.View>
@@ -147,6 +158,20 @@ const styles = StyleSheet.create({
   quizImage: {
     width: '100%',
     height: '100%',
+  },
+  multiImageContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+    aspectRatio: 16 / 9,
+  },
+  imageWrapper: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.black,
+    overflow: 'hidden',
   },
   optionsContainer: {
     gap: 16,

@@ -12,6 +12,7 @@ interface FlashcardItemProps {
   onPlay?: () => void;
   backgroundColor?: string;
   primaryColor?: string;
+  secondaryColor?: string;
   tag?: string;
 }
 
@@ -26,6 +27,7 @@ export function FlashcardItem({
   onPlay,
   backgroundColor = Colors.white,
   primaryColor = Colors.black,
+  secondaryColor = Colors.textMuted,
   tag
 }: FlashcardItemProps) {
   const { playSound } = useAudio();
@@ -49,7 +51,7 @@ export function FlashcardItem({
         <ThemedText style={[styles.vietnamese, { color: primaryColor }]}>
           {vietnamese}
         </ThemedText>
-        <ThemedText style={styles.english}>
+        <ThemedText style={[styles.english, { color: secondaryColor }]}>
           {english}
         </ThemedText>
       </View>
