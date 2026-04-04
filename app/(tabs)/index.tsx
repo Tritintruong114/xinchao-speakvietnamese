@@ -1,5 +1,5 @@
 import { useNavigation, useRouter } from 'expo-router';
-import { Flame, Zap, Banknote } from 'lucide-react-native';
+import { Flame, Zap, Banknote, Camera } from 'lucide-react-native';
 import React, { useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { HomeHero } from '../../components/HomeHero';
@@ -70,6 +70,12 @@ export default function HomeScreen() {
             icon={Banknote}
             backgroundColor={Colors.brandSecondary}
             onPress={() => router.push('/currencies')}
+          />
+          <StatusBadge
+            label="Scan & Translate"
+            icon={Camera}
+            backgroundColor={Colors.brandPrimary}
+            onPress={() => router.push('/survival/scan')}
           />
         </View>
 

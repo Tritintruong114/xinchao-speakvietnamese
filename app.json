@@ -36,7 +36,8 @@
     "plugins": [
       "expo-router",
       "expo-notifications",
-      "expo-audio"
+      "expo-audio",
+      "expo-camera"
     ],
     "experiments": {
       "typedRoutes": true
