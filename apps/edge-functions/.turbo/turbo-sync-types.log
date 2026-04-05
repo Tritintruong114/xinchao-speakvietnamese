@@ -1,0 +1,12 @@
+
+
+> @xinchao/edge-functions@0.0.1 sync-types /Users/truongtritin/Github/xinchao-speak-vietnamese/apps/edge-functions
+> rsync -av --delete ../../packages/shared/src/types/ supabase/functions/_shared/types/
+
+Transfer starting: 3 files
+./
+scan.ts
+survival.ts
+
+sent 2501 bytes  received 70 bytes  2337272 bytes/sec
+total size is 2249  speedup is 0.87

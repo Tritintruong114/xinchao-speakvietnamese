@@ -1,0 +1,12 @@
+{
+  "name": "@xinchao/edge-functions",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Supabase Edge Functions (Deno runtime)",
+  "scripts": {
+    "serve": "supabase functions serve",
+    "deploy": "pnpm run sync-types && supabase functions deploy",
+    "sync-types": "rsync -av --delete ../../packages/shared/src/types/ supabase/functions/_shared/types/",
+    "typecheck": "echo 'Deno typecheck — run: deno check supabase/functions/*/index.ts'"
+  }
+}

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 95%; /* F4F4F0 as HSL */
+    --foreground: 0 0% 10%; /* 1A1A1A */
+  }
+
+  body {
+    @apply bg-brand-cream text-text-main antialiased;
+    font-family: 'Be Vietnam Pro', sans-serif;
+  }
+}
+
+@layer components {
+  .brutal-border {
+    @apply border-2 border-text-main;
+  }
+
+  .brutal-shadow {
+    @apply shadow-brutal;
+  }
+
+  .brutal-shadow-hover {
+    @apply hover:shadow-brutal hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100;
+  }
+
+  .brutal-shadow-pressed {
+    @apply active:shadow-none active:translate-x-1 active:translate-y-1 transition-all duration-75;
+  }
+}

@@ -43,3 +43,6 @@ yarn-error.*
 
 # local cache
 .npm-cache/
+
+# pnpm
+pnpm-lock.yaml
