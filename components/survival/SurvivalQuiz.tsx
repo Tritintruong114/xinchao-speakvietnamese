@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Animated, { FadeIn, BounceIn } from 'react-native-reanimated';
 import { Colors, BorderRadius, Stroke, Shadow } from '../../constants/Theme';
@@ -26,6 +26,12 @@ export const SurvivalQuiz = ({
 }: SurvivalQuizProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isLocked, setIsLocked] = useState(false);
+
+  // Reset state when question changes
+  useEffect(() => {
+    setSelectedIndex(null);
+    setIsLocked(false);
+  }, [question, options]);
 
   const handleSelect = (index: number) => {
     if (isLocked) return;

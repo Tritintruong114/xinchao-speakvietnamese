@@ -37,6 +37,8 @@ export function FlashcardItem({
       onPlay();
     } else if (audioUri) {
       playSound(audioUri);
+    } else {
+      console.warn(`FlashcardItem: audioUri is missing for phrase "${vietnamese}"`);
     }
   };
 

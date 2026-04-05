@@ -1,0 +1,10 @@
+{
+  "name": "@xinchao/landing-web",
+  "version": "0.0.1",
+  "private": true,
+  "description": "XinChao Landing Page (placeholder — Next.js or Astro)",
+  "scripts": {
+    "dev": "echo 'Landing web not yet implemented'",
+    "build": "echo 'Landing web not yet implemented'"
+  }
+}

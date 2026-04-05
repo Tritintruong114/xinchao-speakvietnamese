@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { X } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Theme';
 import { ProgressBar } from './ProgressBar';
 
@@ -11,8 +12,10 @@ interface SurvivalHeaderProps {
 }
 
 export const SurvivalHeader = ({ currentStep, totalSteps, onClose }: SurvivalHeaderProps) => {
+  const insets = useSafeAreaInsets();
+  
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { paddingTop: Math.max(insets.top, 12) }]}>
       <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
         <X size={24} color={Colors.black} />
       </TouchableOpacity>

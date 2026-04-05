@@ -1,0 +1,9 @@
+{
+  "extends": "@xinchao/config-ts/base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true
+  },
+  "include": ["src/**/*.ts"]
+}

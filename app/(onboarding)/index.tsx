@@ -1,103 +1,116 @@
-import { OnboardingProgress } from '@/components/OnboardingProgress';
-import { ThemedButton } from '@/components/ThemedButton';
-import { ThemedText } from '@/components/ThemedText';
-import { Icons } from '@/constants/Icons';
-import { Colors } from '@/constants/Theme';
+import { ThemedButton } from '../../components/ThemedButton';
+import { ThemedText } from '../../components/ThemedText';
+import { Colors, Spacing, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Image } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function OnboardingSplashScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const goToSegmentation = () => {
     router.replace('/(onboarding)/intent');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <View style={styles.content}>
         <View style={styles.heroSection}>
-          <View style={styles.logoContainer}>
-            <Image source={Icons.logo} style={styles.logo} resizeMode="contain" />
+          <View style={styles.logoBox}>
+            <Image 
+              source={require('../../assets/images/welcome_hero.png')} 
+              style={styles.heroImage}
+              resizeMode="contain"
+            />
           </View>
 
           <View style={styles.headingBlock}>
-            <ThemedText type="h1" color={Colors.brandPrimary} style={styles.title}>
+            <ThemedText type="h1" style={styles.title}>
               XIN CHÀO!
             </ThemedText>
 
-            <ThemedText type="body" style={styles.subtitle}>
+            <ThemedText style={styles.subtitle}>
               Survival Vietnamese in your pocket.
             </ThemedText>
           </View>
         </View>
 
         <View style={styles.ctaSection}>
-          <ThemedButton title="GET STARTED" type="primary" onPress={goToSegmentation} style={styles.button} />
-        </View>
-
-        <View style={styles.progressWrapper}>
-          <OnboardingProgress currentStep={1} />
+          <ThemedButton 
+            title="START THE JOURNEY" 
+            type="primary" 
+            onPress={goToSegmentation} 
+            style={styles.button} 
+          />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgPrimary,
+    backgroundColor: Colors.white,
   },
   content: {
     flex: 1,
-    padding: 24,
-  },
-  progressWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    paddingTop: 16,
+    paddingHorizontal: 24,
+    justifyContent: 'space-between',
+    paddingVertical: 64,
   },
   heroSection: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 28,
   },
-  logoContainer: {
+  logoBox: {
+    width: 160,
+    height: 160,
+    backgroundColor: Colors.brandSecondary,
+    borderWidth: Stroke.width,
+    borderColor: Colors.black,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 36,
+    // Hard Shadow
+    shadowColor: Colors.black,
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 8,
+    marginBottom: 40,
+    overflow: 'hidden', // Ensure image doesn't bleed out of rounded box
   },
-  logo: {
-    width: 180,
-    height: 180,
-    borderRadius: 20,
+  heroImage: {
+    width: '100%',
+    height: '100%',
   },
   headingBlock: {
     alignItems: 'center',
-    marginTop: 8,
   },
   title: {
     textAlign: 'center',
-    fontSize: 48,
-    lineHeight: 54,
+    fontSize: 56,
+    fontFamily: 'BeVietnamPro_900Black',
+    color: Colors.brandPrimary,
+    lineHeight: 64,
   },
   subtitle: {
     textAlign: 'center',
-    color: Colors.textMain,
+    fontSize: 16,
+    fontFamily: 'BeVietnamPro_700Bold',
+    color: Colors.black,
     marginTop: 8,
+    lineHeight: 24,
+    opacity: 0.6,
   },
   ctaSection: {
     width: '100%',
-    paddingBottom: 24,
   },
   button: {
     width: '100%',
-    minHeight: 58,
   },
 });

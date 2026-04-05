@@ -37,10 +37,18 @@ export function TravelOptionCard({
         </View>
       )}
       <View style={styles.textBlock}>
-        <ThemedText type="h2" color={highlighted ? Colors.white : Colors.black} style={styles.title}>
+        <ThemedText 
+          type="h2" 
+          color={highlighted ? Colors.white : Colors.black} 
+          style={[styles.title, highlighted && { color: Colors.white }]}
+        >
           {title}
         </ThemedText>
-        <ThemedText type="body" color={highlighted ? Colors.white : Colors.textMain} style={styles.subtitle}>
+        <ThemedText 
+          type="body" 
+          color={highlighted ? Colors.white : Colors.textMain} 
+          style={[styles.subtitle, highlighted && { color: Colors.white }]}
+        >
           {subtitle}
         </ThemedText>
       </View>
@@ -54,15 +62,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    borderColor: Colors.black,
     paddingHorizontal: 14,
     paddingVertical: 12,
     minHeight: 96,
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: Shadow.offset,
+    elevation: 4,
+    marginBottom: 8,
   },
   defaultCard: {
     backgroundColor: Colors.white,
@@ -77,11 +86,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.25)',
   },
   iconBadge: {
-    width: 72,
-    height: 72,
-    borderRadius: 8,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    width: 64,
+    height: 64,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.black,
     backgroundColor: Colors.brandSecondary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -91,18 +100,22 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   title: {
+    fontFamily: 'BeVietnamPro_900Black',
+    fontSize: 20,
+    lineHeight: 24,
     marginBottom: 2,
-    fontSize: 18,
-    lineHeight: 22,
+    color: Colors.black,
   },
   subtitle: {
+    fontFamily: 'BeVietnamPro_700Bold',
     fontSize: 13,
-    lineHeight: 17,
+    lineHeight: 18,
+    color: Colors.black,
+    opacity: 0.6,
   },
   pressed: {
-    transform: [{ translateX: Shadow.offset / 4 }, { translateY: Shadow.offset / 4 }],
-    shadowOffset: { width: Shadow.offset / 2, height: Shadow.offset / 2 },
-    elevation: Shadow.offset / 2,
+    transform: [{ translateX: 2 }, { translateY: 2 }],
+    shadowOffset: { width: 2, height: 2 },
+    elevation: 2,
   },
 });
-

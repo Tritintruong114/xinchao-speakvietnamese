@@ -12,6 +12,7 @@ Provide high-level architectural guidance for React Native applications, ensurin
 3. **State Management**: Recommend and implement efficient state management using Zustand or Redux Toolkit, ensuring state is predictable and debuggable.
 4. **Offline-First Design**: Design data flows that prioritize local storage (using WatermelonDB or MMKV) and synchronize with the backend when online.
 5. **Performance Optimization**: Use `useMemo`, `useCallback`, and `React.memo` strategically to prevent unnecessary re-renders in complex lists.
+6. **UI Resilience & Notch Handling**: Always use `react-native-safe-area-context` (`useSafeAreaInsets`) to handle device notches and status bars. Ensure all content-heavy screens are wrapped in a `ScrollView` with enough `paddingBottom` to avoid overlap with fixed bottom buttons/actions.
 
 # Examples
 - **Custom Hook for Data Fetching**:

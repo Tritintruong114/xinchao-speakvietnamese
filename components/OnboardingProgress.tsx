@@ -4,18 +4,19 @@ import { StyleSheet, View } from 'react-native';
 import { Colors } from '@/constants/Theme';
 
 interface OnboardingProgressProps {
-  currentStep: 1 | 2 | 3;
+  currentStep: number;
+  totalSteps?: number;
 }
 
-export function OnboardingProgress({ currentStep }: OnboardingProgressProps) {
+export function OnboardingProgress({ currentStep, totalSteps = 3 }: OnboardingProgressProps) {
   return (
     <View style={styles.container}>
-      {[1, 2, 3].map((step) => (
+      {Array.from({ length: totalSteps }).map((_, i) => (
         <View
-          key={step}
+          key={i}
           style={[
             styles.segment,
-            step <= currentStep ? styles.segmentActive : styles.segmentInactive,
+            i + 1 <= currentStep ? styles.segmentActive : styles.segmentInactive,
           ]}
         />
       ))}

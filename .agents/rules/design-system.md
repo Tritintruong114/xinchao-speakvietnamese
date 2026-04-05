@@ -14,28 +14,34 @@ trigger: always_on
 ## 2. DESIGN TOKENS (BIẾN SỐ THIẾT KẾ CỐT LÕI)
 
 ### 2.1. Hệ màu sắc (Colors)
-*   `Color-Bg-Primary`: **#FFFFFF** (Trắng tinh) - Không gian nền chính, tạo sự sạch sẽ, tối giản.
-*   `Color-Brand-Primary`: **#DA251D** (Đỏ Cờ) - Dành cho các nút bấm hành động chính (Primary CTA), cảnh báo, và các điểm nhấn quan trọng nhất.
-*   `Color-Brand-Secondary`: **#FFC62F** (Vàng Sao) - Dành cho nền thẻ Flashcard, background phụ, làm nổi bật thông tin.
-*   `Color-Text-Main`: **#1A1A1A** (Đen đậm) - Dùng cho văn bản chính, tiêu đề và các đường viền (Solid Stroke).
-*   `Color-Text-Muted`: **#666666** (Xám nhạt) - Dùng cho văn bản phụ, placeholder trong ô nhập liệu.
+*   `Color-Bg-Primary`: **#F4F4F0** (Vàng kem nhẹ/Anti-glare Off-white) - Không gian nền chính, tạo sự dễ chịu cho mắt.
+*   `Color-Brand-Primary`: **#DA251D** (Đỏ Cờ) - Dành cho các nút bấm hành động chính (Primary CTA), cảnh báo.
+*   `Color-Brand-Secondary`: **#FFC62F** (Vàng Sao) - Dành cho nền thẻ Flashcard, làm nổi bật thông tin.
+*   `Color-Brand-Pink`: **#FF90E8** (Hồng phấn) - Dùng cho các danh mục phụ hoặc trạng thái vui vẻ.
+*   `Color-Brand-Mint`: **#86EFAC** (Xanh bạc hà) - Dùng cho các trạng thái thành công, tích cực.
+*   `Color-Brand-Cyan`: **#00E5FF** (Xanh lơ) - Dùng cho thông tin bổ sung.
+*   `Color-Brand-Lavender`: **#C084FC** (Tím oải hương) - Dùng cho các danh mục ngoại ngữ/văn hóa.
+*   `Color-Brand-Blue`: **#93C5FD** (Xanh dương nhạt) - Dùng cho các trạng thái trung tính.
+*   `Color-Text-Main`: **#1A1A1A** (Đen đậm) - Dùng cho văn bản chính và các đường viền (Solid Stroke).
+*   `Color-Text-Muted`: **#666666** (Xám nhạt) - Dùng cho văn bản phụ.
 
 ### 2.2. Kiểu chữ (Typography)
-*   **Font Family:** `Be Vietnam Pro` hoặc `Inter` (Sans-serif).
-*   `Heading-1`: 24px - 32px, Extra Bold, Line-height 120%, Màu Đỏ Cờ hoặc Đen.
-*   `Heading-2`: 18px - 20px, Bold, Line-height 130%, Màu Đen.
-*   `Body-Text`: 16px, Regular, Line-height 150%, Màu Đen.
-*   `Button-Text`: 16px, Bold, Uppercase (in hoa) hoặc Sentence case.
+*   **Font Family:** `Be Vietnam Pro` (Sans-serif).
+*   `Heading-1`: 24px, Black (900), Line-height 32px, Màu Đỏ Cờ hoặc Đen.
+*   `Heading-2`: 20px, Extra Bold (800), Line-height 26px, Màu Đen.
+*   `Body-Text`: 16px, Regular (400), Line-height 24px, Màu Đen.
+*   `Button-Text`: 16px, Bold (700), Font `Be Vietnam Pro Bold`.
 
 ### 2.3. Khoảng cách & Kích thước (Spacing & Sizing)
-*   **Grid System:** Hệ thống lưới **8pt** (các khoảng cách margin/padding là bội số của 8: 8, 16, 24, 32...).
-*   **Padding màn hình chuẩn:** Lề trái/phải **16px** hoặc **24px**.
-*   **Touch-Target-Min:** **44x44 pt** (Tuân thủ tuyệt đối Apple Human Interface Guidelines tránh lỗi "ngón tay mập").
+*   **Grid System:** Hệ thống lưới **4pt/8pt** (các khoảng cách: 4, 8, 16, 24, 32, 40...).
+*   **Padding màn hình chuẩn:** Lề trái/phải **16px** hoặc **24px** (Spacing.m / Spacing.l).
+*   **Touch-Target-Min:** **44x44 pt** (Apple Human Interface Guidelines).
 
 ### 2.4. Viền & Bo góc (Borders & Radii)
-*   `Stroke-Width`: **1.5px** hoặc **2px**, nét Solid (mảng đặc), màu `#1A1A1A` (Đen).
-*   `Border-Radius-Card`: **12px** - Mềm mại nhưng giữ form dáng rõ ràng.
-*   `Border-Radius-Button`: **8px** - Giữ vẻ cứng cáp, không bo tròn dạng viên thuốc hoàn toàn.
+*   `Stroke-Width`: **2px**, nét Solid, màu `#1A1A1A` (Đen).
+*   `Border-Radius-Card`: **12px**.
+*   `Border-Radius-Button`: **8px**.
+*   `Border-Radius-Tight`: **4px**.
 
 ---
 
@@ -79,8 +85,9 @@ trigger: always_on
 ## 4. SCREEN & LAYOUT EXAMPLES (CẤU TRÚC MÀN HÌNH MẪU)
 
 ### 4.1. Màn hình Onboarding (Tiết lộ lũy tiến)
-*   **Screen 1 (Phân nhánh):** Nền trắng. Headline Đỏ: *"Bạn muốn học tiếng Việt để làm gì?"*. Hai nút Secondary bự: `[ ✈️ Du lịch sinh tồn ]` và `[ 💼 Sống & Làm việc ]`.
-*   **Screen 2 (Aha Moment):** Thẻ Flashcard mẫu (Nền Vàng, viền Đen) "Bao nhiêu tiền?". Nút Primary Đỏ: `[ Nghe phát âm ]`.
+*   **Tiếp cận "English-first":** Toàn bộ luồng Onboarding sử dụng tiếng Anh làm ngôn ngữ dẫn dắt chính (Headings, Labels, Instructions) để đảm bảo người dùng quốc tế hiểu rõ giá trị app ngay lập tức. Tiếng Việt được giữ lại ở vai trò là nội dung học tập hoặc dịch thuật bổ trợ.
+*   **Screen 1 (Phân nhánh):** Nền trắng. Headline Đỏ: *"What's your main goal?"*. Hai nút Secondary bự: `[ ✈️ SURVIVAL TRAVEL ]` và `[ 💼 LIVE & WORK IN VN ]`. Subtitle nhỏ bên dưới: *"Bạn muốn học tiếng Việt để làm gì?"*.
+*   **Screen 2 (Aha Moment):** Sử dụng component `VoicePractice` chuẩn. Thẻ hiển thị "How much is it?" làm trọng tâm hiểu, sau đó là "Bao nhiêu tiền?" để học. Người dùng có thể nhấn loa để nghe và nhấn giữ Micro để tập nói ngay lập tức. Sau khi thành công sẽ có hiệu ứng chúc mừng và phần thưởng +10 XP. Nút Primary Đỏ: `[ CONTINUE ]`.
 
 ### 4.2. Màn hình Trang chủ (Home - Luồng Du lịch)
 *   **Lời chào:** "Chào John!" (Đen) + Icon Pin hiển thị Offline Mode (Đỏ).
@@ -115,3 +122,21 @@ trigger: always_on
 2.  **Quy tắc Phân cấp Thị giác (Visual Hierarchy):** Mỗi màn hình CHỈ ĐƯỢC PHÉP CÓ MỘT Primary Button (Nút Đỏ). Các hành động khác dùng Secondary hoặc Ghost Button để điều hướng mắt người dùng vào hành động quan trọng nhất.
 3.  **Real UI cho App Store:** Ảnh chụp màn hình đem lên Store phải là giao diện thật của app. Không chứa các từ ngữ phóng đại vi phạm chính sách Apple như "App số 1", "Tải ngay", "Miễn phí 100%".
 4.  **Source of Truth (Nguồn chân lý duy nhất):** Mọi thay đổi về biến số (Design Tokens) phải được cập nhật đồng thời trên file Figma của Designer và code config của Developer. Không tự ý phát minh mã màu hay kích thước font chữ mới ngoài hệ thống này.
+
+---
+
+## 7. AI & GENERATIVE ARCHITECTURE (TIÊU CHUẨN AI)
+
+### 7.1. Cấu hình tập trung (AI Centralized Config)
+*   **Source of Truth:** Mọi cấu hình AI (Model ID, Base URL, Version) phải được quản lý tại [AIConfig.ts](file:///Users/truongtritin/Github/xinchao-speak-vietnamese/constants/AIConfig.ts).
+*   **Quy tắc:** Tuyệt đối không hardcode Model ID (ví dụ: "gemini-1.5-flash") trực tiếp trong Hook hoặc Component. Luôn sử dụng `AIConfig.DEFAULT_GEMINI_MODEL`.
+
+### 7.2. Model Selection (Lựa chọn mô hình)
+*   **Mặc định (Default):** Sử dụng **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite-preview`).
+*   **Ưu tiên:** Tốc độ (Latency) > Chi phí (Cost) > Độ chính xác (Accuracy) cho các tác vụ "Sinh tồn" (OCR menu, biển báo).
+*   **Trải nghiệm người dùng:** AI phải phản hồi trong thời gian thực hoặc có trạng thái loading/skeleton tối ưu.
+
+### 7.3. Prompting Standard
+*   **Persona:** Luôn định nghĩa AI là "Vietnamese Street Specialist" để đảm bảo giọng điệu gần gũi, thực tế.
+*   **Output:** Ưu tiên trả về định dạng JSON nghiêm ngặt để ứng dụng bóc tách dữ liệu (Menu items, Prices, Survival Phrases).
+*   **Fallback:** Luôn có câu thoại "sinh tồn" dự phòng trong trường hợp AI không nhận diện được nội dung.

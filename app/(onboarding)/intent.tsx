@@ -1,10 +1,11 @@
-import { OnboardingProgress } from '@/components/OnboardingProgress';
-import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Theme';
-import { useAppStore } from '@/store/useAppStore';
+import { OnboardingLayout } from '../../components/OnboardingLayout';
+import { ThemedText } from '../../components/ThemedText';
+import { Colors, Stroke } from '../../constants/Theme';
+import { useAppStore } from '../../store/useAppStore';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Image, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
+import { Plane, Briefcase } from 'lucide-react-native';
 
 export default function IntentScreen() {
   const router = useRouter();
@@ -17,121 +18,92 @@ export default function IntentScreen() {
       router.push('/(onboarding)/offline');
       return;
     }
-    router.push('/(onboarding)/push');
+    router.push('/(onboarding)/permissions');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.body}>
-          <ThemedText type="h2" style={styles.title}>
-            What brings you to Vietnam?
-          </ThemedText>
+    <OnboardingLayout
+      title="What's your main goal?"
+      description="Bạn muốn học tiếng Việt để làm gì?"
+    >
+      <View style={styles.cardContainer}>
+        <Pressable style={styles.card} onPress={() => handleSelect('travel')}>
+          <View style={[styles.iconBox, { backgroundColor: Colors.brandPink }]}>
+            <Plane size={40} color={Colors.black} strokeWidth={2.5} />
+          </View>
+          <View style={styles.cardTextBlock}>
+            <ThemedText type="h2" style={styles.cardTitle}>
+              SURVIVAL TRAVEL
+            </ThemedText>
+            <ThemedText style={styles.cardSubtitle}>
+              Survival for food, bargaining, and taxis.
+            </ThemedText>
+          </View>
+        </Pressable>
 
-          <Pressable style={styles.card} onPress={() => handleSelect('travel')}>
-            <Image
-              source={require('@/assets/screens/onboarding/traveling.png')}
-              style={styles.cardImage}
-              resizeMode="contain"
-            />
-            <View style={styles.cardTextBlock}>
-              <ThemedText type="h2" style={styles.cardTitle}>
-                Short-Term Travel
-              </ThemedText>
-              <ThemedText type="body" style={styles.cardSubtitle}>
-                Learn fast for food, bargaining, and rides.
-              </ThemedText>
-            </View>
-          </Pressable>
-
-          <Pressable style={styles.card} onPress={() => handleSelect('work')}>
-            <Image
-              source={require('@/assets/screens/onboarding/expats.png')}
-              style={styles.cardImage}
-              resizeMode="contain"
-            />
-            <View style={styles.cardTextBlock}>
-              <ThemedText type="h2" style={styles.cardTitle}>
-                Relocation / Work
-              </ThemedText>
-              <ThemedText type="body" style={styles.cardSubtitle}>
-                A deeper communication journey.
-              </ThemedText>
-            </View>
-          </Pressable>
-        </View>
-
-        <View style={styles.progressWrapper}>
-          <OnboardingProgress currentStep={2} />
-        </View>
+        <Pressable style={styles.card} onPress={() => handleSelect('work')}>
+          <View style={[styles.iconBox, { backgroundColor: Colors.brandCyan }]}>
+            <Briefcase size={40} color={Colors.black} strokeWidth={2.5} />
+          </View>
+          <View style={styles.cardTextBlock}>
+            <ThemedText type="h2" style={styles.cardTitle}>
+              LIVE & WORK IN VN
+            </ThemedText>
+            <ThemedText style={styles.cardSubtitle}>
+              For expats and professionals.
+            </ThemedText>
+          </View>
+        </Pressable>
       </View>
-    </SafeAreaView>
+    </OnboardingLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.brandSecondary,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-  },
-  progressWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    paddingTop: 16,
-  },
-  body: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: 16,
+  cardContainer: {
     width: '100%',
-  },
-  title: {
-    textAlign: 'center',
-    color: Colors.black,
-    marginBottom: 12,
+    gap: 24,
+    paddingTop: 16,
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 12,
-    borderWidth: 2,
+    backgroundColor: Colors.brandSecondary,
+    borderWidth: Stroke.width,
     borderColor: Colors.black,
-    backgroundColor: Colors.white,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    shadowColor: '#000000',
+    borderRadius: 20,
+    padding: 20,
+    // Hard Shadow
+    shadowColor: Colors.black,
     shadowOffset: { width: 6, height: 6 },
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 4,
   },
-  cardImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 8,
-    backgroundColor: '#F5F5F5',
+  iconBox: {
+    width: 72,
+    height: 72,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.black,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardTextBlock: {
     flex: 1,
-    paddingLeft: 12,
+    paddingLeft: 16,
   },
   cardTitle: {
     color: Colors.black,
-    marginBottom: 2,
-    fontSize: 18,
-    lineHeight: 22,
+    fontSize: 22,
+    fontFamily: 'BeVietnamPro_900Black',
+    lineHeight: 26,
+    marginBottom: 4,
   },
   cardSubtitle: {
-    color: Colors.textMain,
-    fontSize: 13,
-    lineHeight: 17,
+    fontSize: 14,
+    fontFamily: 'BeVietnamPro_700Bold',
+    color: Colors.black,
+    opacity: 0.6,
   },
 });
-

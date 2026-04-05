@@ -1,69 +1,57 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { Stack, Link } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-
-const { width } = Dimensions.get('window');
+import { StyleSheet, View, Image } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
+import { ThemedText } from '../components/ThemedText';
+import { ThemedButton } from '../components/ThemedButton';
+import { Colors, Spacing, Shadow, Stroke, BorderRadius } from '../constants/Theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LandingScreen() {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <Stack.Screen options={{ headerShown: false }} />
       
-      {/* Background Gradient */}
-      <LinearGradient
-        colors={['#FF5F6D', '#FFC371']}
-        style={styles.background}
-      />
-
       <View style={styles.content}>
-        {/* App Title */}
-        <Text style={styles.title}>Xin chào</Text>
-        <Text style={styles.subtitle}>Speak Vietnamese with Confidence</Text>
-
-        {/* Hero Illustration Placeholder */}
-        <View style={styles.illustrationContainer}>
-          <LinearGradient
-            colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0.1)']}
-            style={styles.illustrationCircle}
-          >
-            <Text style={styles.emoji}>🇻🇳</Text>
-          </LinearGradient>
-        </View>
-
-        {/* Feature Highlights */}
-        <View style={styles.features}>
-          <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>🎙️</Text>
-            <Text style={styles.featureText}>Speech Recognition</Text>
-          </View>
-          <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>📖</Text>
-            <Text style={styles.featureText}>Daily Phrases</Text>
-          </View>
-          <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>🤖</Text>
-            <Text style={styles.featureText}>AI Tutor</Text>
+        {/* Hero Illustration - Standardized Neo-Brutalism Logo */}
+        <View style={styles.heroContainer}>
+          <View style={styles.logoWrapper}>
+            <Image 
+              source={require('../assets/icons/logo_rectangle.png')} 
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
-        {/* Action Buttons */}
+        <View style={styles.infoBlock}>
+          <ThemedText style={styles.subtitle}>Speak Vietnamese. Survive. Connect.</ThemedText>
+        </View>
+
+        {/* Action Buttons - Standardized CTAs */}
         <View style={styles.buttonContainer}>
-          <Link href="/(tabs)" asChild>
-            <TouchableOpacity style={styles.primaryButton}>
-              <Text style={styles.primaryButtonText}>Get Started</Text>
-            </TouchableOpacity>
-          </Link>
+          <ThemedButton 
+            title="GET STARTED" 
+            onPress={() => router.push('/(onboarding)')}
+            type="primary"
+            style={styles.mainButton}
+          />
           
-          <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>I already have an account</Text>
-          </TouchableOpacity>
+          <ThemedButton 
+            title="I HAVE AN ACCOUNT" 
+            onPress={() => router.push('/(auth)/login')}
+            type="ghost"
+          />
         </View>
       </View>
 
       {/* Footer Decoration */}
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Made with ❤️ for Vietnamese learners</Text>
+        <ThemedText style={styles.footerText}>
+          MADE WITH <ThemedText style={{ color: Colors.brandPrimary }}>♥</ThemedText> IN VIETNAM
+        </ThemedText>
       </View>
     </View>
   );
@@ -72,108 +60,72 @@ export default function LandingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: '100%',
+    backgroundColor: Colors.bgPrimary,
   },
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-  },
-  title: {
-    fontSize: 48,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 10,
-    letterSpacing: 1,
+    paddingHorizontal: 24,
+    paddingTop: 72, // 8 * 9
+    paddingBottom: 40, // 8 * 5
   },
   subtitle: {
-    fontSize: 18,
-    color: 'rgba(255, 255, 255, 0.9)',
-    marginTop: 8,
-    fontWeight: '600',
+    fontSize: 16,
+    fontFamily: 'BeVietnamPro_700Bold',
+    color: Colors.black,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
     textAlign: 'center',
   },
-  illustrationContainer: {
-    marginVertical: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  illustrationCircle: {
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
-  },
-  emoji: {
-    fontSize: 80,
-  },
-  features: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+  infoBlock: {
+    marginTop: -16,
     marginBottom: 40,
-  },
-  featureItem: {
     alignItems: 'center',
   },
-  featureIcon: {
-    fontSize: 24,
-    marginBottom: 5,
+  heroContainer: {
+    marginTop: 48,
+    marginBottom: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  featureText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '500',
+  logoWrapper: {
+    width: 240,
+    height: 240,
+    backgroundColor: Colors.white,
+    borderWidth: 2,
+    borderColor: Colors.black,
+    borderRadius: 24, // 8 * 3
+    overflow: 'hidden',
+    // Standard Neo-Brutalism Hard Shadow
+    shadowColor: Colors.black,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+    padding: 0,
+  },
+  logo: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 24,
   },
   buttonContainer: {
     width: '100%',
-    gap: 15,
+    gap: 16,
+    marginTop: 'auto',
   },
-  primaryButton: {
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 18,
-    borderRadius: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  primaryButtonText: {
-    color: '#FF5F6D',
-    fontSize: 18,
-    fontWeight: '800',
-  },
-  secondaryButton: {
-    paddingVertical: 15,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  secondaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
+  mainButton: {
+    minHeight: 64,
   },
   footer: {
-    paddingBottom: 30,
+    paddingBottom: 24,
     alignItems: 'center',
   },
   footerText: {
-    color: 'rgba(255, 255, 255, 0.6)',
-    fontSize: 12,
+    fontSize: 10,
+    fontFamily: 'BeVietnamPro_800ExtraBold',
+    color: Colors.black,
+    opacity: 0.3,
+    letterSpacing: 1,
   },
 });

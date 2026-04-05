@@ -11,6 +11,7 @@ import { SurvivalQuiz } from '../../components/survival/SurvivalQuiz';
 import { SurvivalSuccess } from '../../components/survival/SurvivalSuccess';
 import { SurvivalTeaching } from '../../components/survival/SurvivalTeaching';
 import { VoicePractice } from '../../components/survival/VoicePractice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAudio } from '../../hooks/useAudio';
 import { SURVIVAL_MODULES } from '../../constants/SurvivalData';
 import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
@@ -20,6 +21,7 @@ const { width } = Dimensions.get('window');
 export default function SurvivalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const module = SURVIVAL_MODULES[id as string];
   const { playSound } = useAudio();
   const [stepIndex, setStepIndex] = useState(0);
@@ -57,7 +59,11 @@ export default function SurvivalScreen() {
         );
       case 'micro-learning':
         return (
-          <View style={[styles.learningContent, { padding: 24 }]}>
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={[styles.scrollContent, { padding: 24, paddingBottom: 100, justifyContent: 'center' }]}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.vocabGrid}>
               {currentStep.vocabulary?.map((v, i) => (
                 <FlashcardItem
@@ -71,7 +77,7 @@ export default function SurvivalScreen() {
                 />
               ))}
             </View>
-          </View>
+          </ScrollView>
         );
       case 'voice_practice':
         return (
@@ -113,11 +119,17 @@ export default function SurvivalScreen() {
         );
       case 'teaching':
         return (
-          <SurvivalTeaching
-            title={currentStep.title}
-            content={currentStep.content || ''}
-            visualHighlight={currentStep.visualHighlight}
-          />
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={[styles.scrollContent, { paddingBottom: 100, justifyContent: 'center' }]}
+            showsVerticalScrollIndicator={false}
+          >
+            <SurvivalTeaching
+              title={currentStep.title}
+              content={currentStep.content || ''}
+              visualHighlight={currentStep.visualHighlight}
+            />
+          </ScrollView>
         );
       default:
         return <ThemedText>Unknown Step Type</ThemedText>;
@@ -139,7 +151,7 @@ export default function SurvivalScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <Stack.Screen options={{ headerShown: false }} />
       <SurvivalHeader
         currentStep={stepIndex}
@@ -158,7 +170,7 @@ export default function SurvivalScreen() {
         onPress={handleNext}
         visible={['onboarding', 'micro-learning', 'teaching'].includes(currentStep.type)}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -329,5 +341,8 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 40,
     flexGrow: 1,
+  },
+  scrollView: {
+    flex: 1,
   },
 });

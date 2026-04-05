@@ -10,3 +10,14 @@ export async function requestPushPermission(): Promise<Notifications.PermissionS
   return requested.status;
 }
 
+export async function sendWelcomeNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Welcome aboard! 🛵",
+      body: "Your journey starts now. Stay street-smart with our daily phrase nudges.",
+      sound: true,
+      priority: Notifications.AndroidNotificationPriority.HIGH,
+    },
+    trigger: null, // send immediately
+  });
+}

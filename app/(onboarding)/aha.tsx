@@ -1,75 +1,26 @@
 import { OnboardingLayout } from '@/components/OnboardingLayout';
 import { ThemedButton } from '@/components/ThemedButton';
-import { ThemedIcon } from '@/components/ThemedIcon';
 import { ThemedText } from '@/components/ThemedText';
+import { VoicePractice } from '@/components/survival/VoicePractice';
 import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAuth } from '@/context/AuthContext';
-import { useAudio } from '@/hooks/useAudio';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
-import { Volume2 } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSequence,
-  withTiming,
-} from 'react-native-reanimated';
-
-// Simple Particle Component represented by a small square
-const Particle = ({ delay, color }: { delay: number; color: string }) => {
-  const opacity = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const translateX = useSharedValue(0);
-  const scale = useSharedValue(0);
-
-  useEffect(() => {
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 50 + Math.random() * 100;
-
-    translateX.value = withDelay(delay, withTiming(Math.cos(angle) * distance, { duration: 1000 }));
-    translateY.value = withDelay(delay, withTiming(Math.sin(angle) * distance, { duration: 1000 }));
-    opacity.value = withDelay(delay, withSequence(withTiming(1, { duration: 200 }), withTiming(0, { duration: 800 })));
-    scale.value = withDelay(delay, withSequence(withTiming(1, { duration: 200 }), withTiming(0, { duration: 800 })));
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { scale: scale.value }
-    ],
-    backgroundColor: color,
-  }));
-
-  return <Animated.View style={[styles.particle, animatedStyle]} />;
-};
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 export default function AhaScreen() {
   const router = useRouter();
   const { user } = useAuth();
-  const [showEffects, setShowEffects] = useState(false);
   const [hasClaimedReward, setHasClaimedReward] = useState(false);
   const [isUpdatingXp, setIsUpdatingXp] = useState(false);
-  const { playSound } = useAudio();
 
   const handleNext = () => {
     router.push('/(onboarding)/permissions');
   };
 
-  const handlePlayAudio = async () => {
-    if (isUpdatingXp) return;
-
-    // Trigger visual effects
-    setShowEffects(true);
-    setTimeout(() => setShowEffects(false), 2000);
-
-    // Play audio
-    playSound('bao_nhieu_tien');
-
+  const handleVoiceSuccess = async () => {
     // Update XP if not already claimed
     if (!hasClaimedReward && user) {
       setIsUpdatingXp(true);
@@ -98,9 +49,6 @@ export default function AhaScreen() {
 
   const renderFooter = () => (
     <View style={styles.footerInner}>
-      <ThemedText type="body" style={styles.description}>
-        Listen to the correct pronunciation and earn your first reward!
-      </ThemedText>
       <ThemedButton
         title="CONTINUE"
         type="primary"
@@ -112,165 +60,65 @@ export default function AhaScreen() {
 
   return (
     <OnboardingLayout
-      title="Try tapping the speaker:"
+      title="Say Your First Words"
       footer={renderFooter()}
     >
-      <View style={styles.cardContainer}>
-        <View style={styles.flashcard}>
-          <ThemedText type="h1" style={styles.vietnameseText}>
-            Bao nhiêu tiền?
-          </ThemedText>
-          <ThemedText type="body" style={styles.englishText}>
-            How much is it?
-          </ThemedText>
+      <View style={styles.container}>
+        <VoicePractice 
+          phrase="Cái này bao nhiêu tiền?"
+          translation="How much is this?"
+          audioUri={require('@/assets/audio/bargaining/baonhieutien.mp3')}
+          onSuccess={handleVoiceSuccess}
+          successFeedback="Great job! +10 XP"
+        />
 
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.audioIcon}
-            onPress={handlePlayAudio}
-            disabled={isUpdatingXp}
+        {hasClaimedReward && (
+          <Animated.View 
+            entering={FadeIn.delay(300)} 
+            exiting={FadeOut}
+            style={styles.rewardBadge}
           >
-            <View style={styles.speakerWrapper}>
-              <ThemedIcon icon={Volume2} size={48} strokeWidth={2.5} />
-            </View>
-
-            {showEffects && (
-              <View style={styles.effectsContainer}>
-                {[...Array(12)].map((_, i) => (
-                  <Particle
-                    key={i}
-                    delay={i * 20}
-                    color={i % 2 === 0 ? Colors.brandPrimary : Colors.brandSecondary}
-                  />
-                ))}
-              </View>
-            )}
-          </TouchableOpacity>
-
-          {hasClaimedReward && (
-            <Animated.View style={styles.rewardBadge}>
-              <ThemedText style={styles.rewardText}>+10 XP</ThemedText>
-            </Animated.View>
-          )}
-        </View>
+            <ThemedText style={styles.rewardText}>+10 XP EARNED</ThemedText>
+          </Animated.View>
+        )}
       </View>
     </OnboardingLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
+  container: {
+    flex: 1,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 20,
-  },
-  flashcard: {
-    width: '100%',
-    aspectRatio: 1,
-    backgroundColor: Colors.brandSecondary,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
-    borderRadius: BorderRadius.card,
-    padding: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // Hard Shadow
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset * 2, height: Shadow.offset * 2 },
-    shadowOpacity: Shadow.opacity,
-    shadowRadius: 0,
-    elevation: Shadow.offset * 2,
-  },
-  vietnameseText: {
-    fontSize: 36,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  englishText: {
-    fontSize: 18,
-    color: Colors.black,
-    opacity: 0.7,
-    textAlign: 'center',
-    marginBottom: 32,
-    fontWeight: 'bold',
-  },
-  audioIcon: {
-    width: 96,
-    height: 96,
-    backgroundColor: Colors.white,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
-    borderRadius: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    // Little shadow for the button itself
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
-    shadowRadius: 0,
-    elevation: Shadow.offset,
-  },
-  speakerWrapper: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  speakerEmoji: {
-    fontSize: 44,
-    textAlign: 'center',
-    // Standardizing emoji position
-    marginTop: Platform.OS === 'ios' ? 4 : 0,
-    marginLeft: Platform.OS === 'ios' ? 4 : 0,
-  },
-  effectsContainer: {
-    position: 'absolute',
-    top: 48,
-    left: 48,
-    width: 0,
-    height: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  particle: {
-    position: 'absolute',
-    width: 10,
-    height: 10,
-    borderRadius: 2,
-    borderWidth: 1,
-    borderColor: Stroke.color,
+    paddingVertical: 40,
   },
   rewardBadge: {
     position: 'absolute',
-    top: -10,
-    right: -10,
+    top: 0,
+    right: 0,
     backgroundColor: Colors.brandPrimary,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 12,
     borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    borderColor: Colors.black,
     transform: [{ rotate: '12deg' }],
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
     shadowRadius: 0,
+    zIndex: 100,
   },
   rewardText: {
     color: Colors.white,
-    fontWeight: '900',
-    fontSize: 16,
+    fontFamily: 'BeVietnamPro_900Black',
+    fontSize: 14,
+    textTransform: 'uppercase',
   },
   footerInner: {
     width: '100%',
     paddingBottom: 24,
-  },
-  description: {
-    textAlign: 'center',
-    marginBottom: 20,
-    color: Colors.textMuted,
-    fontWeight: '500',
   },
 });

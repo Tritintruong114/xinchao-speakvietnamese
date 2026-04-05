@@ -1,11 +1,11 @@
 import { Volume2, Trophy } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Pressable, SafeAreaView, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
-import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
+import { Colors, Stroke } from '@/constants/Theme';
 import { useAppStore } from '@/store/useAppStore';
 import { useAudio } from '@/hooks/useAudio';
 
@@ -28,32 +28,45 @@ export default function TravelAhaScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Pressable style={styles.flashCard} onPress={handlePlay}>
+        <ThemedText type="h1" style={styles.headerTitle}>
+          Try your first phrase!
+        </ThemedText>
+
+        <TouchableOpacity 
+          activeOpacity={0.9} 
+          style={styles.flashCard} 
+          onPress={handlePlay}
+        >
+          <ThemedText style={styles.enPhrase}>
+            Discount please!
+          </ThemedText>
           <ThemedText type="h1" style={styles.viPhrase}>
             Bớt đi!
           </ThemedText>
-          <ThemedText type="body" style={styles.enPhrase}>
-            Discount please!
-          </ThemedText>
 
-          <Pressable onPress={handlePlay} style={styles.speakerButton}>
-            <Volume2 size={24} color={Colors.white} strokeWidth={2.5} />
-          </Pressable>
-        </Pressable>
+          <View style={styles.speakerButton}>
+            <Volume2 size={32} color={Colors.white} strokeWidth={2.5} />
+          </View>
+        </TouchableOpacity>
 
         {isPlayed ? (
           <View style={styles.resultCard}>
             <View style={styles.rewardIconWrapper}>
-              <Trophy size={32} color={Colors.black} strokeWidth={2.5} />
+              <Trophy size={48} color={Colors.brandPrimary} strokeWidth={2.5} />
             </View>
-            <ThemedText type="body" style={styles.resultText}>
-              Save this win to your account?
+            <ThemedText style={styles.resultText}>
+              Bargaining skill UNLOCKED!{"\n"}Ready to save money?
             </ThemedText>
-            <ThemedButton title="QUICK SIGN UP" type="primary" onPress={handleQuickSignup} style={styles.resultCta} />
+            <ThemedButton 
+              title="FINISH ONBOARDING" 
+              type="primary" 
+              onPress={handleQuickSignup} 
+              style={styles.resultCta} 
+            />
           </View>
         ) : (
-          <ThemedText type="body" style={styles.hint}>
-            Tap the card or speaker to hear the phrase.
+          <ThemedText style={styles.hint}>
+            Tap the card to hear the phrase.
           </ThemedText>
         )}
       </View>
@@ -64,85 +77,100 @@ export default function TravelAhaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgPrimary,
+    backgroundColor: Colors.white,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+  },
+  headerTitle: {
+    textAlign: 'center',
+    color: Colors.brandPrimary,
+    marginBottom: 40,
+    fontSize: 32,
+    fontFamily: 'BeVietnamPro_900Black',
   },
   flashCard: {
-    borderRadius: BorderRadius.card,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: Colors.black,
     backgroundColor: Colors.brandSecondary,
-    minHeight: 260,
+    minHeight: 280,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
+    paddingHorizontal: 24,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: Shadow.offset,
-  },
-  viPhrase: {
-    color: Colors.black,
-    textAlign: 'center',
-    marginBottom: 8,
+    elevation: 10,
   },
   enPhrase: {
     color: Colors.black,
     fontSize: 22,
+    fontFamily: 'BeVietnamPro_700Bold',
     lineHeight: 28,
     textAlign: 'center',
+    opacity: 0.6,
+    marginBottom: 8,
+  },
+  viPhrase: {
+    color: Colors.black,
+    textAlign: 'center',
+    marginBottom: 40,
+    fontFamily: 'BeVietnamPro_900Black',
+    fontSize: 56,
   },
   speakerButton: {
     position: 'absolute',
-    right: 14,
-    bottom: 14,
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    right: 20,
+    bottom: 20,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 2,
+    borderColor: Colors.black,
     backgroundColor: Colors.brandPrimary,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  speakerIcon: {
-    fontSize: 24,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   hint: {
-    marginTop: 16,
+    marginTop: 24,
     textAlign: 'center',
-    color: Colors.textMuted,
+    color: Colors.black,
+    fontFamily: 'BeVietnamPro_700Bold',
+    opacity: 0.5,
   },
   resultCard: {
-    marginTop: 16,
-    borderRadius: BorderRadius.card,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
+    marginTop: 32,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: Colors.black,
     backgroundColor: Colors.white,
-    padding: 14,
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
+    padding: 24,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: Shadow.offset,
+    alignItems: 'center',
   },
   rewardIconWrapper: {
-    alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   resultText: {
     textAlign: 'center',
     color: Colors.black,
-    marginBottom: 10,
+    marginBottom: 24,
+    fontFamily: 'BeVietnamPro_700Bold',
+    fontSize: 16,
+    lineHeight: 22,
   },
   resultCta: {
     width: '100%',
   },
 });
-

@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { supabase } from '../lib/supabase'; // We'll verify this exists
-import * as FileSystem from 'expo-file-system';
+import { AIConfig } from '../constants/AIConfig';
 
 export type SurvivalScanResult = {
   raw_text: string;
@@ -47,7 +46,7 @@ export function useSurvivalScan() {
             generationConfig: { responseMimeType: "application/json" }
         };
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        const response = await fetch(`${AIConfig.GEMINI_BASE_URL}/models/${AIConfig.DEFAULT_GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

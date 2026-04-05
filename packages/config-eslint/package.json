@@ -1,0 +1,6 @@
+{
+  "name": "@xinchao/config-eslint",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared ESLint configuration for XinChao monorepo (placeholder)"
+}

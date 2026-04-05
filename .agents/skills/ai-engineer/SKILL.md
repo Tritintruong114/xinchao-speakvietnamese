@@ -16,10 +16,11 @@ Ship reliable AI experiences for OCR and pronunciation scoring with measurable q
 4. Design observability for AI flows: success rate, latency, cost/request, and error taxonomy.
 
 # RULES & CONSTRAINTS
-1. Never expose API keys, model secrets, or raw sensitive user data in logs.
-2. Every AI feature must include: timeout, retry budget, fallback response, and user-safe error message.
-3. Use deterministic settings for scored tasks (pronunciation rubric, OCR normalization).
-4. Maintain benchmark set for Vietnamese edge cases (accent marks, menu slang, regional variants).
+1. **Source of Truth:** Never hardcode Model IDs. Always use `AIConfig.DEFAULT_GEMINI_MODEL` from `constants/AIConfig.ts`.
+2. **Current Standard:** Use **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite-preview`) for survival tasks to minimize latency.
+3. Every AI feature must include: timeout, retry budget, fallback response, and user-safe error message.
+4. Never expose API keys, model secrets, or raw sensitive user data in logs.
+5. Maintain benchmark set for Vietnamese edge cases (accent marks, menu slang, regional variants).
 
 # DELIVERY FORMAT
 - Prompt spec (system/user templates + constraints).

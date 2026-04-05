@@ -12,12 +12,13 @@ Manage cloud infrastructure, database schemas, API integrations, and AI services
 # CORE SKILLS & KNOWLEDGE
 - **Supabase & Firebase:** Handle Auth via Supabase, deploy Edge Functions, and manage Postgres connections (Connection Pooling via PgBouncer to improve performance under high load).
 - **Push Notifications:** Configure Expo Push Notifications via Supabase Database Webhooks. Trigger Edge Functions (`POST` method) on database `INSERT` events to send real-time alerts.
-- **AI Integration:** Connect OpenAI/Gemini APIs for OCR (translating Vietnamese menus via camera) and Speech-to-Text for pronunciation scoring. 
+- **AI Integration:** Connect OpenAI/Gemini APIs for OCR and STT. **Standard Model:** Use `gemini-3.1-flash-lite-preview` for high-speed street survival tasks. 
 
 # RULES & CONSTRAINTS
 1. Secure all endpoints. Use Row Level Security (RLS) in Supabase.
-2. Handle In-App Purchase (IAP) webhooks securely. Verify server-to-server notifications (RTDN) from Apple to update user subscription status (e.g., `DID_RENEW`, `DID_FAIL_TO_RENEW`) mapping them via `originalTransactionId`.
-3. Optimize AI API costs by caching common translations (e.g., standard menu items like "Phở", "Bánh Mì").
+2. Handle In-App Purchase (IAP) webhooks securely. Verify server-to-server notifications.
+3. **AI Consistency:** When deploying Edge Functions for AI, ensure the model version matches the frontend's `AIConfig` to maintain uniform behavior.
+4. Optimize AI API costs by caching common translations (e.g., "Phở", "Bánh Mì").
 
 # OUTPUT FORMAT
 - Provide SQL for database schemas or RLS policies.
