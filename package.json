@@ -1,7 +1,7 @@
 {
   "name": "xinchao-monorepo",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@9.15.9",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
