@@ -15,14 +15,21 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAudio } from '../../hooks/useAudio';
 import { SURVIVAL_MODULES } from '../../constants/SurvivalData';
 import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
+import { SurvivalStore } from '../../store/survivalStore';
 
 const { width } = Dimensions.get('window');
+
+function resolveSurvivalModule(rawId: string | undefined) {
+  if (!rawId) return undefined;
+  const id = Array.isArray(rawId) ? rawId[0] : rawId;
+  return SurvivalStore.getModuleById(id) ?? SURVIVAL_MODULES[id];
+}
 
 export default function SurvivalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const module = SURVIVAL_MODULES[id as string];
+  const module = resolveSurvivalModule(id);
   const { playSound } = useAudio();
   const [stepIndex, setStepIndex] = useState(0);
 

@@ -18,6 +18,8 @@ export interface SavedPhrase {
   audioUri: string; // Tên file audio (đã được bundle offline trong app)
   categories: PhraseCategory[];
   isBookmarked?: boolean;
+  /** Row order when loaded from DB / dashboard */
+  sort_order?: number;
 }
 
 // 3. Mapping màu sắc UI (Neo-Brutalism) cho từng Tag

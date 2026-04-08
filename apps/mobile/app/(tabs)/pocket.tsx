@@ -1,5 +1,6 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, Platform, KeyboardAvoidingView, Pressable } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { ThemedText } from '../../components/ThemedText';
 import { Zap, Search } from 'lucide-react-native';
 import { useNavigation } from 'expo-router';
@@ -7,8 +8,10 @@ import { FlashcardItem } from '../../components/FlashcardItem';
 import { StatusBadge } from '../../components/StatusBadge';
 import { ThemedInput } from '../../components/ThemedInput';
 import { Colors, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
-import { CATEGORIES, SAVED_PHRASES } from '../../constants/survival/saved_phrases';
-import { PhraseCategory as SharedPhraseCategory, CategoryColors } from '@xinchao/shared';
+import { CATEGORIES } from '../../constants/survival/saved_phrases';
+import { PhraseCategory as SharedPhraseCategory } from '@xinchao/shared';
+import { useSavedPhrasesForPocket } from '../../hooks/useSavedPhrasesForPocket';
+import { PhraseStore } from '../../store/phraseStore';
 
 /**
  * Helper to extract hex color from tailwind-like strings: "bg-[#DA251D] text-white"
@@ -20,8 +23,24 @@ const getHexFromTailwind = (tw: string) => {
 
 export default function PocketScreen() {
   const navigation = useNavigation();
+  const { phrases, syncPhrases, refresh } = useSavedPhrasesForPocket();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<SharedPhraseCategory | 'ALL'>('ALL');
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      void (async () => {
+        await PhraseStore.ensureHydrated();
+        if (!active) return;
+        await syncPhrases();
+        if (active) refresh();
+      })();
+      return () => {
+        active = false;
+      };
+    }, [syncPhrases, refresh]),
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,7 +58,7 @@ export default function PocketScreen() {
     });
   }, [navigation]);
 
-  const filteredPhrases = SAVED_PHRASES.filter(phrase => {
+  const filteredPhrases = phrases.filter(phrase => {
     const matchesSearch = 
       phrase.vietnamese.toLowerCase().includes(searchQuery.toLowerCase()) ||
       phrase.english.toLowerCase().includes(searchQuery.toLowerCase());

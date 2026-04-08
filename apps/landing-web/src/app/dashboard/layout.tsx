@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { SITE_URL } from '@/lib/site';
-import { DashboardFrame } from './DashboardFrame';
+import { DashboardShell } from './DashboardShell';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardFrame>{children}</DashboardFrame>;
+  return <DashboardShell>{children}</DashboardShell>;
 }

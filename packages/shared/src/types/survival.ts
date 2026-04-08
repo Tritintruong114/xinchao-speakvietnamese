@@ -22,6 +22,7 @@ export interface Dialogue {
   nextId?: string;
   timeLimit?: number;
   timeoutId?: string;
+  mascotExpression?: MascotExpression;
 }
 
 export type SurvivalStepType =
@@ -63,6 +64,13 @@ export interface SurvivalModule {
   id: string;
   title: string;
   category: 'Beginner' | 'Survival' | 'Legend';
-  image: any;
+  /** Bundled asset (e.g. RN require); optional when loaded from DB */
+  image?: any;
+  /** Remote cover image from survival_modules.image_url */
+  image_url?: string | null;
   steps: SurvivalStep[];
+  /** Row order in DB / dashboard (column `sort_order`) */
+  sort_order?: number;
+  /** ISO timestamp from DB when column exists */
+  updated_at?: string;
 }

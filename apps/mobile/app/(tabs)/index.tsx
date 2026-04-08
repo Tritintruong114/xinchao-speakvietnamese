@@ -1,32 +1,36 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation, useRouter } from 'expo-router';
 import { Flame, Zap, Banknote, Camera } from 'lucide-react-native';
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { ModuleCard } from '../../components/ModuleCard';
 import { StatusBadge } from '../../components/StatusBadge';
 import { ThemedText } from '../../components/ThemedText';
 import { Colors } from '../../constants/Theme';
-
-// Import images - New categorized assets
-const MoneyCountImg = require('../../assets/screens/home/money_count.png');
-const GreetingsImg = require('../../assets/screens/home/greetings.png');
-const CountingNumbersImg = require('../../assets/screens/home/counting_numbers.png');
-// const TaxiImg = require('../../assets/screens/home/ride_hailing.png');
-const DirectionsImg = require('../../assets/screens/home/directions.png');
-// const FoodImg = require('../../assets/screens/home/restaurant_coffee.png');
-const BargainingImg = require('../../assets/screens/home/bargaining.png');
-// const NhauImg = require('../../assets/screens/home/nhau_culture.png');
-// const MetroImg = require('../../assets/screens/home/metro.png');
-// const BusImg = require('../../assets/screens/home/sleeper_bus.png');
-// const TrainImg = require('../../assets/screens/home/train.png');
-// const PlaneImg = require('../../assets/screens/home/airplane.png');
-// const GenZImg = require('../../assets/screens/home/genz_slang.png');
-// const ExpatImg = require('../../assets/screens/home/expat_life.png');
+import { useSurvivalModulesForHome } from '../../hooks/useSurvivalModulesForHome';
+import { resolveSurvivalCoverImage } from '../../lib/localModuleImages';
+import { SurvivalStore } from '../../store/survivalStore';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { sections, syncModules, refresh } = useSurvivalModulesForHome();
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      void (async () => {
+        await SurvivalStore.ensureHydrated();
+        if (!active) return;
+        await syncModules();
+        if (active) refresh();
+      })();
+      return () => {
+        active = false;
+      };
+    }, [syncModules, refresh]),
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -63,7 +67,6 @@ export default function HomeScreen() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Quick Badges */}
         <View style={styles.quickBadges}>
           <StatusBadge
             label="Currencies"
@@ -82,106 +85,23 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* 1. BEGINNER MODULES */}
-        <ThemedText style={styles.sectionTitle}>BEGINNER: THE BASICS</ThemedText>
-        <View style={styles.grid}>
-          <ModuleCard
-            title="MONEY COUNT"
-            image={MoneyCountImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/money_count')}
-          />
-          <ModuleCard
-            title="GREETINGS"
-            image={GreetingsImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/greetings')}
-          />
-          <ModuleCard
-            title="COUNTING NUMBERS"
-            image={CountingNumbersImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/counting_numbers')}
-          />
-        </View>
+        {sections.map((section, si) => (
+          <View key={section.category} style={si > 0 ? { marginTop: 24 } : undefined}>
+            <ThemedText style={styles.sectionTitle}>{section.title}</ThemedText>
+            <View style={styles.grid}>
+              {section.modules.map((m) => (
+                <ModuleCard
+                  key={m.id}
+                  title={m.title}
+                  image={resolveSurvivalCoverImage(m)}
+                  backgroundColor={Colors.white}
+                  onPress={() => router.push(`/survival/${m.id}`)}
+                />
+              ))}
+            </View>
+          </View>
+        ))}
 
-        {/* 2. SURVIVAL MODULES */}
-        <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>SURVIVAL: STREET SMART</ThemedText>
-        <View style={styles.grid}>
-          <ModuleCard
-            title="DIRECTIONS"
-            image={DirectionsImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/directions')}
-          />
-          {/* <ModuleCard
-            title="EAT & DRINK"
-            image={FoodImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/restaurant_coffee')}
-          /> */}
-          <ModuleCard
-            title="BARGAINING"
-            image={BargainingImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/bargaining')}
-          />
-          {/* <ModuleCard
-            title="NHẬU CULTURE"
-            image={NhauImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/nhau_culture')}
-          />
-          <ModuleCard
-            title="RIDE HAILING"
-            image={TaxiImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/ride_hailing')}
-          />
-          <ModuleCard
-            title="METRO"
-            image={MetroImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/metro')}
-          />
-          <ModuleCard
-            title="SLEEPER BUS"
-            image={BusImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/sleeper_bus')}
-          />
-          <ModuleCard
-            title="TRAIN"
-            image={TrainImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/train')}
-          />
-          <ModuleCard
-            title="AIRPLANE"
-            image={PlaneImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/airplane')}
-          /> */}
-        </View>
-
-        {/* 3. LEGEND MODULES */}
-        {/* <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>LEGEND: LIVE LIKE A LOCAL</ThemedText>
-        <View style={styles.grid}>
-          <ModuleCard
-            title="GEN Z SLANG"
-            image={GenZImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/genz_slang')}
-          />
-          <ModuleCard
-            title="EXPAT LIFE"
-            image={ExpatImg}
-            backgroundColor={Colors.white}
-            onPress={() => router.push('/survival/expat_life')}
-          />
-        </View> */}
-
-        {/* Footer padding */}
         <View style={{ height: 100 }} />
       </ScrollView>
     </View>

@@ -12,6 +12,16 @@
     @apply bg-brand-cream text-text-main antialiased;
     font-family: 'Be Vietnam Pro', sans-serif;
   }
+
+  /* Hide scrollbars globally; scrolling still works (trackpad, wheel, touch). */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer components {

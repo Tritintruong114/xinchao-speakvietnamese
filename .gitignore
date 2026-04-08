@@ -25,6 +25,9 @@ out/
 # Metro
 .metro-health-check*
 
+# tooling
+tools/.cache/
+
 # debug
 npm-debug.*
 yarn-debug.*

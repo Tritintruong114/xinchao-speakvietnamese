@@ -10,9 +10,18 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "sync-types": "turbo run sync-types"
+    "sync-types": "turbo run sync-types",
+    "seed:survival": "tsx tools/seed-survival-modules.ts",
+    "seed:pocket": "tsx tools/seed-saved-phrases.ts"
+  },
+  "dependencies": {
+    "@xinchao/shared": "workspace:*"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "^2.99.3",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.2",
     "turbo": "2.9.3",
     "typescript": "~5.9.2"
   },

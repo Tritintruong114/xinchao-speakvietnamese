@@ -8,7 +8,8 @@ import { ThemedText } from './ThemedText';
 interface FlashcardItemProps {
   vietnamese: string;
   english: string;
-  audioUri?: string;
+  /** Local asset (number) or remote/bundled URI string. */
+  audioUri?: string | number;
   onPlay?: () => void;
   backgroundColor?: string;
   primaryColor?: string;

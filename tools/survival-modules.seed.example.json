@@ -1,0 +1,10 @@
+[
+  {
+    "id": "example_module",
+    "title": "Example module",
+    "category": "Beginner",
+    "sort_order": 0,
+    "image_url": null,
+    "steps": []
+  }
+]

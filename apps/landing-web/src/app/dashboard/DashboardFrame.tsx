@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, MessageCircle, UserPlus } from 'lucide-react';
+import { BookOpen, MessageCircle, Settings, UserPlus, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -17,16 +17,18 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
   const segment = pathname.replace(/\/$/, '').split('/').pop() ?? '';
   const isWaitlist = pathname === '/dashboard' || pathname === '/dashboard/';
   const isContact = segment === 'contact';
-  const isLibrary = segment === 'library';
+  const isLibrary = pathname.startsWith('/dashboard/library');
+  const isOffline = pathname.startsWith('/dashboard/offline');
+  const isSettings = pathname.startsWith('/dashboard/settings');
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen min-h-0 overflow-hidden">
       <aside
-        className="relative z-20 flex w-20 shrink-0 flex-col border-r-4 border-text-main bg-white md:w-24"
+        className="relative z-20 flex h-full w-20 shrink-0 flex-col border-r-4 border-text-main bg-white md:w-24"
         aria-label="Dashboard navigation"
       >
-        <div className="pointer-events-none flex-1 min-h-0" aria-hidden />
-        <nav className="relative z-10 flex flex-col items-center gap-8 py-6">
+        <div className="pointer-events-none min-h-0 flex-1" aria-hidden />
+        <nav className="relative z-10 flex w-full shrink-0 flex-col items-center justify-center gap-8 py-6">
           <Link
             href="/dashboard"
             prefetch
@@ -50,18 +52,40 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
           <Link
             href="/dashboard/library"
             prefetch
-            title="Library (coming soon)"
-            aria-label="Library (coming soon)"
+            title="Survival library"
+            aria-label="Survival library (CRUD)"
             aria-current={isLibrary ? 'page' : undefined}
             className={navButtonClass(isLibrary)}
           >
             <BookOpen className="h-6 w-6 text-text-main pointer-events-none" strokeWidth={2.5} />
           </Link>
+          <Link
+            href="/dashboard/offline"
+            prefetch
+            title="Offline & Pocket phrases"
+            aria-label="Offline data and Pocket phrases"
+            aria-current={isOffline ? 'page' : undefined}
+            className={navButtonClass(isOffline)}
+          >
+            <WifiOff className="h-6 w-6 text-text-main pointer-events-none" strokeWidth={2.5} />
+          </Link>
+          <Link
+            href="/dashboard/settings"
+            prefetch
+            title="Dashboard settings"
+            aria-label="Dashboard settings"
+            aria-current={isSettings ? 'page' : undefined}
+            className={navButtonClass(isSettings)}
+          >
+            <Settings className="h-6 w-6 text-text-main pointer-events-none" strokeWidth={2.5} />
+          </Link>
         </nav>
-        <div className="pointer-events-none flex-1 min-h-0" aria-hidden />
+        <div className="pointer-events-none min-h-0 flex-1" aria-hidden />
       </aside>
 
-      <div className="relative z-0 min-w-0 flex-1 overflow-auto p-6 md:p-10">{children}</div>
+      <div className="relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6 md:p-10">{children}</div>
+      </div>
     </div>
   );
 }
