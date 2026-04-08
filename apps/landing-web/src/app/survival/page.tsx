@@ -1,7 +1,15 @@
-import { BrutalHeading, BrutalCard, BrutalTag } from '@xinchao/ui-web';
+import { BrutalHeading, BrutalCard, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
 import { Shield, Zap, Globe, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
 import { BrutalSection } from '../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
+
+export const metadata: Metadata = {
+  title: 'Survival Kit',
+  description:
+    'Street slang, offline packs, menu OCR, and bargaining practice—your pocket survival kit for Vietnam.',
+};
 
 export default function SurvivalKitPage() {
   return (
@@ -64,9 +72,16 @@ export default function SurvivalKitPage() {
 
           <div className="flex flex-col items-center gap-8 py-12">
             <BrutalHeading as="h2" className="text-center italic underline decoration-brand-red decoration-8 underline-offset-8">Ready to Survive?</BrutalHeading>
-            <button className="bg-brand-red text-white text-3xl font-black uppercase px-12 py-6 border-4 border-text-main rounded-2xl brutal-shadow-lg hover:translate-x-1 hover:translate-y-1 hover:brutal-shadow transition-all">
-               DOWNLOAD THE KIT
-            </button>
+            <Link
+              href="/#waitlist"
+              className={getBrutalButtonClassName({
+                variant: 'primary',
+                className:
+                  'text-3xl uppercase px-12 py-6 rounded-2xl brutal-shadow-lg hover:translate-x-1 hover:translate-y-1 transition-all text-center',
+              })}
+            >
+              DOWNLOAD THE KIT
+            </Link>
           </div>
         </BrutalContainer>
       </BrutalSection>

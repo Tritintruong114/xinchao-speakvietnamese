@@ -20,6 +20,7 @@ const preset: Config = {
         'brutal-sm': '2px 2px 0px 0px rgba(26, 26, 26, 1)',
         'brutal': '4px 4px 0px 0px rgba(26, 26, 26, 1)',
         'brutal-lg': '8px 8px 0px 0px rgba(26, 26, 26, 1)',
+        'brutal-2xl': '12px 12px 0px 0px rgba(26, 26, 26, 1)',
       },
       fontFamily: {
         sans: ['Be Vietnam Pro', 'sans-serif'],
@@ -28,8 +29,9 @@ const preset: Config = {
         '3': '3px',
       },
       animation: {
-        'marquee': 'marquee 25s linear infinite',
-        'float': 'float 3s ease-in-out infinite',
+        marquee: 'marquee 25s linear infinite',
+        float: 'float 3s ease-in-out infinite',
+        'spin-slow': 'spin-slow 18s linear infinite',
       },
       keyframes: {
         marquee: {
@@ -39,6 +41,10 @@ const preset: Config = {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' },
+        },
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
         },
       },
     },

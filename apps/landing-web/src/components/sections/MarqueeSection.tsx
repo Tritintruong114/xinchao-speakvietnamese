@@ -7,13 +7,14 @@ interface MarqueeSectionProps {
 }
 
 const DEFAULT_ITEMS = [
-  "Scan Menu",
-  "Street Slang",
-  "Bargain like a pro",
-  "Navigate like a local",
-  "Order like a local",
-  "Bargain like a pro",
-  "Navigate like a local",
+  'Scan Menu',
+  'Street Slang',
+  'Bargain like a pro',
+  'Navigate like a local',
+  'Order like a local',
+  'Count change fast',
+  'Decode street signs',
+  'Survival audio',
 ];
 
 export const MarqueeSection: React.FC<MarqueeSectionProps> = ({ items = DEFAULT_ITEMS }) => {

@@ -1,8 +1,15 @@
-import { BrutalButton, BrutalCard, BrutalHeading, BrutalTag } from '@xinchao/ui-web';
+import { BrutalCard, BrutalHeading, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
 import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
 import { BrutalSection } from '../../components/layout/BrutalSection';
+
+export const metadata: Metadata = {
+  title: 'Our mission',
+  description:
+    'Why XinChao exists: survival-first Vietnamese for travelers and expats—offline packs, street slang, and no grammar fluff.',
+};
 
 export default function AboutPage() {
   return (
@@ -12,7 +19,7 @@ export default function AboutPage() {
         <BrutalContainer maxWidth="4xl" className="text-center space-y-8">
           <BrutalTag backgroundColor="bg-brand-red" rotate="rotate-1" className="text-white">OUR STORY</BrutalTag>
           <BrutalHeading as="h1" className="text-text-main lowercase italic underline decoration-brand-yellow decoration-8 underline-offset-8">
-            The Traveler's Lifebuoy
+            The Traveler&apos;s Lifebuoy
           </BrutalHeading>
           <p className="text-3xl font-bold italic leading-relaxed text-text-main/90">
             "XinChao wasn't built in a sleek office. It was born out of the 'Survival Shock' we felt in our first 24 hours in Saigon."
@@ -80,13 +87,27 @@ export default function AboutPage() {
       <BrutalSection padding="lg" className="border-t-8 border-text-main text-center" id="cta">
         <BrutalContainer className="space-y-12">
           <BrutalHeading as="h2" className="text-4xl md:text-6xl">Biến mọi du khách trở thành "người bản địa" ngay trong 24h đầu.</BrutalHeading>
-          <p className="text-2xl font-bold italic opacity-60 italic">
-            (Turning every traveler into a "native" in their first 24 hours.)
+          <p className="text-2xl font-bold italic opacity-60">
+            (Turning every traveler into a &quot;native&quot; in their first 24 hours.)
           </p>
           <div className="flex flex-wrap justify-center gap-6">
-            <BrutalButton className="text-2xl px-12 py-6 bg-brand-red text-white">START YOUR SURVIVAL</BrutalButton>
-            <Link href="/team-member">
-              <BrutalButton variant="secondary" className="text-2xl px-12 py-6">TALK TO THE TEAM</BrutalButton>
+            <Link
+              href="/#waitlist"
+              className={getBrutalButtonClassName({
+                variant: 'primary',
+                className: 'text-2xl px-12 py-6',
+              })}
+            >
+              START YOUR SURVIVAL
+            </Link>
+            <Link
+              href="/team-member"
+              className={getBrutalButtonClassName({
+                variant: 'secondary',
+                className: 'text-2xl px-12 py-6',
+              })}
+            >
+              TALK TO THE TEAM
             </Link>
           </div>
         </BrutalContainer>

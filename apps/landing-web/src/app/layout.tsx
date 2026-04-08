@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
+import { SITE_URL } from '@/lib/site';
 import { NavbarWrapper } from '../components/layout/NavbarWrapper';
 import { FooterSection } from '../components/sections/FooterSection';
 import './globals.css';
@@ -11,12 +12,31 @@ const be_vietnam_pro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: 'XinChao - Survival Vietnamese for Travelers & Expats',
-  description: 'The Traveler\'s Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam—100% Offline.',
-  metadataBase: new URL('https://xinchao-app.com'), // Replace with actual domain later
+  title: {
+    default: 'XinChao - Survival Vietnamese for Travelers & Expats',
+    template: '%s · XinChao',
+  },
+  description:
+    "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam—offline-first.",
+  metadataBase: new URL(SITE_URL),
   icons: {
-    icon: '/favicon.png',
+    icon: '/app-icon.png',
     apple: '/app-icon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en',
+    url: SITE_URL,
+    siteName: 'XinChao',
+    title: 'XinChao - Survival Vietnamese for Travelers & Expats',
+    description:
+      "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam.",
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'XinChao - Survival Vietnamese',
+    description:
+      'Street-smart Vietnamese for travelers and expats. Offline survival packs, scan menus, bargain like a local.',
   },
 };
 
@@ -27,14 +47,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={be_vietnam_pro.variable}>
-      <head>
-        <link rel="icon" href="/favicon.png" />
-      </head>
       <body className="font-sans bg-brand-cream selection:bg-brand-red selection:text-white min-h-screen flex flex-col">
         <NavbarWrapper />
-        <main className="flex-grow">
-          {children}
-        </main>
+        <main className="flex-grow">{children}</main>
         <FooterSection />
       </body>
     </html>

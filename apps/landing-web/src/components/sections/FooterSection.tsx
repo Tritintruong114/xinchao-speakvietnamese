@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrutalHeading, BrutalTag, BrutalButton } from '@xinchao/ui-web';
-import { Mail, Instagram, Youtube, Twitter, Smartphone, ExternalLink } from 'lucide-react';
+import { BrutalTag, BrutalButton } from '@xinchao/ui-web';
+import { Mail, Youtube, Smartphone, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { SITE_CONTACT_EMAIL } from '@/lib/site';
 import { BrandLogo } from '../common/BrandLogo';
 import { BrutalSection } from '../layout/BrutalSection';
 import { BrutalContainer } from '../layout/BrutalContainer';
@@ -18,16 +19,29 @@ export const FooterSection: React.FC = () => {
           <div className="space-y-6">
             <BrandLogo size="lg" />
             <p className="text-xl font-bold italic opacity-80 leading-relaxed">
-              The Traveler's Lifebuoy. <br />
+              The Traveler&apos;s Lifebuoy. <br />
               <span className="text-brand-red">Survive</span>, <span className="text-brand-yellow">Connect</span>, and <br />
               Live like a local in 24 hours.
             </p>
             <BrutalTag className="bg-brand-mint text-text-main border-text-main">100% OFFLINE-FIRST</BrutalTag>
             
             <div className="flex gap-4 pt-4">
-              <a href="#" className="p-3 bg-white border-2 border-text-main rounded-lg brutal-shadow-sm hover:bg-brand-yellow transition-colors"><Instagram size={24} /></a>
-              <a href="#" className="p-3 bg-white border-2 border-text-main rounded-lg brutal-shadow-sm hover:bg-brand-pink transition-colors"><Twitter size={24} /></a>
-              <a href="https://www.youtube.com/@tuhocproduct" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border-2 border-text-main rounded-lg brutal-shadow-sm hover:bg-brand-red hover:text-white transition-colors"><Youtube size={24} /></a>
+              <a
+                href={`mailto:${SITE_CONTACT_EMAIL}`}
+                className="p-3 bg-white border-2 border-text-main rounded-lg brutal-shadow-sm hover:bg-brand-yellow transition-colors"
+                aria-label="Email us"
+              >
+                <Mail size={24} />
+              </a>
+              <a
+                href="https://www.youtube.com/@tuhocproduct"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white border-2 border-text-main rounded-lg brutal-shadow-sm hover:bg-brand-red hover:text-white transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube size={24} />
+              </a>
             </div>
           </div>
 
@@ -49,7 +63,14 @@ export const FooterSection: React.FC = () => {
               <li><Link href="/contact" className="hover:text-brand-yellow transition-colors">Contact Us</Link></li>
               <li><Link href="/contact" className="hover:text-brand-yellow transition-colors">Help Center</Link></li>
               <li><Link href="/" className="hover:text-brand-yellow transition-colors">Safety Tips</Link></li>
-              <li><a href="mailto:truongtritin.bee@gmail.com" className="hover:text-brand-yellow transition-colors flex items-center gap-2 italic"><Mail size={18} /> Email Support</a></li>
+              <li>
+                <a
+                  href={`mailto:${SITE_CONTACT_EMAIL}`}
+                  className="hover:text-brand-yellow transition-colors flex items-center gap-2 italic"
+                >
+                  <Mail size={18} /> Email Support
+                </a>
+              </li>
             </ul>
           </div>
 

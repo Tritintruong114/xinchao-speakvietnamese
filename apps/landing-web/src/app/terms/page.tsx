@@ -1,6 +1,12 @@
 import { BrutalHeading, BrutalTag } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
 import { BrutalSection } from '../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: 'Terms for using XinChao survival Vietnamese tools and content.',
+};
 
 export default function TermsPage() {
   return (

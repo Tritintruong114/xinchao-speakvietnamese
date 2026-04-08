@@ -1,7 +1,12 @@
-import { BrutalHeading, BrutalCard, BrutalTag, BrutalButton } from '@xinchao/ui-web';
-import { Check, Heart, Shield, Zap } from 'lucide-react';
+import { BrutalHeading, BrutalTag } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
 import { BrutalSection } from '../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
+
+export const metadata: Metadata = {
+  title: 'Pricing',
+  description: 'Fair pricing for full access to XinChao survival packs—details coming soon.',
+};
 
 export default function PricingPage() {
   return (

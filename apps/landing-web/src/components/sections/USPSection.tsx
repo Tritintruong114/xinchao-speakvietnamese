@@ -46,7 +46,7 @@ export const USPSection: React.FC = () => {
           {USPs.map((usp) => (
             <div key={usp.id} className="relative group">
                <BrutalCard 
-                 backgroundColor={usp.color as any}
+                 backgroundColor={usp.color}
                  className="p-10 flex flex-col items-center text-center gap-8 border-4 brutal-shadow-lg h-full border-text-main"
                >
                  <div className="p-6 bg-white border-4 border-text-main rounded-2xl brutal-shadow-sm group-hover:rotate-12 transition-transform duration-300">

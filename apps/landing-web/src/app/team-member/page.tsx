@@ -1,8 +1,15 @@
-import { BrutalButton, BrutalCard, BrutalHeading, BrutalTag } from '@xinchao/ui-web';
-import { Linkedin, Youtube, Mail, ExternalLink, User } from 'lucide-react';
+import { BrutalCard, BrutalHeading, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
+import { Linkedin, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import { BrutalSection } from '../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
+import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Team',
+  description: 'The small team building XinChao—survival Vietnamese for travelers and expats.',
+};
 
 export default function TeamMemberPage() {
   return (
@@ -24,10 +31,13 @@ export default function TeamMemberPage() {
           <BrutalCard className="p-10 bg-brand-yellow border-4 border-text-main brutal-shadow-lg flex flex-col md:flex-row gap-12 items-center">
             {/* Avatar / Photo */}
             <div className="w-56 h-[390px] bg-white border-4 border-text-main rounded-2xl flex items-center justify-center brutal-shadow-sm overflow-hidden flex-shrink-0">
-               <img 
-                 src="/bruno.jpg" 
-                 alt="Tín Trương" 
-                 className="w-full h-full object-cover transition-all duration-300" 
+               <Image
+                 src="/bruno.jpg"
+                 alt="Tín Trương"
+                 width={224}
+                 height={390}
+                 className="w-full h-full object-cover transition-all duration-300"
+                 sizes="(max-width: 768px) 100vw, 224px"
                />
             </div>
 
@@ -43,16 +53,28 @@ export default function TeamMemberPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
-                <a href="https://www.linkedin.com/in/truongtritin-bruno/" target="_blank" rel="noopener noreferrer">
-                  <BrutalButton variant="primary" className="flex items-center gap-2 py-3 px-6">
-                    <Linkedin size={20} /> LinkedIn
-                  </BrutalButton>
-                </a>
-                <a href="https://www.youtube.com/@tuhocproduct" target="_blank" rel="noopener noreferrer">
-                  <BrutalButton variant="secondary" className="flex items-center gap-2 py-3 px-6">
-                    <Youtube size={20} /> YouTube
-                  </BrutalButton>
-                </a>
+                <Link
+                  href="https://www.linkedin.com/in/truongtritin-bruno/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={getBrutalButtonClassName({
+                    variant: 'primary',
+                    className: 'flex items-center gap-2 py-3 px-6',
+                  })}
+                >
+                  <Linkedin size={20} /> LinkedIn
+                </Link>
+                <Link
+                  href="https://www.youtube.com/@tuhocproduct"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={getBrutalButtonClassName({
+                    variant: 'secondary',
+                    className: 'flex items-center gap-2 py-3 px-6',
+                  })}
+                >
+                  <Youtube size={20} /> YouTube
+                </Link>
               </div>
             </div>
           </BrutalCard>
@@ -67,8 +89,14 @@ export default function TeamMemberPage() {
           <p className="text-2xl font-bold italic opacity-60 leading-relaxed">
             We're always looking for street-smart locals and passionate travelers to help us expand the kit.
           </p>
-          <Link href="/contact">
-            <BrutalButton variant="primary" className="text-2xl px-12 py-6">WORK WITH US</BrutalButton>
+          <Link
+            href="/contact"
+            className={getBrutalButtonClassName({
+              variant: 'primary',
+              className: 'text-2xl px-12 py-6',
+            })}
+          >
+            WORK WITH US
           </Link>
         </BrutalContainer>
       </BrutalSection>

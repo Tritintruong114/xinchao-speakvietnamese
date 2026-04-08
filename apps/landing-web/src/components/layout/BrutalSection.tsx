@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@xinchao/ui-web/src/utils/cn'; // Assuming utils exists, or use local cn
+import { cn } from '@xinchao/ui-web';
 
 interface BrutalSectionProps {
   children: React.ReactNode;

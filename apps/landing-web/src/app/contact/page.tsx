@@ -1,10 +1,16 @@
-'use client';
-
-import React from 'react';
-import { BrutalHeading, BrutalCard, BrutalTag, BrutalButton } from '@xinchao/ui-web';
-import { Mail, MessageCircle, MapPin, Send } from 'lucide-react';
+import { BrutalHeading, BrutalCard, BrutalTag } from '@xinchao/ui-web';
+import type { Metadata } from 'next';
+import { Mail, MessageCircle, MapPin } from 'lucide-react';
+import { SITE_CONTACT_EMAIL } from '@/lib/site';
 import { BrutalSection } from '../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../components/layout/BrutalContainer';
+import { ContactForm } from './ContactForm';
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description:
+    'Reach the XinChao team for survival kit help, street slang tips, or partnership questions.',
+};
 
 export default function ContactPage() {
   return (
@@ -16,7 +22,8 @@ export default function ContactPage() {
             Say Xin Chào
           </BrutalHeading>
           <p className="text-3xl font-bold italic leading-relaxed text-text-main/90">
-            Need help with the kit? Found a weird street slang? Or just want to grab a Cà Phê Muối? Our team is here.
+            Need help with the kit? Found a weird street slang? Or just want to grab a Cà Phê Muối? Our team
+            is here.
           </p>
         </BrutalContainer>
       </BrutalSection>
@@ -31,7 +38,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-sm font-black opacity-50 uppercase">Email Us</p>
-                  <p className="text-xl font-bold">truongtritin.bee@gmail.com</p>
+                  <p className="text-xl font-bold break-all">{SITE_CONTACT_EMAIL}</p>
                 </div>
               </BrutalCard>
 
@@ -51,32 +58,13 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-sm font-black opacity-50 uppercase">Office</p>
-                  <p className="text-xl font-bold">Everywhere in Saigon</p>
+                  <p className="text-xl font-bold">Remote-first · Saigon</p>
                 </div>
               </BrutalCard>
             </div>
           </div>
 
-          <BrutalCard className="p-10 space-y-8 bg-white border-4 border-text-main brutal-shadow-lg">
-            <h3 className="text-3xl font-black italic">Drop a Message</h3>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-2">
-                <label className="font-black uppercase text-sm">Your Name</label>
-                <input type="text" placeholder="John Doe" className="w-full p-4 border-2 border-text-main rounded-lg focus:outline-none focus:ring-4 focus:ring-brand-yellow transition-all font-bold" />
-              </div>
-              <div className="space-y-2">
-                <label className="font-black uppercase text-sm">Email Address</label>
-                <input type="email" placeholder="john@example.com" className="w-full p-4 border-2 border-text-main rounded-lg focus:outline-none focus:ring-4 focus:ring-brand-yellow transition-all font-bold" />
-              </div>
-              <div className="space-y-2">
-                <label className="font-black uppercase text-sm">Survival Issue</label>
-                <textarea rows={4} placeholder="I can't translate this Bún Riêu menu..." className="w-full p-4 border-2 border-text-main rounded-lg focus:outline-none focus:ring-4 focus:ring-brand-yellow transition-all font-bold"></textarea>
-              </div>
-              <BrutalButton className="w-full py-5 text-2xl">
-                SEND MESSAGE <Send size={20} />
-              </BrutalButton>
-            </form>
-          </BrutalCard>
+          <ContactForm />
         </BrutalContainer>
       </BrutalSection>
     </>
