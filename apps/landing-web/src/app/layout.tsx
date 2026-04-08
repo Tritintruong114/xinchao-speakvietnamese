@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
-import { SITE_URL } from '@/lib/site';
+import { SITE_DESCRIPTION_DEFAULT, SITE_DEFAULT_KEYWORDS } from '@/lib/seo';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 import './globals.css';
 
 const be_vietnam_pro = Be_Vietnam_Pro({
@@ -11,30 +12,49 @@ const be_vietnam_pro = Be_Vietnam_Pro({
 
 export const metadata: Metadata = {
   title: {
-    default: 'XinChao - Survival Vietnamese for Travelers & Expats',
-    template: '%s · XinChao',
+    default: `${SITE_NAME} — Survival Vietnamese for Travelers & Expats`,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam—offline-first.",
+  description: SITE_DESCRIPTION_DEFAULT,
+  keywords: SITE_DEFAULT_KEYWORDS,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
   metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   icons: {
-    icon: '/app-icon.png',
-    apple: '/app-icon.png',
+    icon: [{ url: '/app-icon.png', type: 'image/png' }],
+    apple: [{ url: '/app-icon.png', type: 'image/png' }],
   },
   openGraph: {
     type: 'website',
-    locale: 'en',
+    locale: 'en_US',
     url: SITE_URL,
-    siteName: 'XinChao',
-    title: 'XinChao - Survival Vietnamese for Travelers & Expats',
-    description:
-      "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam.",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Survival Vietnamese for Travelers & Expats`,
+    description: SITE_DESCRIPTION_DEFAULT,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'XinChao - Survival Vietnamese',
+    title: `${SITE_NAME} — Survival Vietnamese`,
     description:
       'Street-smart Vietnamese for travelers and expats. Offline survival packs, scan menus, bargain like a local.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  category: 'education',
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
   },
 };
 

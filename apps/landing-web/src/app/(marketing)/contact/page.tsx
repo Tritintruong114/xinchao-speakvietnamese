@@ -1,16 +1,17 @@
 import { BrutalHeading, BrutalCard, BrutalTag } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
-import { Mail, MessageCircle, MapPin } from 'lucide-react';
+import { buildPageMetadata } from '@/lib/seo';
 import { SITE_CONTACT_EMAIL } from '@/lib/site';
+import { Mail, MessageCircle, MapPin } from 'lucide-react';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 import { ContactForm } from './ContactForm';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Contact',
   description:
     'Reach the XinChao team for survival kit help, street slang tips, or partnership questions.',
-};
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (

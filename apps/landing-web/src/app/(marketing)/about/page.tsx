@@ -1,15 +1,16 @@
 import { BrutalCard, BrutalHeading, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Our mission',
   description:
     'Why XinChao exists: survival-first Vietnamese for travelers and expats—offline packs, street slang, and no grammar fluff.',
-};
+  path: '/about',
+});
 
 export default function AboutPage() {
   return (

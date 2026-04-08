@@ -1,12 +1,13 @@
 import { BrutalHeading, BrutalTag } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Pricing',
   description: 'Fair pricing for full access to XinChao survival packs—details coming soon.',
-};
+  path: '/pricing',
+});
 
 export default function PricingPage() {
   return (

@@ -1,15 +1,16 @@
 import { BrutalCard, BrutalHeading, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { Linkedin, Youtube } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
-import Image from 'next/image';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Team',
   description: 'The small team building XinChao—survival Vietnamese for travelers and expats.',
-};
+  path: '/team-member',
+});
 
 export default function TeamMemberPage() {
   return (

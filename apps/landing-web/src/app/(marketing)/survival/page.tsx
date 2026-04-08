@@ -1,15 +1,17 @@
 import { BrutalHeading, BrutalCard, BrutalTag, getBrutalButtonClassName } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { Shield, Zap, Globe, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Survival Kit',
   description:
     'Street slang, offline packs, menu OCR, and bargaining practice—your pocket survival kit for Vietnam.',
-};
+  path: '/survival',
+  keywords: ['Vietnamese slang', 'bargaining Vietnamese', 'menu OCR Vietnam'],
+});
 
 export default function SurvivalKitPage() {
   return (

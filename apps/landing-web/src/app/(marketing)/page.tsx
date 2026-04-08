@@ -1,15 +1,17 @@
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { HeroSection } from '../../components/sections/HeroSection';
 import { MarqueeSection } from '../../components/sections/MarqueeSection';
 import { ReviewSection } from '../../components/sections/ReviewSection';
 import { USPSection } from '../../components/sections/USPSection';
 import { WaitlistSection } from '../../components/sections/WaitlistSection';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Survival Vietnamese for Travelers',
   description:
     'Street-smart phrases, offline survival packs, and menu scanning for Vietnam—learn what textbooks skip.',
-};
+  path: '/',
+  keywords: ['Vietnam food phrases', 'tourist Vietnamese', 'offline phrasebook'],
+});
 
 export default function Home() {
   return (

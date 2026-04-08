@@ -16,7 +16,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({ className, size = 'md' }) 
         "border-2 border-text-main rounded-xl overflow-hidden brutal-shadow-sm flex-shrink-0 bg-brand-yellow",
         containerSize
       )}>
-        <img src="/logo-horizontal.png" alt="XinChao App Icon" className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform" />
+        <img src="/logo-horizontal.png" alt="XinChao logo" className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform" />
       </div>
       <span className={cn(
         "font-black italic tracking-tighter uppercase",

@@ -1,12 +1,13 @@
 import { BrutalHeading, BrutalTag } from '@xinchao/ui-web';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { BrutalSection } from '../../../components/layout/BrutalSection';
 import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Cookie Policy',
   description: 'How XinChao uses cookies for sessions, preferences, and performance.',
-};
+  path: '/cookie-policy',
+});
 
 export default function CookiePolicyPage() {
   return (
