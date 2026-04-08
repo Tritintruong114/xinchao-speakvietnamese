@@ -1,8 +1,9 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 // @ts-expect-error - getReactNativePersistence is often missing in monorepo types for firebase/auth
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
 // @ts-ignore - Some firebase versions have issues with RN persistence types in monorepos
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 // Replace these with actual config from your Firebase project
 const firebaseConfig = {
@@ -14,16 +15,18 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
-console.log("Firebase API Key:", firebaseConfig.apiKey ? "PRESENT" : "MISSING");
-console.log("Firebase App ID:", firebaseConfig.appId ? "PRESENT" : "MISSING");
-
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth with AsyncStorage persistence
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
+// Initialize Auth with AsyncStorage persistence only in native environments
+export const auth = (() => {
+  if (Platform.OS === 'web' || typeof window === 'undefined') {
+    return getAuth(app);
+  }
+  return initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  });
+})();
 
 export default app;
 

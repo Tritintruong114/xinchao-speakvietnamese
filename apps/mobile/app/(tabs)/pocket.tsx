@@ -1,184 +1,210 @@
-import React, { useLayoutEffect } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { StyleSheet, View, ScrollView, Platform, KeyboardAvoidingView, Pressable } from 'react-native';
 import { ThemedText } from '../../components/ThemedText';
-import { Backpack, Zap, Flame } from 'lucide-react-native';
+import { Zap, Search } from 'lucide-react-native';
 import { useNavigation } from 'expo-router';
-import { SurvivalKitCard } from '../../components/SurvivalKitCard';
 import { FlashcardItem } from '../../components/FlashcardItem';
 import { StatusBadge } from '../../components/StatusBadge';
+import { ThemedInput } from '../../components/ThemedInput';
+import { Colors, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
+import { CATEGORIES, SAVED_PHRASES } from '../../constants/survival/saved_phrases';
+import { PhraseCategory as SharedPhraseCategory, CategoryColors } from '@xinchao/shared';
+
+/**
+ * Helper to extract hex color from tailwind-like strings: "bg-[#DA251D] text-white"
+ */
+const getHexFromTailwind = (tw: string) => {
+  const match = tw.match(/#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/);
+  return match ? `#${match[1]}` : '#FFFFFF';
+};
 
 export default function PocketScreen() {
   const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<SharedPhraseCategory | 'ALL'>('ALL');
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'SURVIVAL BAG',
+      headerTitle: 'SAVED PHRASES',
       headerHideBorder: true,
       titleAlignment: 'left',
       headerRight: () => (
         <StatusBadge
           label="OFFLINE"
           icon={Zap}
-          backgroundColor="#FFFFFF"
+          backgroundColor={Colors.brandBlue}
+          iconFillColor={Colors.white}
         />
       ),
     });
   }, [navigation]);
 
+  const filteredPhrases = SAVED_PHRASES.filter(phrase => {
+    const matchesSearch = 
+      phrase.vietnamese.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      phrase.english.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === 'ALL' || phrase.categories.includes(selectedCategory as SharedPhraseCategory);
+    
+    return matchesSearch && matchesCategory;
+  });
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Hero Section - Status */}
-      <View style={styles.hero}>
-        <View style={styles.heroRow}>
-           <View style={styles.bagWrap}>
-              <Backpack size={34} color="#1A1A1A" strokeWidth={2.5} />
-           </View>
-           <View style={styles.heroContent}>
-              <ThemedText style={styles.heroHeadline}>KITS FULLY CHARGED!</ThemedText>
-              <ThemedText style={styles.heroSub}>
-                15MB offline data saved. No Wi-Fi? No problem.
-              </ThemedText>
-           </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      style={styles.container}
+    >
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Categories Horizontal Scroll */}
+        <View style={styles.categoriesWrapper}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesContainer}
+          >
+            {CATEGORIES.map(cat => (
+              <Pressable
+                key={cat.id}
+                onPress={() => {
+                  if (selectedCategory === cat.id) {
+                    setSelectedCategory('ALL');
+                  } else {
+                    setSelectedCategory(cat.id as SharedPhraseCategory | 'ALL');
+                  }
+                }}
+                style={[
+                  styles.chip,
+                  { backgroundColor: getHexFromTailwind(cat.themeClass) },
+                  selectedCategory === cat.id && styles.activeChip
+                ]}
+              >
+                <ThemedText style={[
+                  styles.chipText,
+                  cat.themeClass.includes('text-white') && { color: '#FFFFFF' },
+                  selectedCategory === cat.id && styles.activeChipText
+                ]}>
+                  {cat.label}
+                </ThemedText>
+              </Pressable>
+            ))}
+          </ScrollView>
         </View>
-        <View style={styles.progressTrack}>
-           <View style={styles.progressBar} />
-        </View>
-      </View>
 
-      {/* Section 1: Downloaded Kits */}
-      <View style={styles.section}>
-        <ThemedText style={styles.sectionHeading}>DOWNLOADED KITS</ThemedText>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
-          style={styles.kitsScroll}
-          contentContainerStyle={styles.kitsContainer}
-        >
-          <SurvivalKitCard 
-            title="Ben Thanh Survival" 
-            backgroundColor="#DA251D" 
-            textColor="#FFFFFF"
-            onDelete={() => {}} 
-          />
-          <SurvivalKitCard 
-            title="Saigon Street Food" 
-            backgroundColor="#FFFFFF" 
-            onDelete={() => {}} 
-          />
-        </ScrollView>
-      </View>
-
-      {/* Section 2: Saved Phrases */}
-      <View style={styles.section}>
-        <ThemedText style={styles.sectionHeading}>SAVED PHRASES</ThemedText>
-        <View style={styles.flashList}>
-          <FlashcardItem 
-            vietnamese="Không đá, không đường" 
-            english="No ice, no sugar" 
-            audioUri="khong_da_khong_duong"
-          />
-          <FlashcardItem 
-            vietnamese="Bao nhiêu tiền?" 
-            english="How much is it?" 
-            audioUri="bao_nhieu_tien"
-          />
-          <FlashcardItem 
-            vietnamese="Cho tôi gọi taxi" 
-            english="Call me a taxi" 
-            audioUri="cho_toi_goi_taxi"
-          />
+        {/* Phrases List */}
+        <View style={styles.section}>
+          <View style={styles.flashList}>
+            {filteredPhrases.length > 0 ? (
+              filteredPhrases.map((phrase) => (
+                <FlashcardItem 
+                  key={phrase.id}
+                  vietnamese={phrase.vietnamese} 
+                  english={phrase.english} 
+                  audioUri={phrase.audioUri}
+                  searchQuery={searchQuery}
+                />
+              ))
+            ) : (
+              <ThemedText style={styles.emptyText}>No phrases found.</ThemedText>
+            )}
+          </View>
         </View>
+      </ScrollView>
+
+      {/* Persistent Search Bar footer */}
+      <View style={styles.footer}>
+        <ThemedInput
+          placeholder="Quick search phrases..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          borderColor={Colors.brandPrimary}
+          icon={Search}
+          containerStyle={styles.searchInputContainer}
+          style={styles.searchInput}
+        />
       </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 16,
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  content: {
-    padding: 16,
-    paddingBottom: 40,
+  scrollView: {
+    flex: 1,
   },
-  hero: {
-    backgroundColor: '#FFC62F',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    padding: 14,
-    height: 180,
-    justifyContent: 'space-between',
-    marginBottom: 24,
-    // Neo-brutal hard shadow
-    shadowColor: '#1A1A1A',
+  content: {
+    paddingBottom: 24,
+  },
+  categoriesWrapper: {
+    marginBottom: 16,
+  },
+  categoriesContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 8, // For the chip shadow
+    gap: 12,
+  },
+  chip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: BorderRadius.button,
+    borderWidth: Stroke.width,
+    borderColor: Colors.black,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeChip: {
+    // Hard shadow for active state
+    shadowColor: Colors.black,
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 4,
+    transform: [{ translateX: -1 }, { translateY: -1 }],
   },
-  heroRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  bagWrap: {
-    width: 72,
-    height: 72,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heroContent: {
-    flex: 1,
-    gap: 6,
-  },
-  heroHeadline: {
-    fontSize: 20,
-    fontFamily: 'BeVietnamPro_900Black',
-    color: '#1A1A1A',
-  },
-  heroSub: {
-    fontSize: 13,
+  chipText: {
+    fontSize: 12,
     fontFamily: 'BeVietnamPro_700Bold',
-    color: '#1A1A1A',
-    lineHeight: 18,
+    color: Colors.black,
+    textTransform: 'uppercase',
   },
-  progressTrack: {
-    height: 24,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#1A1A1A',
-    overflow: 'hidden',
-  },
-  progressBar: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#1A1A1A',
+  activeChipText: {
+    fontFamily: 'BeVietnamPro_900Black',
   },
   section: {
-    marginBottom: 24,
-  },
-  sectionHeading: {
-    fontSize: 16,
-    fontFamily: 'BeVietnamPro_900Black',
-    color: '#1A1A1A',
-    marginBottom: 12,
-  },
-  kitsScroll: {
-    marginHorizontal: -16,
     paddingHorizontal: 16,
-  },
-  kitsContainer: {
-    paddingRight: 16, // Extra padding for the last card shadow
-    paddingBottom: 8,
+    marginBottom: 24,
   },
   flashList: {
     marginTop: 4,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#666666',
+    fontFamily: 'BeVietnamPro_400Regular',
+  },
+  footer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)', // Slightly transparency
+    borderTopWidth: 1,
+    borderColor: '#F0F0F0',
+  },
+  searchInputContainer: {
+    marginBottom: 0, 
+  },
+  searchInput: {
+    fontFamily: 'BeVietnamPro_700Bold',
+    height: 56, // Slightly taller
+    fontSize: 18, // Slightly bigger text
   },
 });

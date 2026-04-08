@@ -63,7 +63,7 @@ export default function StreakScreen() {
                   styles.dayDot, 
                   d.active ? styles.dayDotActive : styles.dayDotInactive
                   ]}>
-                  {d.active && <Flame size={12} color={Colors.black} />}
+                  {d.active && <Flame size={12} color={Colors.black} fill={Colors.brandPrimary} />}
                 </View>
                 <ThemedText style={styles.dayText}>{d.day}</ThemedText>
               </View>
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dayDotActive: {
-    backgroundColor: Colors.brandSecondary,
+    backgroundColor: Colors.brandMint,
   },
   dayDotInactive: {
     backgroundColor: Colors.white,

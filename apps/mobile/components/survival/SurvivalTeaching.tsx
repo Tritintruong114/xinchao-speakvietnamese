@@ -1,9 +1,36 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
-import { Colors, BorderRadius, Stroke, Shadow } from '../../constants/Theme';
+import { Colors, BorderRadius, Stroke } from '../../constants/Theme';
 import { ThemedText } from '../ThemedText';
-import { AlertCircle, Lightbulb } from 'lucide-react-native';
+
+const BOLD_SEGMENT = /\*\*(.+?)\*\*/g;
+
+function renderBoldSegments(text: string, keyPrefix: string): React.ReactNode {
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  const re = new RegExp(BOLD_SEGMENT.source, 'g');
+  let boldIdx = 0;
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    nodes.push(
+      <ThemedText key={`${keyPrefix}-bold-${boldIdx++}`} style={styles.contentBold}>
+        {match[1]}
+      </ThemedText>
+    );
+    lastIndex = re.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+  if (nodes.length === 0) {
+    return text;
+  }
+  return nodes;
+}
 
 interface SurvivalTeachingProps {
   title: string;
@@ -16,6 +43,36 @@ export const SurvivalTeaching = ({
   content,
   visualHighlight,
 }: SurvivalTeachingProps) => {
+  const renderRichContent = () => {
+    const lines = content.split('\n');
+    return (
+      <View style={styles.richContent}>
+        {lines.map((line, i) => {
+          const key = `ln-${i}`;
+          if (line === '') {
+            return <View key={key} style={styles.contentSpacer} />;
+          }
+          if (line.startsWith('- ')) {
+            const body = line.slice(2);
+            return (
+              <View key={key} style={styles.bulletRow}>
+                <ThemedText style={styles.bulletMark}>•</ThemedText>
+                <ThemedText style={[styles.contentText, styles.contentTextInBullet]}>
+                  {renderBoldSegments(body, key)}
+                </ThemedText>
+              </View>
+            );
+          }
+          return (
+            <ThemedText key={key} style={[styles.contentText, styles.contentParagraph]}>
+              {renderBoldSegments(line, key)}
+            </ThemedText>
+          );
+        })}
+      </View>
+    );
+  };
+
   // Simple renderer for <s> strikethrough logic in visualHighlight
   const renderHighlight = (text: string) => {
     if (!text) return null;
@@ -44,9 +101,7 @@ export const SurvivalTeaching = ({
           {title}
         </ThemedText>
 
-        <ThemedText style={styles.contentText}>
-          {content}
-        </ThemedText>
+        {renderRichContent()}
 
         {visualHighlight && (
           <Animated.View entering={SlideInRight.delay(600)} style={styles.visualBox}>
@@ -94,12 +149,43 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: Colors.black,
   },
+  richContent: {
+    marginBottom: 32,
+  },
+  contentSpacer: {
+    height: 10,
+  },
+  contentParagraph: {
+    marginBottom: 10,
+  },
+  bulletRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 10,
+    paddingRight: 4,
+  },
+  bulletMark: {
+    fontSize: 18,
+    lineHeight: 28,
+    fontFamily: 'BeVietnamPro_800ExtraBold',
+    color: Colors.brandPrimary,
+    marginTop: 1,
+  },
   contentText: {
     fontSize: 18,
     lineHeight: 28,
     fontFamily: 'BeVietnamPro_600SemiBold',
     color: Colors.textMain,
-    marginBottom: 32,
+  },
+  contentTextInBullet: {
+    flex: 1,
+  },
+  contentBold: {
+    fontFamily: 'BeVietnamPro_800ExtraBold',
+    fontSize: 18,
+    lineHeight: 28,
+    color: Colors.textMain,
   },
   visualBox: {
     backgroundColor: Colors.brandSecondary,

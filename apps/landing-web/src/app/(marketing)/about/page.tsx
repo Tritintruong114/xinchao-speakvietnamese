@@ -2,8 +2,8 @@ import { BrutalCard, BrutalHeading, BrutalTag, getBrutalButtonClassName } from '
 import type { Metadata } from 'next';
 import { Heart } from 'lucide-react';
 import Link from 'next/link';
-import { BrutalContainer } from '../../components/layout/BrutalContainer';
-import { BrutalSection } from '../../components/layout/BrutalSection';
+import { BrutalContainer } from '../../../components/layout/BrutalContainer';
+import { BrutalSection } from '../../../components/layout/BrutalSection';
 
 export const metadata: Metadata = {
   title: 'Our mission',

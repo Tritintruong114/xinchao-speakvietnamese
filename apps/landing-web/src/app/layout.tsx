@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import { SITE_URL } from '@/lib/site';
-import { NavbarWrapper } from '../components/layout/NavbarWrapper';
-import { FooterSection } from '../components/sections/FooterSection';
 import './globals.css';
 
 const be_vietnam_pro = Be_Vietnam_Pro({
@@ -47,10 +45,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={be_vietnam_pro.variable}>
-      <body className="font-sans bg-brand-cream selection:bg-brand-red selection:text-white min-h-screen flex flex-col">
-        <NavbarWrapper />
-        <main className="flex-grow">{children}</main>
-        <FooterSection />
+      <body className="font-sans bg-brand-cream selection:bg-brand-red selection:text-white min-h-screen">
+        {children}
       </body>
     </html>
   );

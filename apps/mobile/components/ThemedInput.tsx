@@ -1,19 +1,23 @@
+import { LucideIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 import { Colors, Spacing, BorderRadius, Stroke, Shadow } from '../constants/Theme';
 
 interface ThemedInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
+  borderColor?: string;
+  icon?: LucideIcon;
 }
 
-/**
- * ThemedInput - A custom TextInput wrapper designed for "XinChao".
- * Features:
- * - strokeWidth solid black border.
- * - shadowOffset hard offset shadow for depth (Neo-brutalism).
- * - Focused state with brandPrimary (Red) border.
- */
-export function ThemedInput({ containerStyle, onFocus, onBlur, style, ...props }: ThemedInputProps) {
+export function ThemedInput({ 
+  containerStyle, 
+  onFocus, 
+  onBlur, 
+  style, 
+  borderColor = Stroke.color,
+  icon: Icon,
+  ...props 
+}: ThemedInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: any) => {
@@ -30,8 +34,10 @@ export function ThemedInput({ containerStyle, onFocus, onBlur, style, ...props }
     <View style={[styles.shadowContainer, containerStyle]}>
       <View style={[
         styles.inputContainer,
+        { borderColor: isFocused ? Colors.brandPrimary : borderColor },
         isFocused && styles.focusedContainer
       ]}>
+        {Icon && <Icon size={20} color={Colors.textMuted} style={styles.icon} />}
         <TextInput
           style={[styles.input, style]}
           onFocus={handleFocus}
@@ -57,11 +63,17 @@ const styles = StyleSheet.create({
     borderColor: Stroke.color,
     borderRadius: BorderRadius.button,
     minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: Spacing.m,
     // Negative margin to offset from the "shadow" background
     transform: [{ translateX: -Shadow.offset }, { translateY: -Shadow.offset }],
   },
   focusedContainer: {
     borderColor: Colors.brandPrimary,
+  },
+  icon: {
+    marginRight: -4, // Pull text closer to icon
   },
   input: {
     flex: 1,

@@ -2,8 +2,8 @@ import { BrutalHeading, BrutalCard, BrutalTag, getBrutalButtonClassName } from '
 import type { Metadata } from 'next';
 import { Shield, Zap, Globe, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
-import { BrutalSection } from '../../components/layout/BrutalSection';
-import { BrutalContainer } from '../../components/layout/BrutalContainer';
+import { BrutalSection } from '../../../components/layout/BrutalSection';
+import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
 export const metadata: Metadata = {
   title: 'Survival Kit',

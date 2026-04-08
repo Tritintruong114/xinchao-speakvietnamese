@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { notifyWaitlistSignup } from '@/lib/email';
 import { SITE_CONTACT_EMAIL } from '@/lib/site';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
@@ -28,6 +29,8 @@ export async function POST(req: Request) {
       console.error('[waitlist]', error.message);
       return NextResponse.json({ error: 'Could not save your email. Try again later.' }, { status: 503 });
     }
+
+    await notifyWaitlistSignup(email);
 
     return NextResponse.json({ ok: true as const, mode: 'database' as const });
   }

@@ -1,3 +1,4 @@
+import { SavedPhrase, PhraseCategory } from '@xinchao/shared';
 
 export type MascotExpression = 'happy' | 'neutral' | 'sad' | 'excited';
 
@@ -17,6 +18,7 @@ export interface Dialogue {
   nextId?: string;
   timeLimit?: number; // in seconds
   timeoutId?: string; // where to go if time runs out
+  mascotExpression?: MascotExpression;
 }
 
 export type SurvivalStepType =
@@ -61,3 +63,6 @@ export interface SurvivalModule {
   image: any;
   steps: SurvivalStep[];
 }
+
+export { SavedPhrase, PhraseCategory };
+

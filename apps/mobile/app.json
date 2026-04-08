@@ -15,6 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tuhocproduct.xinchao",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -37,7 +38,10 @@
       "expo-router",
       "expo-notifications",
       "expo-audio",
-      "expo-camera"
+      "expo-camera",
+      "expo-asset",
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

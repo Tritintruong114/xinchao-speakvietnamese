@@ -2,8 +2,8 @@ import { BrutalHeading, BrutalCard, BrutalTag } from '@xinchao/ui-web';
 import type { Metadata } from 'next';
 import { Mail, MessageCircle, MapPin } from 'lucide-react';
 import { SITE_CONTACT_EMAIL } from '@/lib/site';
-import { BrutalSection } from '../../components/layout/BrutalSection';
-import { BrutalContainer } from '../../components/layout/BrutalContainer';
+import { BrutalSection } from '../../../components/layout/BrutalSection';
+import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 import { ContactForm } from './ContactForm';
 
 export const metadata: Metadata = {

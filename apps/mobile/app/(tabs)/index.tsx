@@ -2,7 +2,7 @@ import { useNavigation, useRouter } from 'expo-router';
 import { Flame, Zap, Banknote, Camera } from 'lucide-react-native';
 import React, { useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { HomeHero } from '../../components/HomeHero';
+
 import { ModuleCard } from '../../components/ModuleCard';
 import { StatusBadge } from '../../components/StatusBadge';
 import { ThemedText } from '../../components/ThemedText';
@@ -11,17 +11,18 @@ import { Colors } from '../../constants/Theme';
 // Import images - New categorized assets
 const MoneyCountImg = require('../../assets/screens/home/money_count.png');
 const GreetingsImg = require('../../assets/screens/home/greetings.png');
-const TaxiImg = require('../../assets/screens/home/ride_hailing.png');
+const CountingNumbersImg = require('../../assets/screens/home/counting_numbers.png');
+// const TaxiImg = require('../../assets/screens/home/ride_hailing.png');
 const DirectionsImg = require('../../assets/screens/home/directions.png');
-const FoodImg = require('../../assets/screens/home/restaurant_coffee.png');
+// const FoodImg = require('../../assets/screens/home/restaurant_coffee.png');
 const BargainingImg = require('../../assets/screens/home/bargaining.png');
-const NhauImg = require('../../assets/screens/home/nhau_culture.png');
-const MetroImg = require('../../assets/screens/home/metro.png');
-const BusImg = require('../../assets/screens/home/sleeper_bus.png');
-const TrainImg = require('../../assets/screens/home/train.png');
-const PlaneImg = require('../../assets/screens/home/airplane.png');
-const GenZImg = require('../../assets/screens/home/genz_slang.png');
-const ExpatImg = require('../../assets/screens/home/expat_life.png');
+// const NhauImg = require('../../assets/screens/home/nhau_culture.png');
+// const MetroImg = require('../../assets/screens/home/metro.png');
+// const BusImg = require('../../assets/screens/home/sleeper_bus.png');
+// const TrainImg = require('../../assets/screens/home/train.png');
+// const PlaneImg = require('../../assets/screens/home/airplane.png');
+// const GenZImg = require('../../assets/screens/home/genz_slang.png');
+// const ExpatImg = require('../../assets/screens/home/expat_life.png');
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -36,7 +37,8 @@ export default function HomeScreen() {
         <StatusBadge
           label="12 STREAK"
           icon={Flame}
-          backgroundColor={Colors.brandSecondary}
+          backgroundColor={Colors.brandMint}
+          iconFillColor={Colors.brandPrimary}
           onPress={() => router.push('/streak')}
         />
       ),
@@ -44,7 +46,8 @@ export default function HomeScreen() {
         <StatusBadge
           label="OFFLINE"
           icon={Zap}
-          backgroundColor={Colors.white}
+          backgroundColor={Colors.brandBlue}
+          iconFillColor={Colors.white}
         />
       ),
     });
@@ -60,21 +63,21 @@ export default function HomeScreen() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Hero Section */}
-        <HomeHero onPress={() => console.log('Hero Pressed')} />
-
         {/* Quick Badges */}
         <View style={styles.quickBadges}>
           <StatusBadge
             label="Currencies"
             icon={Banknote}
             backgroundColor={Colors.brandSecondary}
+            iconFillColor={Colors.white}
             onPress={() => router.push('/currencies')}
           />
           <StatusBadge
             label="Scan & Translate"
             icon={Camera}
             backgroundColor={Colors.brandPrimary}
+            textColor={Colors.white}
+            iconFillColor="rgba(255,255,255,0.2)"
             onPress={() => router.push('/survival/scan')}
           />
         </View>
@@ -94,6 +97,12 @@ export default function HomeScreen() {
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/greetings')}
           />
+          <ModuleCard
+            title="COUNTING NUMBERS"
+            image={CountingNumbersImg}
+            backgroundColor={Colors.white}
+            onPress={() => router.push('/survival/counting_numbers')}
+          />
         </View>
 
         {/* 2. SURVIVAL MODULES */}
@@ -105,19 +114,19 @@ export default function HomeScreen() {
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/directions')}
           />
-          <ModuleCard
+          {/* <ModuleCard
             title="EAT & DRINK"
             image={FoodImg}
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/restaurant_coffee')}
-          />
+          /> */}
           <ModuleCard
             title="BARGAINING"
             image={BargainingImg}
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/bargaining')}
           />
-          <ModuleCard
+          {/* <ModuleCard
             title="NHẬU CULTURE"
             image={NhauImg}
             backgroundColor={Colors.white}
@@ -152,11 +161,11 @@ export default function HomeScreen() {
             image={PlaneImg}
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/airplane')}
-          />
+          /> */}
         </View>
 
         {/* 3. LEGEND MODULES */}
-        <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>LEGEND: LIVE LIKE A LOCAL</ThemedText>
+        {/* <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>LEGEND: LIVE LIKE A LOCAL</ThemedText>
         <View style={styles.grid}>
           <ModuleCard
             title="GEN Z SLANG"
@@ -170,7 +179,7 @@ export default function HomeScreen() {
             backgroundColor={Colors.white}
             onPress={() => router.push('/survival/expat_life')}
           />
-        </View>
+        </View> */}
 
         {/* Footer padding */}
         <View style={{ height: 100 }} />

@@ -13,6 +13,7 @@
 		5920FAF22BD248B70056A234 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E60B06C4C966A4884A5EF8 /* PrivacyInfo.xcprivacy */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		CC8FE72CAB1F0C30C954C5DE /* libPods-xinchao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AE29A91023B9D8FF247ADAE /* libPods-xinchao.a */; };
+		D925D572F66840EEBF087DDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F4FB5FA6E794FD6B90A12C0 /* GoogleService-Info.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,6 +23,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = xinchao/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = xinchao/Info.plist; sourceTree = "<group>"; };
 		8A0ADC109CF190346F5A8A1B /* Pods-xinchao.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xinchao.release.xcconfig"; path = "Target Support Files/Pods-xinchao/Pods-xinchao.release.xcconfig"; sourceTree = "<group>"; };
+		9F4FB5FA6E794FD6B90A12C0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "xinchao/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2E10D50C4684EC32D9F9669 /* Pods-xinchao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xinchao.debug.xcconfig"; path = "Target Support Files/Pods-xinchao/Pods-xinchao.debug.xcconfig"; sourceTree = "<group>"; };
 		A6E60B06C4C966A4884A5EF8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = xinchao/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = xinchao/SplashScreen.storyboard; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				A6E60B06C4C966A4884A5EF8 /* PrivacyInfo.xcprivacy */,
+				9F4FB5FA6E794FD6B90A12C0 /* GoogleService-Info.plist */,
 			);
 			name = xinchao;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				5920FAF22BD248B70056A234 /* PrivacyInfo.xcprivacy in Resources */,
+				D925D572F66840EEBF087DDD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,7 +467,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.83.4_@babel+core@7.29.0_@types+react@19.2.14_react@19.2.0/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
@@ -520,7 +524,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.83.4_@babel+core@7.29.0_@types+react@19.2.14_react@19.2.0/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;

@@ -1,8 +1,7 @@
 import { useNavigation } from 'expo-router';
 import { ChevronRight, Flame, Settings, Star, User } from 'lucide-react-native';
 import React, { useLayoutEffect } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { StatusBadge } from '../../components/StatusBadge';
+import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ThemedText } from '../../components/ThemedText';
 import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
 
@@ -14,25 +13,27 @@ export default function ProfileScreen() {
       headerTitle: 'HO SO',
       headerHideBorder: true,
       titleAlignment: 'left',
-      headerTitleStyle: {
-        fontSize: 30,
-        fontFamily: 'BeVietnamPro_900Black',
-        color: Colors.black,
-      },
-      headerRight: () => (
-        <Pressable style={styles.headerSettingsBtn}>
-          <Settings color={Colors.black} size={22} strokeWidth={2.5} />
-        </Pressable>
-      ),
+      headerRight: () => null,
     });
   }, [navigation]);
 
   const settingsItems = [
     { title: 'Restore Purchases', color: Colors.black },
-    { title: 'Privacy Policy', color: Colors.black },
-    { title: 'Contact Support', color: Colors.black },
+    { title: 'Privacy Policy', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/privacy' },
+    { title: 'Terms & Conditions', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/terms' },
+    { title: 'Cookie Policy', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/cookie-policy' },
+    { title: 'Contact Support', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/contact' },
     { title: 'Delete Account', color: Colors.brandPrimary, isLast: true },
   ];
+
+  const handlePress = (item: typeof settingsItems[0]) => {
+    if (item.url) {
+      Linking.openURL(item.url).catch(err => console.error("Couldn't load page", err));
+    } else {
+      // Handle other actions like Delete Account or Restore Purchases
+      console.log('Action for:', item.title);
+    }
+  };
 
   return (
     <View style={styles.outerContainer}>
@@ -55,7 +56,7 @@ export default function ProfileScreen() {
 
           <View style={styles.statGrid}>
             <View style={styles.statBox}>
-               <Flame size={20} color={Colors.black} strokeWidth={2.5} />
+               <Flame size={20} color={Colors.black} fill={Colors.brandPrimary} strokeWidth={2.5} />
                <ThemedText style={styles.statValue}>12 DAY STREAK</ThemedText>
             </View>
             <View style={styles.statBox}>
@@ -81,6 +82,7 @@ export default function ProfileScreen() {
           {settingsItems.map((item, index) => (
             <Pressable 
               key={item.title} 
+              onPress={() => handlePress(item)}
               style={[
                 styles.listItem, 
                 !item.isLast && styles.listItemBorder
@@ -111,22 +113,6 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     paddingTop: 8,
-  },
-  headerSettingsBtn: {
-    width: 44,
-    height: 44,
-    backgroundColor: Colors.white,
-    borderWidth: Stroke.width,
-    borderColor: Stroke.color,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // Hard Shadow
-    shadowColor: Shadow.color,
-    shadowOffset: { width: Shadow.offset, height: Shadow.offset },
-    shadowOpacity: Shadow.opacity,
-    shadowRadius: 0,
-    elevation: Shadow.offset,
   },
   statsCard: {
     backgroundColor: '#FAFAF8',
@@ -179,7 +165,7 @@ const styles = StyleSheet.create({
   statBox: {
     flex: 1,
     height: 74,
-    backgroundColor: Colors.brandSecondary,
+    backgroundColor: Colors.brandMint,
     borderWidth: Stroke.width,
     borderColor: Stroke.color,
     borderRadius: BorderRadius.button,

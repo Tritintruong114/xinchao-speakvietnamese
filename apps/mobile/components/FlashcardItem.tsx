@@ -1,6 +1,6 @@
 import { Volume2 } from 'lucide-react-native';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { BorderRadius, Colors, Shadow, Stroke } from '../constants/Theme';
 import { useAudio } from '../hooks/useAudio';
 import { ThemedText } from './ThemedText';
@@ -15,6 +15,32 @@ interface FlashcardItemProps {
   secondaryColor?: string;
   tag?: string;
   style?: any;
+  searchQuery?: string;
+}
+
+/**
+ * Helper to highlight matched search terms
+ */
+function HighlightedText({ text, query, style, highlightStyle }: { text: string; query?: string; style?: any; highlightStyle?: any }) {
+  if (!query || query.trim() === '') {
+    return <ThemedText style={style}>{text}</ThemedText>;
+  }
+
+  const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+
+  return (
+    <ThemedText style={style}>
+      {parts.map((part, i) => 
+        part.toLowerCase() === query.toLowerCase() ? (
+          <Text key={i} style={[styles.highlight, highlightStyle]}>
+            {part}
+          </Text>
+        ) : (
+          part
+        )
+      )}
+    </ThemedText>
+  );
 }
 
 /**
@@ -29,7 +55,8 @@ export function FlashcardItem({
   backgroundColor = Colors.white,
   primaryColor = Colors.black,
   secondaryColor = Colors.textMuted,
-  tag
+  tag,
+  searchQuery
 }: FlashcardItemProps) {
   const { playSound } = useAudio();
 
@@ -51,12 +78,17 @@ export function FlashcardItem({
             <ThemedText style={styles.tagText}>{tag.toUpperCase()}</ThemedText>
           </View>
         )}
-        <ThemedText style={[styles.vietnamese, { color: primaryColor }]}>
-          {vietnamese}
-        </ThemedText>
-        <ThemedText style={[styles.english, { color: secondaryColor }]}>
-          {english}
-        </ThemedText>
+        <HighlightedText 
+          text={vietnamese} 
+          query={searchQuery} 
+          style={[styles.vietnamese, { color: primaryColor }]} 
+        />
+        <HighlightedText 
+          text={english} 
+          query={searchQuery} 
+          style={[styles.english, { color: secondaryColor }]} 
+          highlightStyle={styles.highlightEnglish}
+        />
       </View>
 
       {(onPlay || audioUri) && (
@@ -110,6 +142,14 @@ const styles = StyleSheet.create({
     fontFamily: 'BeVietnamPro_600SemiBold',
     color: Colors.white,
     fontStyle: 'italic',
+  },
+  highlight: {
+    backgroundColor: Colors.brandSecondary,
+    fontFamily: 'BeVietnamPro_900Black',
+    color: Colors.black,
+  },
+  highlightEnglish: {
+    fontStyle: 'italic', // Maintain italic for english matches
   },
   buttonWrapper: {
     alignItems: 'flex-end',

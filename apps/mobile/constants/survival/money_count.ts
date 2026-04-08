@@ -16,41 +16,36 @@ export const money_count: SurvivalModule = {
       id: 'survival_items',
       type: 'micro-learning',
       title: 'SURVIVAL ITEMS: CORE CASH',
-      description: 'Master these basic numbers and phrases to survive your first day in Vietnam.',
+      description: 'Master these high-impact denominations to avoid the most common tourist traps.',
       vocabulary: [
         { 
-          phrase: 'Một nghìn đồng', 
-          translation: '1,000 VND', 
-          audioUri: require('../../assets/audio/currencies/1k.mp3'),
-          tag: 'Paper'
+          phrase: 'Năm trăm nghìn đồng', 
+          translation: 'Five hundred thousand dong', 
+          audioUri: require('../../assets/audio/currencies/500k.mp3'),
+          tag: 'Polymer'
         },
         { 
-          phrase: 'Mười nghìn đồng', 
-          translation: '10,000 VND', 
-          audioUri: require('../../assets/audio/currencies/10k.mp3'),
+          phrase: 'Hai mươi nghìn đồng', 
+          translation: 'Twenty thousand dong', 
+          audioUri: require('../../assets/audio/currencies/20k.mp3'),
           tag: 'Polymer'
         },
         { 
           phrase: 'Một trăm nghìn đồng', 
-          translation: '100,000 VND', 
+          translation: 'One hundred thousand dong', 
           audioUri: require('../../assets/audio/currencies/100k.mp3'),
           tag: 'Polymer'
         },
         { 
-          phrase: 'Năm trăm nghìn đồng', 
-          translation: '500,000 VND', 
-          audioUri: require('../../assets/audio/currencies/500k.mp3'),
+          phrase: 'Năm mươi nghìn đồng', 
+          translation: 'Fifty thousand dong', 
+          audioUri: require('../../assets/audio/currencies/50k.mp3'),
           tag: 'Polymer'
         },
         { 
           phrase: 'Bao nhiêu tiền?', 
           translation: 'How much is it?', 
           audioUri: require('../../assets/audio/bargaining/baonhieutien.mp3')
-        },
-        { 
-          phrase: 'Tiền thối', 
-          translation: 'Change (Money back)', 
-          audioUri: require('../../assets/audio/currencies/50k.mp3') // Placeholder for change pronunciation
         },
       ],
       mascotExpression: 'happy',
@@ -115,35 +110,6 @@ export const money_count: SurvivalModule = {
       fact: 'Total = 7k (Fare) + 15k (Deposit) = 22k. You get the 15k back when you return the card!',
     },
     {
-      id: 'roleplay_hotel',
-      type: 'roleplay',
-      title: 'HOTEL PRICE CHECK',
-      dialogues: [
-        {
-          id: 'd1',
-          speaker: 'user',
-          text: 'Phòng này bao nhiêu tiền một đêm?',
-          audioUri: require('../../assets/audio/bargaining/baonhieutien.mp3'), // Partial match
-        },
-        {
-          id: 'd2',
-          speaker: 'seller',
-          text: 'Dạ, tám trăm ngàn một đêm ạ.',
-          audioUri: require('../../assets/audio/currencies/200k.mp3'), // Using 200k as base for 800k placeholder
-        },
-        {
-          id: 'd3',
-          speaker: 'user',
-          text: 'Tôi ở hai đêm. Tổng cộng bao nhiêu?',
-        },
-        {
-          id: 'd4',
-          speaker: 'seller',
-          text: 'Dạ, tổng cộng một triệu sáu trăm ngàn ạ.',
-        },
-      ],
-    },
-    {
       id: 'slang_ruoi',
       type: 'voice_practice',
       title: 'STREET SLANG: "RƯỠI"',
@@ -154,10 +120,86 @@ export const money_count: SurvivalModule = {
       successFeedback: 'Perfect! Use "rưỡi" to sound like a pro when talking about millions or hours.',
     },
     {
+      id: 'roleplay_hotel',
+      type: 'roleplay',
+      title: 'HOTEL SHOWDOWN',
+      dialogues: [
+        {
+          id: 'd1',
+          speaker: 'user',
+          text: 'Phòng này bao nhiêu tiền một đêm?',
+          audioUri: require('../../assets/audio/bargaining/baonhieutien.mp3'),
+          nextId: 'd2',
+        },
+        {
+          id: 'd2',
+          speaker: 'seller',
+          text: 'Dạ, tám trăm ngàn một đêm ạ.',
+          audioUri: require('../../assets/audio/currencies/200k.mp3'), // Placeholder for 800k
+          nextId: 'd3',
+        },
+        {
+          id: 'd3',
+          speaker: 'user',
+          options: [
+            { 
+              label: 'Tôi ở hai đêm. Tổng cộng bao nhiêu?', 
+              nextId: 'd4_ask_total' 
+            },
+            { 
+              label: 'Đắt quá! (Too expensive)', 
+              nextId: 'd4_negotiate' 
+            },
+          ],
+          timeLimit: 10,
+          timeoutId: 'd1', // Send back to start if player hesitates
+        },
+        {
+          id: 'd4_ask_total',
+          speaker: 'seller',
+          text: 'Dạ, ở hai đêm tổng cộng một triệu sáu trăm ngàn ạ.',
+          nextId: 'd5_payment_decision',
+        },
+        {
+          id: 'd4_negotiate',
+          speaker: 'seller',
+          text: 'Dạ, khách sạn em giá niêm yết rồi. Nếu anh ở hai đêm em bớt cho một chút.',
+          nextId: 'd4_ask_total',
+        },
+        {
+          id: 'd5_payment_decision',
+          speaker: 'user',
+          options: [
+            { 
+              label: 'Một triệu sáu? Được, tôi lấy.', 
+              nextId: 'end_success' 
+            },
+            { 
+              label: 'Hai triệu sáu? (Mistake)', 
+              nextId: 'd5_fail' 
+            },
+          ],
+          timeLimit: 8,
+        },
+        {
+          id: 'd5_fail',
+          speaker: 'app',
+          tip: 'Wait! 800k x 2 is 1.6 Million, not 2.6 Million. Watch those zeros!',
+          nextId: 'd4_ask_total',
+        },
+        {
+          id: 'end_success',
+          speaker: 'mascot',
+          text: 'Perfect calculation! You saved yourself from a 1 Million VND mistake.',
+          mascotExpression: 'excited',
+        },
+      ],
+    },
+    {
       id: 'reward',
       type: 'reward',
       title: 'MONEY MASTERED',
-      reward: { xp: 100, badge: 'MONEY_PRO' },
+      reward: { xp: 150, badge: 'MONEY_PRO' },
     },
   ],
 };

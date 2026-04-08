@@ -38,6 +38,9 @@ yarn-error.*
 .env*.local
 .env
 
+# Firebase iOS (repo-specific config; keep local or use CI secrets)
+**/GoogleService-Info.plist
+
 # typescript
 *.tsbuildinfo
 

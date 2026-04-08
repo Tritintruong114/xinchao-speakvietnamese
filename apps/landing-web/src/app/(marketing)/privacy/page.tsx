@@ -1,7 +1,7 @@
 import { BrutalHeading, BrutalTag } from '@xinchao/ui-web';
 import type { Metadata } from 'next';
-import { BrutalSection } from '../../components/layout/BrutalSection';
-import { BrutalContainer } from '../../components/layout/BrutalContainer';
+import { BrutalSection } from '../../../components/layout/BrutalSection';
+import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',

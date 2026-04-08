@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { notifyContactSubmission } from '@/lib/email';
 import { SITE_CONTACT_EMAIL } from '@/lib/site';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
@@ -39,6 +40,8 @@ export async function POST(req: Request) {
       console.error('[contact]', error.message);
       return NextResponse.json({ error: 'Could not send message. Try again later.' }, { status: 503 });
     }
+
+    await notifyContactSubmission({ name, email, message });
 
     return NextResponse.json({ ok: true as const, mode: 'database' as const });
   }

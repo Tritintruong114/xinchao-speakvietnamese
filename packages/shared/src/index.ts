@@ -9,6 +9,7 @@
 // Types
 export type { SurvivalModule, SurvivalStep, SurvivalStepType, Dialogue, MascotExpression } from './types/survival';
 export type { SurvivalScanResult } from './types/scan';
+export * from './types/phrase';
 
 // Constants
 export { AIConfig } from './constants/ai';

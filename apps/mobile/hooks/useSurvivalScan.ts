@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { AIConfig, SurvivalScanResult } from '@xinchao/shared';
+import { SurvivalScanResult } from '@xinchao/shared';
+import { supabase } from '../lib/supabase';
 
 
 
@@ -24,43 +25,22 @@ export function useSurvivalScan() {
             throw new Error("Failed to take picture");
         }
 
-        const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-        if (!GEMINI_API_KEY) {
-            throw new Error("Gemini API Key missing. Please add EXPO_PUBLIC_GEMINI_API_KEY to your .env file.");
-        }
-
-        const payload = {
-            contents: [{
-                parts: [
-                    { text: `You are a "Vietnamese Street Specialist". Analyze the provided image snippet of a [FOOD/SIGN] and provide a high-accuracy translation optimized for a traveler's survival. Extract DISHES, PRICES, MODIFIERS, DIRECTIONS. Return a JSON object EXACTLY like this: {"type": "FOOD | SIGN | UNKNOWN", "name": "Local Name", "meaning": "English Translation", "price": 50000, "is_spicy": false, "survival_phrases": ["Cho tôi một dĩa cơm tấm"]}` },
-                    { inline_data: { mime_type: "image/jpeg", data: photo.base64 } }
-                ]
-            }],
-            generationConfig: { responseMimeType: "application/json" }
-        };
-
-        const response = await fetch(`${AIConfig.GEMINI_BASE_URL}/models/${AIConfig.DEFAULT_GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+        const { data, error: invokeError } = await supabase.functions.invoke('survival-scan', {
+            body: { 
+                image_base64: photo.base64,
+                context: "FOOD/SIGN" 
+            }
         });
 
-        const body = await response.json();
-        if (!response.ok) {
-            throw new Error(body.error?.message || "Failed to call Gemini");
+        if (invokeError) {
+            throw new Error(invokeError.message || "Failed to call survival-scan function");
         }
 
-        const geminiText = body.candidates[0].content.parts[0].text;
-        const jsonResult = JSON.parse(geminiText);
+        if (!data?.result) {
+            throw new Error("Missing result from scan function");
+        }
 
-        setResult({
-            raw_text: jsonResult.name || "Unknown",
-            translated_text: jsonResult.meaning || "Unknown",
-            phonetic: "",
-            entities: [],
-            survival_phrase: jsonResult.survival_phrases?.[0] || "Xin chào",
-            survival_translation: ""
-        });
+        setResult(data.result);
     } catch (err: any) {
         setError(err.message || "Oops! Món này lạ quá, Bé Ghế Nhựa chưa học kịp.");
     } finally {

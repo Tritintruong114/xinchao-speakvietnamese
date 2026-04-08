@@ -8,11 +8,23 @@ interface StatusBadgeProps {
   label: string;
   backgroundColor: string;
   icon?: LucideIcon;
+  iconColor?: string;
+  iconFillColor?: string;
+  textColor?: string;
   style?: ViewStyle;
   onPress?: () => void;
 }
 
-export function StatusBadge({ label, backgroundColor, icon: Icon, style, onPress }: StatusBadgeProps) {
+export function StatusBadge({ 
+  label, 
+  backgroundColor, 
+  icon: Icon, 
+  iconColor,
+  iconFillColor,
+  textColor,
+  style, 
+  onPress 
+}: StatusBadgeProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -35,8 +47,16 @@ export function StatusBadge({ label, backgroundColor, icon: Icon, style, onPress
         isPressed && styles.badgePressed
       ]}>
         <View style={styles.content}>
-          {Icon && <Icon size={14} color={Colors.black} strokeWidth={2.5} style={{ marginRight: 6 }} />}
-          <ThemedText style={styles.text}>{label.toUpperCase()}</ThemedText>
+          {Icon && (
+            <Icon 
+              size={14} 
+              color={iconColor || textColor || Colors.black} 
+              fill={iconFillColor} 
+              strokeWidth={2.5} 
+              style={{ marginRight: 6 }} 
+            />
+          )}
+          <ThemedText style={[styles.text, textColor ? { color: textColor } : null]}>{label.toUpperCase()}</ThemedText>
         </View>
       </View>
     </Pressable>
@@ -80,7 +100,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     fontFamily: 'BeVietnamPro_800ExtraBold',
-    color: Colors.black,
+    color: Colors.black, // fallback
     letterSpacing: 0.5,
   },
 });
