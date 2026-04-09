@@ -1,14 +1,35 @@
-import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { ThemedText } from '../components/ThemedText';
 import { ThemedButton } from '../components/ThemedButton';
 import { Colors, Spacing, Shadow, Stroke, BorderRadius } from '../constants/Theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '@/context/AuthContext';
+import { useToastStore } from '@/store/useToastStore';
 
 export default function LandingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { signInAnonymously } = useAuth();
+  const { showToast } = useToastStore();
+  const [busy, setBusy] = useState(false);
+
+  const handleGetStarted = async () => {
+    setBusy(true);
+    try {
+      await signInAnonymously();
+    } catch {
+      showToast(
+        'Chưa kết nối được. Bạn vẫn có thể tiếp tục — thử lại sau trên màn hình tiếp theo nhé.',
+        'warning',
+        5,
+      );
+    } finally {
+      setBusy(false);
+    }
+    router.push('/(onboarding)');
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -32,12 +53,18 @@ export default function LandingScreen() {
 
         {/* Action Buttons - Standardized CTAs */}
         <View style={styles.buttonContainer}>
-          <ThemedButton 
-            title="GET STARTED" 
-            onPress={() => router.push('/(onboarding)')}
-            type="primary"
-            style={styles.mainButton}
-          />
+          {busy ? (
+            <View style={[styles.mainButton, styles.loadingWrap]}>
+              <ActivityIndicator size="large" color={Colors.brandPrimary} />
+            </View>
+          ) : (
+            <ThemedButton
+              title="GET STARTED"
+              onPress={() => void handleGetStarted()}
+              type="primary"
+              style={styles.mainButton}
+            />
+          )}
           
           <ThemedButton 
             title="I HAVE AN ACCOUNT" 
@@ -116,6 +143,10 @@ const styles = StyleSheet.create({
   },
   mainButton: {
     minHeight: 64,
+  },
+  loadingWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footer: {
     paddingBottom: 24,

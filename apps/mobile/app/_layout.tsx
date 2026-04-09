@@ -27,6 +27,7 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useAppStore } from '@/store/useAppStore';
 import { GlobalToast } from '@/components/GlobalToast';
+import { ensurePurchasesConfigured } from '@/lib/purchases';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,6 +61,8 @@ function RootLayoutNav({ loaded }: { loaded: boolean }) {
 
     const inAuthGroup = segments[0] === '(auth)';
     const inOnboardingGroup = segments[0] === '(onboarding)';
+    const authChild = segments[1] as string | undefined;
+    const onLinkAccount = inAuthGroup && authChild === 'link-account';
 
     if (!hasOnboarded) {
       if (!inOnboardingGroup) {
@@ -70,11 +73,18 @@ function RootLayoutNav({ loaded }: { loaded: boolean }) {
         router.replace('/(auth)/login');
       }
     } else if (user) {
-      if (inAuthGroup || inOnboardingGroup) {
+      if (inOnboardingGroup) {
+        router.replace('/(tabs)');
+      } else if (inAuthGroup && !onLinkAccount) {
         router.replace('/(tabs)');
       }
     }
   }, [user, authLoading, hasOnboarded, segments, loaded]);
+
+  useEffect(() => {
+    if (authLoading || !loaded) return;
+    void ensurePurchasesConfigured(user?.uid ?? null);
+  }, [authLoading, loaded, user?.uid]);
 
   // Don't render the stack until we know the auth status
   if (authLoading || !loaded) {

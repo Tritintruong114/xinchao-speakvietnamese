@@ -4,15 +4,22 @@ import { ThemedText } from '@/components/ThemedText';
 import { VoicePractice } from '@/components/survival/VoicePractice';
 import { Colors, Stroke, Shadow, BorderRadius } from '@/constants/Theme';
 import { useAuth } from '@/context/AuthContext';
+import { auth } from '@/lib/firebase';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { useAppStore } from '@/store/useAppStore';
+import { useToastStore } from '@/store/useToastStore';
+
+const AHA_XP_REWARD = 50;
 
 export default function AhaScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { signInAnonymously } = useAuth();
+  const { showToast } = useToastStore();
+  const addDisplayXp = useAppStore((s) => s.addDisplayXp);
   const [hasClaimedReward, setHasClaimedReward] = useState(false);
   const [isUpdatingXp, setIsUpdatingXp] = useState(false);
 
@@ -21,29 +28,35 @@ export default function AhaScreen() {
   };
 
   const handleVoiceSuccess = async () => {
-    // Update XP if not already claimed
-    if (!hasClaimedReward && user) {
-      setIsUpdatingXp(true);
-      try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('xp')
-          .eq('id', user.uid)
-          .single();
-
-        const currentXp = profile?.xp || 0;
-
-        await supabase
-          .from('profiles')
-          .update({ xp: currentXp + 10 })
-          .eq('id', user.uid);
-
-        setHasClaimedReward(true);
-      } catch (error) {
-        console.error('Error updating XP:', error);
-      } finally {
-        setIsUpdatingXp(false);
+    if (hasClaimedReward) return;
+    setIsUpdatingXp(true);
+    try {
+      if (!auth.currentUser) {
+        await signInAnonymously();
       }
+      const uid = auth.currentUser?.uid;
+      if (!uid) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('xp')
+        .eq('id', uid)
+        .single();
+
+      const currentXp = profile?.xp || 0;
+
+      await supabase
+        .from('profiles')
+        .update({ xp: currentXp + AHA_XP_REWARD })
+        .eq('id', uid);
+
+      setHasClaimedReward(true);
+      addDisplayXp(AHA_XP_REWARD);
+      showToast(`Ting ting! +${AHA_XP_REWARD} XP — bạn đã mở khóa phần thưởng đầu tiên!`, 'success', 4);
+    } catch (error) {
+      console.error('Error updating XP:', error);
+    } finally {
+      setIsUpdatingXp(false);
     }
   };
 
@@ -69,7 +82,7 @@ export default function AhaScreen() {
           translation="How much is this?"
           audioUri={require('@/assets/audio/bargaining/baonhieutien.mp3')}
           onSuccess={handleVoiceSuccess}
-          successFeedback="Great job! +10 XP"
+          successFeedback={`Perfect! +${AHA_XP_REWARD} XP`}
         />
 
         {hasClaimedReward && (
@@ -78,7 +91,7 @@ export default function AhaScreen() {
             exiting={FadeOut}
             style={styles.rewardBadge}
           >
-            <ThemedText style={styles.rewardText}>+10 XP EARNED</ThemedText>
+            <ThemedText style={styles.rewardText}>+{AHA_XP_REWARD} XP EARNED</ThemedText>
           </Animated.View>
         )}
       </View>

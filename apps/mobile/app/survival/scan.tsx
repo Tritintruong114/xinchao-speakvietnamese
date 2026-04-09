@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
-import { CameraView, CameraType } from 'expo-camera';
-import { Camera } from 'lucide-react-native';
+import { CameraView } from 'expo-camera';
 import { Stack, useRouter } from 'expo-router';
-import { useSurvivalScan } from '../../hooks/useSurvivalScan';
+import { Camera } from 'lucide-react-native';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PrePermissionScreen } from '../../components/survival/PrePermissionScreen';
-import { ScanResultCard } from '../../components/survival/ScanResultCard';
+import { ScanAnalyzeSkeleton, ScanResultCard } from '../../components/survival/ScanResultCard';
 import { SurvivalOverlay } from '../../components/survival/SurvivalOverlay';
+import { useSurvivalScan } from '../../hooks/useSurvivalScan';
 
 export default function ScanScreen() {
   const router = useRouter();
@@ -43,20 +43,18 @@ export default function ScanScreen() {
       <View style={styles.cameraContainer}>
         <CameraView style={styles.camera} facing="back" ref={cameraRef} />
         <SurvivalOverlay isError={!!error} />
+
+        {isLoading && !result ? <ScanAnalyzeSkeleton /> : null}
         
         {/* Capture Button */}
         {!result && (
           <View style={styles.captureContainer}>
              <TouchableOpacity 
-                style={styles.captureBtn} 
+                style={[styles.captureBtn, isLoading && styles.captureBtnBusy]} 
                 onPress={scanImage}
                 disabled={isLoading}
              >
-               {isLoading ? (
-                  <ActivityIndicator color="#FFFFFF" size="large" />
-               ) : (
-                  <Camera color="#FFFFFF" strokeWidth={2.5} size={32} />
-               )}
+               <Camera color="#FFFFFF" strokeWidth={2.5} size={32} />
              </TouchableOpacity>
           </View>
         )}
@@ -109,6 +107,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
+  },
+  captureBtnBusy: {
+    opacity: 0.55,
   },
   errorCard: {
     position: 'absolute',

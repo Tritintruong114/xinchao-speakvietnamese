@@ -1,12 +1,28 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SurvivalScanResult } from '@xinchao/shared';
 import * as Speech from 'expo-speech';
 import { Volume2 } from 'lucide-react-native';
-import { SurvivalScanResult } from '@xinchao/shared';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Colors, Stroke } from '../../constants/Theme';
+import { NeoBrutalPulseBlock } from '../skeletons/NeoBrutalPulseBlock';
 
 interface Props {
   result: SurvivalScanResult;
   onClose: () => void;
+}
+
+/** Skeleton Neo-Brutal khi chờ Gemini (thay spinner trên nút chụp). */
+export function ScanAnalyzeSkeleton() {
+  return (
+    <View style={skeletonStyles.container}>
+      <View style={skeletonStyles.card}>
+        <NeoBrutalPulseBlock width="100%" height={28} style={skeletonStyles.block} />
+        <NeoBrutalPulseBlock width="92%" height={22} style={skeletonStyles.block} />
+        <NeoBrutalPulseBlock width="100%" height={52} style={skeletonStyles.block} />
+        <NeoBrutalPulseBlock width="100%" height={44} style={skeletonStyles.block} />
+      </View>
+    </View>
+  );
 }
 
 export function ScanResultCard({ result, onClose }: Props) {
@@ -120,5 +136,31 @@ const styles = StyleSheet.create({
     fontFamily: 'BeVietnamPro-Bold',
     fontSize: 16,
     color: '#1A1A1A',
-  }
+  },
+});
+
+const skeletonStyles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    padding: 24,
+    paddingBottom: 48,
+    pointerEvents: 'none',
+  },
+  card: {
+    backgroundColor: Colors.brandSecondary,
+    borderRadius: 12,
+    borderWidth: Stroke.width,
+    borderColor: Stroke.color,
+    padding: 16,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 8,
+  },
+  block: {
+    marginBottom: 12,
+    maxWidth: '100%',
+  },
 });

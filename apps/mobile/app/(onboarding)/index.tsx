@@ -1,14 +1,23 @@
 import { ThemedButton } from '../../components/ThemedButton';
 import { ThemedText } from '../../components/ThemedText';
-import { Colors, Spacing, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
+import { Colors, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function OnboardingSplashScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { user, loading: authLoading, signInAnonymously } = useAuth();
+  const anonAttempted = useRef(false);
+
+  useEffect(() => {
+    if (authLoading || user || anonAttempted.current) return;
+    anonAttempted.current = true;
+    void signInAnonymously().catch(() => {});
+  }, [authLoading, user, signInAnonymously]);
 
   const goToSegmentation = () => {
     router.replace('/(onboarding)/intent');

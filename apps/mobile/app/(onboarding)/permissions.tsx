@@ -11,8 +11,9 @@ import { requestPushPermission, sendWelcomeNotification } from '@/lib/notificati
 
 export default function PermissionsScreen() {
   const router = useRouter();
-  const { setHasAskedNotificationPermission } = useAppStore();
+  const { setHasAskedNotificationPermission, userIntent } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
+  const isTravel = userIntent !== 'work';
 
   const handleEnableNotifications = async () => {
     setIsLoading(true);
@@ -56,21 +57,32 @@ export default function PermissionsScreen() {
     </View>
   );
 
+  const title = isTravel ? 'Bật thông báo — giữ nhịp vỉa hè' : 'Bật thông báo — làm việc tại VN mượt hơn';
+  const description = isTravel
+    ? 'Cho phép push để mỗi sáng ~9h nhận một câu tiếng ló / survival siêu ngắn. Chỉ vài giây là đủ — giúp bạn quay lại app mỗi ngày.'
+    : 'Nhận gợi ý tiếng Việt công sở (chào hỏi, họp ngắn, ăn trưa) đúng lúc — không spam, chỉ micro-nudge có ích.';
+
+  const cardPrimaryTitle = isTravel ? 'Câu “chạy chợ” mỗi sáng' : 'Micro-lesson expat mỗi sáng';
+  const cardPrimaryBody = isTravel
+    ? 'Một câu tiếng ló vỉa hè / chợ / Grab mỗi ngày — vui, nhớ lâu, không áp lực.'
+    : 'Một cụm giao tiếp văn phòng hoặc đời sống expat — ngắn, dùng được ngay.';
+
+  const cardBellTitle = isTravel ? 'Nhắc khi đi chợ / khu du lịch' : 'Nhắc lịch & mẹo văn hóa';
+  const cardBellBody = isTravel
+    ? 'Mẹo mặc cả / tránh scam nhẹ nhàng khi bạn ở khu chợ hoặc điểm nóng (tuỳ cấu hình sau).'
+    : 'Gợi ý nhỏ cho họp, trà đá, networking — giữ nhịp học tiếng Việt trong tuần.';
+
   return (
-    <OnboardingLayout
-      title="Stay Street-Smart"
-      description="Get quick tips when you need them most."
-      footer={renderFooter()}
-    >
+    <OnboardingLayout title={title} description={description} footer={renderFooter()}>
       <View style={styles.permissionBox}>
         <View style={[styles.iconCircle, { backgroundColor: Colors.brandCyan }]}>
           <Sparkles size={32} color={Colors.black} strokeWidth={2.5} />
         </View>
         <View style={styles.textDetails}>
-          <ThemedText type="h2" style={styles.cardTitle}>Phrase Nudges</ThemedText>
-          <ThemedText style={styles.description}>
-            3 quick phrases sent before your day starts. Review each in under 10 seconds.
+          <ThemedText type="h2" style={styles.cardTitle}>
+            {cardPrimaryTitle}
           </ThemedText>
+          <ThemedText style={styles.description}>{cardPrimaryBody}</ThemedText>
         </View>
       </View>
 
@@ -79,10 +91,10 @@ export default function PermissionsScreen() {
           <Bell size={32} color={Colors.black} strokeWidth={2.5} />
         </View>
         <View style={styles.textDetails}>
-          <ThemedText type="h2" style={styles.cardTitle}>Market Alerts</ThemedText>
-          <ThemedText style={styles.description}>
-            Bargaining tips when you're near local markets or main spots.
+          <ThemedText type="h2" style={styles.cardTitle}>
+            {cardBellTitle}
           </ThemedText>
+          <ThemedText style={styles.description}>{cardBellBody}</ThemedText>
         </View>
       </View>
 

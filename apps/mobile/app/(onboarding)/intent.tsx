@@ -14,11 +14,7 @@ export default function IntentScreen() {
   const handleSelect = (intent: 'travel' | 'work') => {
     setUserIntent(intent);
     setOnboardingStatus('started');
-    if (intent === 'travel') {
-      router.push('/(onboarding)/offline');
-      return;
-    }
-    router.push('/(onboarding)/permissions');
+    router.push('./curating');
   };
 
   return (

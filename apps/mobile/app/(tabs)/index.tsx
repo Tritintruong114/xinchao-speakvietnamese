@@ -18,12 +18,28 @@ import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { useSurvivalModulesForHome } from '../../hooks/useSurvivalModulesForHome';
 import { resolveSurvivalCoverImage } from '../../lib/localModuleImages';
 import { SurvivalStore } from '../../store/survivalStore';
+import { useAppStore } from '../../store/useAppStore';
+import { useToastStore } from '../../store/useToastStore';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRouter();
   const { sections, syncModules, refresh, isLoading } = useSurvivalModulesForHome();
   const { isOffline, refresh: refreshNet } = useNetworkStatus();
+  const displayStreak = useAppStore((s) => s.displayStreak);
+  const { showToast } = useToastStore();
+
+  const onPressScan = useCallback(() => {
+    if (isOffline) {
+      showToast(
+        'Bé Ghế Nhựa báo cáo: Cần có mạng để mở Camera quét menu nhé!',
+        'warning',
+        4,
+      );
+      return;
+    }
+    router.push('/survival/scan');
+  }, [isOffline, router, showToast]);
 
   useFocusEffect(
     useCallback(() => {
@@ -48,7 +64,7 @@ export default function HomeScreen() {
   const retryNetworkAndSync = useCallback(async () => {
     await refreshNet();
     await SurvivalStore.ensureHydrated();
-    await syncModules();
+    await syncModules({ force: true });
     refresh();
   }, [refreshNet, syncModules, refresh]);
 
@@ -59,7 +75,7 @@ export default function HomeScreen() {
       headerHideBorder: true,
       headerLeft: () => (
         <StatusBadge
-          label="12 STREAK"
+          label={`${displayStreak} STREAK`}
           icon={Flame}
           backgroundColor={Colors.brandMint}
           iconFillColor={Colors.brandPrimary}
@@ -76,7 +92,7 @@ export default function HomeScreen() {
         />
       ),
     });
-  }, [navigation, router, isOffline]);
+  }, [navigation, router, isOffline, displayStreak]);
 
   if (showEmptyOffline) {
     return (
@@ -126,7 +142,8 @@ export default function HomeScreen() {
                 backgroundColor={Colors.brandPrimary}
                 textColor={Colors.white}
                 iconFillColor="rgba(255,255,255,0.2)"
-                onPress={() => router.push('/survival/scan')}
+                style={isOffline ? { opacity: 0.5 } : undefined}
+                onPress={onPressScan}
               />
             </View>
 

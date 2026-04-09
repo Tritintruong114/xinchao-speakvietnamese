@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
@@ -6,14 +6,15 @@ import { Colors, Stroke } from '@/constants/Theme';
 import { Sparkles } from 'lucide-react-native';
 import { OnboardingLayout } from '@/components/OnboardingLayout';
 import { useAppStore } from '@/store/useAppStore';
+import { useAuth } from '@/context/AuthContext';
 
 export default function SuccessScreen() {
   const router = useRouter();
-  const { setHasOnboarded } = useAppStore();
-  const scaleAnim = new Animated.Value(0);
+  const { setHasOnboarded, setDisplayStreak } = useAppStore();
+  const { signInAnonymously } = useAuth();
+  const scaleAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Celebration animation
     Animated.spring(scaleAnim, {
       toValue: 1,
       tension: 20,
@@ -21,14 +22,21 @@ export default function SuccessScreen() {
       useNativeDriver: true,
     }).start();
 
-    // Auto-navigation
     const timer = setTimeout(() => {
-      setHasOnboarded(true);
-      router.replace('/(auth)/login');
+      void (async () => {
+        try {
+          await signInAnonymously();
+        } catch {
+          // Continue — user may already be signed in; root guard handles edge case
+        }
+        setDisplayStreak(1);
+        setHasOnboarded(true);
+        router.replace('/(tabs)');
+      })();
     }, 2800);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [scaleAnim, signInAnonymously, setDisplayStreak, setHasOnboarded, router]);
 
   return (
     <OnboardingLayout showProgress={false}>

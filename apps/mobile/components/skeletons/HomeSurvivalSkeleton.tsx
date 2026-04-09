@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { NeoBrutalPulseBlock } from './NeoBrutalPulseBlock';
 import { BorderRadius, Colors, Stroke } from '../../constants/Theme';
+import { NeoBrutalPulseBlock } from './NeoBrutalPulseBlock';
 
 const { width } = Dimensions.get('window');
 const CARD_W = (width - 48) / 2;

@@ -7,16 +7,32 @@ import { useCallback, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { SurvivalStore } from '../store/survivalStore';
 
+/** Skip Supabase fetch if last successful sync was more recent than this (tab focus throttle). */
+const MIN_SYNC_INTERVAL_MS = 5 * 60 * 1000;
+
+export type SurvivalSyncOptions = { force?: boolean };
+
 export const useSurvivalSync = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const syncModules = useCallback(async () => {
-    setIsLoading(true);
+  const syncModules = useCallback(async (options?: SurvivalSyncOptions) => {
     setError(null);
 
     try {
       await SurvivalStore.ensureHydrated();
+
+      if (!options?.force) {
+        const last = SurvivalStore.getLastSyncedAt();
+        if (last) {
+          const age = Date.now() - new Date(last).getTime();
+          if (!Number.isNaN(age) && age >= 0 && age < MIN_SYNC_INTERVAL_MS) {
+            return;
+          }
+        }
+      }
+
+      setIsLoading(true);
 
       const { data, error: fetchError } = await supabase
         .from(SURVIVAL_MODULES_TABLE)

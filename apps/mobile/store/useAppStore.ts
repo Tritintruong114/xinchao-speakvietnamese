@@ -21,12 +21,18 @@ interface AppState {
   userIntent: 'travel' | 'work' | null;
   hasAskedNotificationPermission: boolean;
   isSurvivalPackDownloaded: boolean;
+  /** Local gamification until dedicated backend streak API — shown on Home, synced from onboarding rewards. */
+  displayStreak: number;
+  displayXp: number;
   setHasOnboarded: (value: boolean) => void;
   setOnboardingStatus: (status: AppState['onboardingStatus']) => void;
   setUserIntent: (intent: AppState['userIntent']) => void;
   setHasAskedNotificationPermission: (value: boolean) => void;
   setSurvivalPackDownloaded: (value: boolean) => void;
-  // Add more global state here (e.g., stats, preferences)
+  setDisplayStreak: (value: number) => void;
+  addDisplayXp: (delta: number) => void;
+  /** Reset local gamification / prefs after account deletion (keeps hasOnboarded). */
+  resetLocalProgressForAccountDeletion: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -37,11 +43,24 @@ export const useAppStore = create<AppState>()(
       userIntent: null,
       hasAskedNotificationPermission: false,
       isSurvivalPackDownloaded: false,
+      displayStreak: 0,
+      displayXp: 0,
       setHasOnboarded: (value) => set({ hasOnboarded: value, onboardingStatus: value ? 'completed' : 'not_started' }),
       setOnboardingStatus: (status) => set({ onboardingStatus: status }),
       setUserIntent: (intent) => set({ userIntent: intent }),
       setHasAskedNotificationPermission: (value) => set({ hasAskedNotificationPermission: value }),
       setSurvivalPackDownloaded: (value) => set({ isSurvivalPackDownloaded: value }),
+      setDisplayStreak: (value) => set({ displayStreak: Math.max(0, Math.floor(value)) }),
+      addDisplayXp: (delta) =>
+        set((s) => ({ displayXp: Math.max(0, s.displayXp + Math.floor(delta)) })),
+      resetLocalProgressForAccountDeletion: () =>
+        set({
+          displayStreak: 0,
+          displayXp: 0,
+          userIntent: null,
+          hasAskedNotificationPermission: false,
+          isSurvivalPackDownloaded: false,
+        }),
     }),
     {
       name: 'xinchao-storage',

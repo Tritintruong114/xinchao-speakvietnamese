@@ -27,7 +27,7 @@ interface OnboardingLayoutProps {
 
 const ONBOARDING_ORDER = [
   'intent',
-  'offline',
+  'curating',
   'aha',
   'permissions'
 ];
