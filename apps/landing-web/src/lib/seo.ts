@@ -3,7 +3,7 @@ import { SITE_NAME, SITE_URL } from './site';
 
 /** Default description when a page omits its own. */
 export const SITE_DESCRIPTION_DEFAULT =
-  "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam—offline-first.";
+  "The Traveler's Lifebuoy. Survive the street food, negotiate like a local, and connect in Vietnam—street-tested, pocket-ready.";
 
 export const SITE_DEFAULT_KEYWORDS = [
   'Vietnamese for travelers',
@@ -11,7 +11,7 @@ export const SITE_DEFAULT_KEYWORDS = [
   'Learn Vietnamese',
   'Vietnam travel app',
   'survival Vietnamese',
-  'offline Vietnamese',
+  'Vietnamese for travel',
   'street Vietnamese',
   'Vietnamese expats',
   'menu translation Vietnam',

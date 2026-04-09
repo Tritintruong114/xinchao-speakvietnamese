@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrutalCard, BrutalHeading, BrutalTag } from '@xinchao/ui-web';
-import { WifiOff, ScanIcon, MessageCircle } from 'lucide-react';
+import { Zap, ScanIcon, MessageCircle } from 'lucide-react';
 import { BrutalSection } from '../layout/BrutalSection';
 import { BrutalContainer } from '../layout/BrutalContainer';
 
@@ -14,10 +14,11 @@ const USPs = [
   },
   {
     id: 2,
-    title: "100% OFFLINE",
-    description: "Zero reliance on 4G or Wi-Fi. Our Lightweight 'Survival Packs' work anywhere—from sleeper buses to remote mountain villages.",
-    icon: WifiOff,
-    color: "bg-brand-mint"
+    title: 'STREET-SMART. BLAZING FAST.',
+    description:
+      'Survival packs tuned for real sidewalks: short lessons, zero grammar homework, phrases you’ll actually say out loud—built to snap open when you need them.',
+    icon: Zap,
+    color: 'bg-brand-mint',
   },
   {
     id: 3,

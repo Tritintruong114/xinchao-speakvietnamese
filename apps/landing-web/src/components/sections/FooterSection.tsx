@@ -23,7 +23,7 @@ export const FooterSection: React.FC = () => {
               <span className="text-brand-red">Survive</span>, <span className="text-brand-yellow">Connect</span>, and <br />
               Live like a local in 24 hours.
             </p>
-            <BrutalTag className="bg-brand-mint text-text-main border-text-main">100% OFFLINE-FIRST</BrutalTag>
+            <BrutalTag className="bg-brand-mint text-text-main border-text-main">STREET-TESTED &amp; POCKET-READY</BrutalTag>
             
             <div className="flex gap-4 pt-4">
               <a
@@ -93,7 +93,7 @@ export const FooterSection: React.FC = () => {
                  </div>
               </BrutalButton>
             </div>
-            <p className="text-sm font-black opacity-50 text-center italic">Supported Offline in 63 provinces 🇻🇳</p>
+            <p className="text-sm font-black opacity-50 text-center italic">From mountain passes to motorbike alleys—63 provinces 🇻🇳</p>
           </div>
         </div>
 

@@ -8,9 +8,9 @@ import { WaitlistSection } from '../../components/sections/WaitlistSection';
 export const metadata = buildPageMetadata({
   title: 'Survival Vietnamese for Travelers',
   description:
-    'Street-smart phrases, offline survival packs, and menu scanning for Vietnam—learn what textbooks skip.',
+    'Street-smart phrases, pocket survival packs, and menu scanning for Vietnam—learn what textbooks skip.',
   path: '/',
-  keywords: ['Vietnam food phrases', 'tourist Vietnamese', 'offline phrasebook'],
+  keywords: ['Vietnam food phrases', 'tourist Vietnamese', 'Vietnamese travel phrases'],
 });
 
 export default function Home() {

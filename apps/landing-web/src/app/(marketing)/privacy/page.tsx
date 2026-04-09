@@ -5,7 +5,8 @@ import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 
 export const metadata = buildPageMetadata({
   title: 'Privacy Policy',
-  description: 'How XinChao handles your data—offline-first, minimal collection, camera and microphone on-device.',
+  description:
+    'How XinChao handles your data—strict privacy, secure cloud where needed, minimal collection, no selling your learning moments to advertisers.',
   path: '/privacy',
 });
 
@@ -23,7 +24,7 @@ export default function PrivacyPage() {
           <section className="space-y-4">
             <h2 className="text-3xl font-black text-text-main not-italic">1. We Value Your Privacy</h2>
             <p>
-              XinChao is built to be "Offline-First". This means most of your data stays on your device. We don't sell your street scans, your bargaining practice, or your location history to third-party advertisers.
+              XinChao is built privacy-first: strict safeguards, secure cloud infrastructure where a feature needs it, and minimal data collection. We don&apos;t sell your scans, practice sessions, or location history to third-party advertisers.
             </p>
           </section>
 
@@ -37,7 +38,7 @@ export default function PrivacyPage() {
           <section className="space-y-4">
             <h2 className="text-3xl font-black text-text-main not-italic">3. Camera & Microphone</h2>
             <p>
-              We need access to your camera for scanning menus and your microphone for pronunciation practice. These features work *on-device*. We don't record your voice or store your photos on our servers.
+              We need camera access to scan menus and microphone access for speaking practice. Capturing happens on your phone; to return translations or feedback, image, audio, or derived text may be sent over encrypted connections to our backend or vetted AI providers. We don&apos;t use that content to profile you for ads, and we don&apos;t sell it.
             </p>
           </section>
 

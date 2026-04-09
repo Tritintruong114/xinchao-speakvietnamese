@@ -29,7 +29,7 @@ export const HeroSection: React.FC = () => {
             Don&apos;t just travel—live like a local. The pocket survival kit for street food, bargaining,
             and culture in your first days.
             <span className="text-text-main bg-brand-mint px-2 border-2 border-text-main mx-1">
-              Built to work offline.
+              Built for real streets—not just classrooms.
             </span>
           </p>
 
@@ -89,7 +89,7 @@ export const HeroSection: React.FC = () => {
           </BrutalPhone>
 
           <div className="absolute top-1/4 -right-4 bg-white border-2 border-text-main p-4 rounded-xl brutal-shadow font-black animate-bounce hidden xl:block whitespace-nowrap">
-            Offline-first AI assistant
+            Your pocket Vietnamese coach
           </div>
         </div>
       </BrutalContainer>

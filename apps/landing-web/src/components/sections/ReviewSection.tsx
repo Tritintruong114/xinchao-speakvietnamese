@@ -23,7 +23,7 @@ const REVIEWS = [
     level: 'Digital Nomad',
     location: 'HCMC Sleeper Bus',
     content:
-      'Offline mode is the lifebuoy. On a long bus with no signal, I could still ask for water and the next stop.',
+      'The scripts are short enough to memorize between stops—finally lines I could say without sounding like a phrasebook robot.',
     borderColor: 'border-brand-lavender',
     avatarId: 'sarah',
   },

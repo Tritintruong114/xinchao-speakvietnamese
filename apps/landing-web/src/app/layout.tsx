@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${SITE_NAME} — Survival Vietnamese`,
     description:
-      'Street-smart Vietnamese for travelers and expats. Offline survival packs, scan menus, bargain like a local.',
+      'Street-smart Vietnamese for travelers and expats. Pocket survival packs, scan menus, bargain like a local.',
   },
   robots: {
     index: true,

@@ -8,7 +8,7 @@ import { BrutalSection } from '../../../components/layout/BrutalSection';
 export const metadata = buildPageMetadata({
   title: 'Our mission',
   description:
-    'Why XinChao exists: survival-first Vietnamese for travelers and expats—offline packs, street slang, and no grammar fluff.',
+    'Why XinChao exists: survival-first Vietnamese for travelers and expats—pocket packs, street slang, and no grammar fluff.',
   path: '/about',
 });
 
@@ -75,9 +75,9 @@ export default function AboutPage() {
             </BrutalCard>
             <BrutalCard className="p-8 border-4 space-y-4">
               <div className="text-4xl font-black text-brand-mint">03.</div>
-              <h4 className="text-2xl font-black italic uppercase">No Internet Needed</h4>
+              <h4 className="text-2xl font-black italic uppercase">Keeps up when networks don&apos;t</h4>
               <p className="font-bold italic opacity-70">
-                Small, powerful "Survival Packs" that work 100% offline. Because the best adventures happen where there is no Wi-Fi.
+                Small, powerful Survival Packs load on your phone so a weak signal never leaves you tongue-tied. The best adventures rarely come with perfect Wi-Fi.
               </p>
             </BrutalCard>
           </div>

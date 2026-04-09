@@ -8,7 +8,7 @@ import { BrutalContainer } from '../../../components/layout/BrutalContainer';
 export const metadata = buildPageMetadata({
   title: 'Survival Kit',
   description:
-    'Street slang, offline packs, menu OCR, and bargaining practice—your pocket survival kit for Vietnam.',
+    'Street slang, pocket phrase packs, menu OCR, and bargaining practice—your survival kit for Vietnam.',
   path: '/survival',
   keywords: ['Vietnamese slang', 'bargaining Vietnamese', 'menu OCR Vietnam'],
 });
@@ -23,7 +23,7 @@ export default function SurvivalKitPage() {
             The Survival Kit
           </BrutalHeading>
           <p className="text-3xl font-bold italic leading-relaxed text-text-main/90">
-            Everything you need to navigate Vietnam like a local. No fluff, just street-smart tools that work 100% offline.
+            Everything you need to navigate Vietnam like a local. No fluff—just street-smart tools that stay with you on the road.
           </p>
         </BrutalContainer>
       </BrutalSection>
@@ -47,7 +47,7 @@ export default function SurvivalKitPage() {
               </div>
               <h3 className="text-2xl font-black italic">Instant Menu Scanner</h3>
               <p className="font-bold opacity-70 italic text-lg">
-                Translate menus, street signs, and receipts instantly. No internet connection required. Just point, scan, and survive.
+                Translate menus, street signs, and receipts fast. Point, scan, and keep moving—no typing marathon on the sidewalk.
               </p>
             </BrutalCard>
 
@@ -55,7 +55,7 @@ export default function SurvivalKitPage() {
               <div className="w-16 h-16 bg-brand-mint border-2 border-text-main rounded-xl flex items-center justify-center text-text-main brutal-shadow-sm">
                 <Globe size={32} />
               </div>
-              <h3 className="text-2xl font-black italic">Offline Maps & Pins</h3>
+              <h3 className="text-2xl font-black italic">Curated Maps &amp; Pins</h3>
               <p className="font-bold opacity-70 italic text-lg">
                 Never get lost in the alleys of Hanoi or Saigon. Curated pins for the best Bún Chả, Bánh Mì, and hidden gems.
               </p>
