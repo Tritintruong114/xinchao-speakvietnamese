@@ -1,6 +1,5 @@
-# Reproducible infra (MLOps-style): release notes live in Git as first-class artifacts (not pasted CMS).
-# Sequential pipeline: push -> AI gen-docs -> optional bot commit [skip ci] -> build (CDV) -> optional Vercel CLI.
-# Circuit breaker: [skip ci] on the docs commit avoids infinite Action loops when github-actions[bot] pushes.
+# Reproducible infra: on each human push/merge to main, bump @xinchao/landing-web patch semver, regenerate AI release notes for that version, commit once [skip ci], then build/deploy.
+# Circuit breaker: [skip ci] avoids a second Actions run on the bot push (Vercel Git may still deploy that commit).
 #
 # Required secret: GEMINI_API_KEY
 # Optional: NEXT_PUBLIC_SITE_URL (defaults to production canonical URL below), VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
@@ -45,23 +44,42 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Bump landing-web patch version (semver)
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const p = 'apps/landing-web/package.json';
+          const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const parts = String(j.version || '').trim().split('.');
+          if (parts.length !== 3 || parts.some((x) => !/^\d+$/.test(x))) {
+            console.error('apps/landing-web/package.json version must be maj.min.patch (e.g. 1.1.0), got:', j.version);
+            process.exit(1);
+          }
+          const [a, b, c] = parts.map(Number);
+          j.version = `${a}.${b}.${c + 1}`;
+          fs.writeFileSync(p, JSON.stringify(j, null, 2) + '\n');
+          console.log('Bumped to', j.version);
+          NODE
+
       - name: Generate release notes (single-agent script)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           VERSION="$(node -p "require('./apps/landing-web/package.json').version")"
+          echo "Generating release notes for v${VERSION}"
           pnpm run gen-docs -- --version "v${VERSION}"
 
-      - name: Commit and push if release-notes changed
+      - name: Commit version + release notes and push
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add apps/landing-web/content/release-notes/
+          git add apps/landing-web/package.json apps/landing-web/content/release-notes/
           if git diff --quiet && git diff --staged --quiet; then
-            echo "No changes under content/release-notes — skip commit."
+            echo "No changes to commit."
             exit 0
           fi
-          git commit -m "docs(auto): cập nhật release notes [skip ci]"
+          VERSION="$(node -p "require('./apps/landing-web/package.json').version")"
+          git commit -m "chore(release): v${VERSION} + release notes [skip ci]"
           git push
 
   build-and-deploy:
