@@ -1,0 +1,112 @@
+# On Issue/PR comment containing @checkin: append today's workflow runs (Asia/Ho_Chi_Minh) to checkinlog.txt.
+name: Check-in log (@checkin)
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  append-checkin-log:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.comment.body, '@checkin')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Append today's Actions runs to checkinlog.txt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          TRIGGER_ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          export GH_TOKEN
+          python3 << 'PY'
+          import json
+          import os
+          import pathlib
+          import urllib.request
+          from datetime import datetime, timedelta, timezone
+
+          event = json.loads(pathlib.Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+          ev = os.environ["EVENT_NAME"]
+          if ev == "workflow_dispatch":
+              body = f"(workflow_dispatch) triggered by {os.environ['TRIGGER_ACTOR']}"
+              user = os.environ["TRIGGER_ACTOR"]
+              issue_no = "—"
+              title = "workflow_dispatch"
+          else:
+              c = event.get("comment") or {}
+              iss = event.get("issue") or {}
+              body = (c.get("body") or "").replace("\n", " ")[:800]
+              user = (c.get("user") or {}).get("login", "")
+              issue_no = str(iss.get("number", ""))
+              title = (iss.get("title") or "").replace("\n", " ")[:200]
+
+          vn = timezone(timedelta(hours=7))
+          now_vn = datetime.now(vn)
+          today_vn = now_vn.date()
+          repo = os.environ["REPO"]
+          token = os.environ["GH_TOKEN"]
+
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/actions/runs?per_page=100",
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {token}",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              },
+          )
+          with urllib.request.urlopen(req) as resp:
+              data = json.load(resp)
+
+          lines = []
+          for r in data.get("workflow_runs", []):
+              created = datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")).astimezone(vn)
+              if created.date() != today_vn:
+                  continue
+              name = r.get("name") or r.get("path") or ""
+              conclusion = r.get("conclusion") or "in_progress"
+              status = r.get("status")
+              disp = (r.get("display_title") or "").replace("\n", " ")
+              url = r.get("html_url", "")
+              lines.append(
+                  f"  - {created.strftime('%H:%M')} | {name} | {status}/{conclusion} | {disp} | {url}"
+              )
+
+          sep = "=" * 80
+          block = (
+              f"{sep}\n"
+              f"CHECK-IN @checkin | {now_vn.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
+              f"Trigger: @{user} on issue/PR #{issue_no} — {title}\n"
+              f"Comment: {body}\n"
+              f"{'-' * 80}\n"
+              f"Workflow runs this calendar day (VN, {today_vn}): {len(lines)} run(s)"
+          )
+          if lines:
+              block += "\n" + "\n".join(sorted(lines))
+          else:
+              block += "\n  (no runs in the last 100 API results matched VN today — or none yet)"
+
+          with open("checkinlog.txt", "a", encoding="utf-8") as f:
+              f.write(block + "\n")
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add checkinlog.txt
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "docs(checkin): log @checkin for $(date -u +%Y-%m-%d) [skip ci]"
+          git push

@@ -11,7 +11,7 @@
  *   pnpm run gen-docs -- --version v1.2.0
  *   pnpm run gen-docs -- --input ./my-log.txt
  *   git log -30 --oneline | pnpm run gen-docs -- --stdin
- *   (Luôn thêm --stdin khi pipe; mặc định đọc git log.)
+ *   Use --stdin when piping git log; otherwise the script reads git log from the repo root.
  */
 
 import { AIConfig } from '@xinchao/shared';
@@ -31,12 +31,19 @@ config({ path: path.join(root, 'apps/landing-web/.env') });
 
 const OUT_DIR = path.join(root, 'apps/landing-web/content/release-notes');
 
-/** Single-shot instruction — user-facing release note from commit log (VN via \\u escapes). */
+/**
+ * Single-shot prompt: English, enterprise-style user release notes from git log.
+ * Persona + anti-hallucination + fence-free Markdown so CI can write API output straight to .md.
+ */
 const WRITER_PROMPT = [
-  'M\u00e0y l\u00e0 Technical Writer. D\u1ef1a v\u00e0o log code n\u00e0y, h\u00e3y vi\u1ebft cho tao 1 file Markdown Release Note th\u00e2n thi\u1ec7n v\u1edbi ng\u01b0\u1eddi d\u00f9ng.',
-  'Tr\u00e1nh jargon k\u1ef9 thu\u1eadt s\u00e2u; kh\u00f4ng c\u1ea7n li\u1ec7t k\u00ea hash tr\u1eeb khi th\u1eadt s\u1ef1 h\u1eefu \u00edch.',
-  'G\u1ee3i \u00fd c\u1ea5u tr\u00fac: H1 t\u00ean phi\u00ean b\u1ea3n, \u0111o\u1ea1n t\u00f3m t\u1eaft, c\u00e1c m\u1ee5c nh\u01b0 M\u1edbi / C\u1ea3i thi\u1ec7n / S\u1eeda l\u1ed7i n\u1ebfu h\u1ee3p l\u00fd.',
-  'CH\u1ec8 tr\u1ea3 v\u1ec1 Markdown thu\u1ea7n, kh\u00f4ng b\u1ecdc trong ``` fence.',
+  'You are a senior technical writer. Using ONLY the git log below, write one Markdown release note for English-speaking end users (travelers and Vietnamese learners)—not for engineers.',
+  'Voice: warm, confident, short sentences. Lead with user benefits. Strip engineering vocabulary (e.g. Supabase, Expo, Deno, Turbo, GitHub Actions, Edge Functions) unless a commit message forces a plain-English paraphrase.',
+  'Anti-hallucination: Never invent or exaggerate features. If the log does not clearly imply something, omit it. Do not mention Offline Mode, offline-first, or "works without internet" unless commits explicitly describe that behavior.',
+  'Structure: (1) H1 = product name + version, e.g. "# XinChao 1.2.0". (2) One short welcoming intro paragraph (2–4 sentences max) only if the log gives enough substance. (3) Sections ## New, ## Improvements, ## Fixes as needed—omit empty sections. Use bullet lists; bold the first few words of a bullet when it helps scanning.',
+  'When the log touches onboarding, survival modules, pocket phrases, camera/OCR/scan, landing/website, SEO, or social/Open Graph, describe what the traveler experiences—only if commits support it.',
+  'Sharing / SEO: If relevant commits exist, add a plain-English line or bullets: what friends see when someone shares a XinChao link (app name, short description, preview image). No stack details.',
+  'Security/privacy: Mention only if commits clearly indicate it; keep it one short bullet in Fixes or Improvements.',
+  'Output rules: Return ONLY the Markdown document body. No preamble, no apology, no code fences (no ``` wrapping). The file will be saved as-is for the website.',
 ].join('\n');
 
 function parseCli() {

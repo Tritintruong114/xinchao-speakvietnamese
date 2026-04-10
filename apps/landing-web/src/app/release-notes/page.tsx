@@ -15,8 +15,7 @@ export default async function ReleaseNotesIndexPage() {
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl">Release notes</h1>
         <p className="max-w-2xl text-neutral-600">
-          Changelog and version history. Content lives in the repo under{' '}
-          <code className="rounded bg-black/5 px-1.5 py-0.5 text-sm">content/release-notes</code>.
+          What is new in each version—written for travelers and learners using XinChao in English.
         </p>
       </header>
       <ul className="space-y-2 border-t border-black/10 pt-6">

@@ -1,0 +1,3 @@
+# Check-in log
+# Appended by GitHub Actions when you add a comment that contains @checkin on any Issue or Pull Request in this repo.
+# (Does not trigger from commit messages or from chat outside GitHub.)
