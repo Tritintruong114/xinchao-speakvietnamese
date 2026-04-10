@@ -1,0 +1,24 @@
+# xinchao-monorepo — XinChao (học tiếng Việt / survival modules, pocket phrases)
+pnpm@9.15.9 + turbo@2.9.3 | workspaces: apps/*, packages/* | root overrides: react/react-dom 19.2.0
+
+## apps
+- @xinchao/mobile — Expo ~55, RN 0.83, expo-router, Zustand, WatermelonDB+quick-sqlite, Supabase, Firebase, RevenueCat (react-native-purchases), OCR/camera/audio/speech stack. Routes: app/index, (tabs)/index|pocket|profile, (auth)/login|link-account, (onboarding)/*, survival/scan + survival/[id], streak, currencies, modal, dev-reset, test_components.
+- @xinchao/landing-web — Next 15.1.3 App Router (src/app), React 19, Tailwind, @xinchao/ui-web + config-tailwind, Supabase, Resend. (marketing)/*, dashboard/* (library, offline, settings, login, contact), api/contact, api/waitlist.
+- @xinchao/edge-functions — Supabase Edge (Deno). functions: survival-scan, setup-db. sync-types: rsync packages/shared/src/types → supabase/functions/_shared/types/
+
+## packages
+- @xinchao/shared — tsc build; types: survival, phrase, scan; survival/moduleDb, pocket/phraseDb; constants ai + brand; main src/index.ts
+- @xinchao/ui-web — shared web UI
+- @xinchao/config-eslint | config-ts | config-tailwind — tooling
+
+## root scripts
+dev|build|lint|typecheck (turbo), mobile|functions (filter), sync-types (turbo), seed:survival|seed:pocket (tsx tools/*)
+
+## tools/
+seed-survival-modules.ts, seed-saved-phrases.ts, apply-saved-phrases-migration.ts, survival-modules.seed.example.json
+
+## turbo.json highlights
+build → dist/**; typecheck/lint depend on ^build; dev persistent no cache; sync-types outputs edge _shared/types from shared types
+
+## cross-cutting
+Shared DB/types contract: mobile + edge consume @xinchao/shared; edge copies types for Deno. Global turbo dep: .env

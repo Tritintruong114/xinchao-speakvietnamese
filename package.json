@@ -12,7 +12,9 @@
     "typecheck": "turbo run typecheck",
     "sync-types": "turbo run sync-types",
     "seed:survival": "tsx tools/seed-survival-modules.ts",
-    "seed:pocket": "tsx tools/seed-saved-phrases.ts"
+    "seed:pocket": "tsx tools/seed-saved-phrases.ts",
+    "gen-docs": "tsx tools/generate-docs.ts",
+    "generate:release-notes": "tsx tools/generate-docs.ts"
   },
   "dependencies": {
     "@xinchao/shared": "workspace:*"
