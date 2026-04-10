@@ -113,5 +113,13 @@ jobs:
             echo "If the project uses Vercel Git integration, production deploys on push to main."
             exit 0
           fi
-          cd apps/landing-web
-          npx --yes vercel@latest deploy --prod --token "$VERCEL_TOKEN" --yes --build-env NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL"
+          # Monorepo: deploy from repo root so pnpm workspace + apps/landing-web/package.json resolve.
+          # Vercel project must have Root Directory = apps/landing-web (Dashboard → Settings → General).
+          if [ -z "${VERCEL_ORG_ID:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
+            echo "::error::Add GitHub secrets VERCEL_ORG_ID and VERCEL_PROJECT_ID from Vercel → Project → Settings → General."
+            exit 1
+          fi
+          npx --yes vercel@latest deploy --prod \
+            --token "$VERCEL_TOKEN" \
+            --yes \
+            --build-env NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL"
