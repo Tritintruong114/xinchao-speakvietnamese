@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -16,6 +17,7 @@ export async function listReleaseNoteVersions(): Promise<string[]> {
 }
 
 export async function getReleaseNoteMarkdown(version: string): Promise<string | null> {
+  noStore();
   if (!isSafeVersionSlug(version)) return null;
   const filePath = path.join(RELEASE_NOTES_DIR, `${version}.md`);
   try {

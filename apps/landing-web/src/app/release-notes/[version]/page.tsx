@@ -8,6 +8,9 @@ type PageProps = {
   params: Promise<{ version: string }>;
 };
 
+/** Always resolve markdown at request time so /v1.1.0 never serves a stale or wrong bundle. */
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
   const versions = await listReleaseNoteVersions();
   return versions.map((version) => ({ version }));
@@ -40,7 +43,7 @@ export default async function ReleaseNoteVersionPage({ params }: PageProps) {
           ← All release notes
         </Link>
       </div>
-      <MarkdownDoc source={markdown} />
+      <MarkdownDoc key={decoded} source={markdown} />
     </article>
   );
 }
