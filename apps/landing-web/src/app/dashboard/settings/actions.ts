@@ -4,7 +4,9 @@ import { getPrimaryDashboardAdmin, hashDashboardPassword } from '@/lib/dashboard
 import { DASHBOARD_SESSION_COOKIE } from '@/lib/dashboardSessionCrypto';
 import {
   insertDashboardAdmin,
+  SETTING_AI_MODULE_SYSTEM_PROMPT,
   SETTING_ELEVENLABS,
+  SETTING_ELEVENLABS_VOICE,
   SETTING_GEMINI,
   upsertDashboardSetting,
 } from '@/lib/dashboardSettingsDb';
@@ -15,8 +17,9 @@ import { redirect } from 'next/navigation';
 export async function saveDashboardApiKeysAction(formData: FormData): Promise<void> {
   const eleven = String(formData.get('elevenlabs_api_key') || '').trim();
   const gemini = String(formData.get('gemini_api_key') || '').trim();
+  const voice = String(formData.get('elevenlabs_voice_id') || '').trim();
 
-  if (!eleven && !gemini) {
+  if (!eleven && !gemini && !voice) {
     redirect('/dashboard/settings');
   }
 
@@ -28,9 +31,24 @@ export async function saveDashboardApiKeysAction(formData: FormData): Promise<vo
     const { error } = await upsertDashboardSetting(SETTING_GEMINI, gemini);
     if (error) redirect(`/dashboard/settings?keysError=${encodeURIComponent(error)}`);
   }
+  if (voice) {
+    const { error } = await upsertDashboardSetting(SETTING_ELEVENLABS_VOICE, voice);
+    if (error) redirect(`/dashboard/settings?keysError=${encodeURIComponent(error)}`);
+  }
 
   revalidatePath('/dashboard/settings');
   redirect('/dashboard/settings?keysSaved=1');
+}
+
+export async function saveDashboardAiModulePromptAction(formData: FormData): Promise<void> {
+  const prompt = String(formData.get('ai_module_system_prompt') ?? '');
+  const { error } = await upsertDashboardSetting(SETTING_AI_MODULE_SYSTEM_PROMPT, prompt);
+  if (error) {
+    redirect(`/dashboard/settings?promptError=${encodeURIComponent(error)}`);
+  }
+  revalidatePath('/dashboard/settings');
+  revalidatePath('/dashboard/library');
+  redirect('/dashboard/settings?promptSaved=1');
 }
 
 export async function createDashboardAdminAction(formData: FormData): Promise<void> {

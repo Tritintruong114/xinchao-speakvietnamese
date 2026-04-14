@@ -1,180 +1,113 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, Platform, KeyboardAvoidingView, Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { ThemedText } from '../../components/ThemedText';
-import { Search, Wifi, WifiOff } from 'lucide-react-native';
-import { useNavigation } from 'expo-router';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { FlashcardItem } from '../../components/FlashcardItem';
 import { NetworkErrorState } from '../../components/network/NetworkErrorState';
-import { PocketChipsSkeleton, PocketListSkeleton } from '../../components/skeletons/PocketListSkeleton';
-import { StatusBadge } from '../../components/StatusBadge';
+import { PocketListSkeleton } from '../../components/skeletons/PocketListSkeleton';
 import { ThemedInput } from '../../components/ThemedInput';
-import { Colors, Stroke, Shadow, BorderRadius } from '../../constants/Theme';
-import { CATEGORIES } from '../../constants/survival/saved_phrases';
-import { PhraseCategory as SharedPhraseCategory } from '@xinchao/shared';
+import { ThemedText } from '../../components/ThemedText';
+import { Colors } from '../../constants/Theme';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
-import { useSavedPhrasesForPocket } from '../../hooks/useSavedPhrasesForPocket';
-import { PhraseStore } from '../../store/phraseStore';
-
-/**
- * Helper to extract hex color from tailwind-like strings: "bg-[#DA251D] text-white"
- */
-const getHexFromTailwind = (tw: string) => {
-  const match = tw.match(/#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/);
-  return match ? `#${match[1]}` : '#FFFFFF';
-};
+import { useSurvivalSync } from '../../hooks/useSurvivalSync';
+import { getMergedSurvivalModules } from '../../lib/survivalCatalog';
+import { collectSurvivalLibraryAudioRows } from '../../lib/survivalLibraryPhrases';
+import { SurvivalStore } from '../../store/survivalStore';
+import { Search } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function PocketScreen() {
-  const navigation = useNavigation();
-  const { phrases, syncPhrases, refresh, isLoading } = useSavedPhrasesForPocket();
+  const insets = useSafeAreaInsets();
+  const { syncModules, isLoading } = useSurvivalSync();
   const { isOffline, refresh: refreshNet } = useNetworkStatus();
+  const [catalogTick, setCatalogTick] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<SharedPhraseCategory | 'ALL'>('ALL');
 
-  /** Skeleton when online and list would be empty (no bundle/cache yet). */
-  const showOnlineSkeleton = isLoading && !isOffline && phrases.length === 0;
-  const showEmptyOffline = isOffline && phrases.length === 0;
+  const modules = useMemo(() => getMergedSurvivalModules(), [catalogTick]);
+  const audioRows = useMemo(() => collectSurvivalLibraryAudioRows(modules), [modules]);
 
   const retryNetworkAndSync = useCallback(async () => {
     await refreshNet();
-    await PhraseStore.ensureHydrated();
-    await syncPhrases();
-    refresh();
-  }, [refreshNet, syncPhrases, refresh]);
+    await SurvivalStore.ensureHydrated();
+    await syncModules({ force: true });
+    setCatalogTick((n) => n + 1);
+  }, [refreshNet, syncModules]);
 
   useFocusEffect(
     useCallback(() => {
       let active = true;
       void (async () => {
-        await PhraseStore.ensureHydrated();
+        await SurvivalStore.ensureHydrated();
         if (!active) return;
-        await syncPhrases();
-        if (active) refresh();
+        await syncModules({ force: true });
+        if (active) setCatalogTick((n) => n + 1);
       })();
       return () => {
         active = false;
       };
-    }, [syncPhrases, refresh]),
+    }, [syncModules]),
   );
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'SAVED PHRASES',
-      headerHideBorder: true,
-      titleAlignment: 'left',
-      headerRight: () => (
-        <StatusBadge
-          label={isOffline ? 'OFFLINE' : 'ONLINE'}
-          icon={isOffline ? WifiOff : Wifi}
-          backgroundColor={isOffline ? Colors.brandBlue : Colors.brandMint}
-          iconFillColor={isOffline ? Colors.white : Colors.brandPrimary}
-          textColor={isOffline ? Colors.white : Colors.black}
-        />
-      ),
-    });
-  }, [navigation, isOffline]);
+  const showOnlineSkeleton = isLoading && !isOffline && modules.length === 0;
 
-  if (showEmptyOffline) {
+  const filteredRows = audioRows.filter((row) => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return true;
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-        style={styles.container}
-      >
-        <NetworkErrorState variant="full" onRetry={retryNetworkAndSync} />
-      </KeyboardAvoidingView>
+      row.primary.toLowerCase().includes(q) ||
+      row.secondary.toLowerCase().includes(q) ||
+      row.moduleTitle.toLowerCase().includes(q)
     );
-  }
-
-  const filteredPhrases = phrases.filter(phrase => {
-    const matchesSearch = 
-      phrase.vietnamese.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      phrase.english.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategory === 'ALL' || phrase.categories.includes(selectedCategory as SharedPhraseCategory);
-    
-    return matchesSearch && matchesCategory;
   });
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-      style={styles.container}
+      style={[styles.container, { paddingTop: 16 + insets.top }]}
     >
-      <ScrollView 
-        style={styles.scrollView} 
+      <ScrollView
+        style={styles.scrollView}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
         {isOffline ? <NetworkErrorState variant="compact" onRetry={retryNetworkAndSync} /> : null}
 
         {showOnlineSkeleton ? (
-          <>
-            <PocketChipsSkeleton />
-            <PocketListSkeleton />
-          </>
+          <PocketListSkeleton />
         ) : (
-          <>
-            <View style={styles.categoriesWrapper}>
-              <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.categoriesContainer}
-              >
-                {CATEGORIES.map(cat => (
-                  <Pressable
-                    key={cat.id}
-                    onPress={() => {
-                      if (selectedCategory === cat.id) {
-                        setSelectedCategory('ALL');
-                      } else {
-                        setSelectedCategory(cat.id as SharedPhraseCategory | 'ALL');
-                      }
-                    }}
-                    style={[
-                      styles.chip,
-                      { backgroundColor: getHexFromTailwind(cat.themeClass) },
-                      selectedCategory === cat.id && styles.activeChip
-                    ]}
-                  >
-                    <ThemedText style={[
-                      styles.chipText,
-                      cat.themeClass.includes('text-white') && { color: '#FFFFFF' },
-                      selectedCategory === cat.id && styles.activeChipText
-                    ]}>
-                      {cat.label}
-                    </ThemedText>
-                  </Pressable>
-                ))}
-              </ScrollView>
+          <View style={styles.section}>
+            <View style={styles.flashList}>
+              {filteredRows.length > 0 ? (
+                filteredRows.map((row) => (
+                  <FlashcardItem
+                    key={row.id}
+                    vietnamese={row.primary}
+                    english={row.secondary.trim() ? row.secondary : row.moduleTitle}
+                    audioUri={row.audioUri}
+                    primaryColor={Colors.black}
+                    searchQuery={searchQuery}
+                  />
+                ))
+              ) : (
+                <ThemedText style={styles.emptyText}>
+                  Chưa có dòng nào có audio trong thư viện. Thêm audioUri trong module trên LMS hoặc
+                  kéo catalog khi có mạng.
+                </ThemedText>
+              )}
             </View>
-
-            <View style={styles.section}>
-              <View style={styles.flashList}>
-                {filteredPhrases.length > 0 ? (
-                  filteredPhrases.map((phrase) => (
-                    <FlashcardItem 
-                      key={phrase.id}
-                      vietnamese={phrase.vietnamese} 
-                      english={phrase.english} 
-                      audioUri={phrase.audioUri}
-                      searchQuery={searchQuery}
-                    />
-                  ))
-                ) : (
-                  <ThemedText style={styles.emptyText}>No phrases found.</ThemedText>
-                )}
-              </View>
-            </View>
-          </>
+          </View>
         )}
       </ScrollView>
 
-      {/* Persistent Search Bar footer */}
       <View style={styles.footer}>
         <ThemedInput
-          placeholder="Quick search phrases..."
+          placeholder="Tìm trong thư viện…"
           value={searchQuery}
           onChangeText={setSearchQuery}
           borderColor={Colors.brandPrimary}
@@ -189,7 +122,6 @@ export default function PocketScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
@@ -198,41 +130,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 24,
-  },
-  categoriesWrapper: {
-    marginBottom: 16,
-  },
-  categoriesContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 8, // For the chip shadow
-    gap: 12,
-  },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: BorderRadius.button,
-    borderWidth: Stroke.width,
-    borderColor: Colors.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  activeChip: {
-    // Hard shadow for active state
-    shadowColor: Colors.black,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-    transform: [{ translateX: -1 }, { translateY: -1 }],
-  },
-  chipText: {
-    fontSize: 12,
-    fontFamily: 'BeVietnamPro_700Bold',
-    color: Colors.black,
-    textTransform: 'uppercase',
-  },
-  activeChipText: {
-    fontFamily: 'BeVietnamPro_900Black',
   },
   section: {
     paddingHorizontal: 16,
@@ -246,21 +143,23 @@ const styles = StyleSheet.create({
     marginTop: 40,
     color: '#666666',
     fontFamily: 'BeVietnamPro_400Regular',
+    lineHeight: 22,
+    paddingHorizontal: 12,
   },
   footer: {
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: Platform.OS === 'ios' ? 24 : 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)', // Slightly transparency
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderTopWidth: 1,
     borderColor: '#F0F0F0',
   },
   searchInputContainer: {
-    marginBottom: 0, 
+    marginBottom: 0,
   },
   searchInput: {
     fontFamily: 'BeVietnamPro_700Bold',
-    height: 56, // Slightly taller
-    fontSize: 18, // Slightly bigger text
+    height: 56,
+    fontSize: 18,
   },
 });

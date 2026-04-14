@@ -62,7 +62,7 @@ export interface SurvivalStep {
 export interface SurvivalModule {
   id: string;
   title: string;
-  category: 'Beginner' | 'Survival' | 'Legend';
+  category: string;
   image: any;
   steps: SurvivalStep[];
   /** Row order in DB / dashboard (column `sort_order`) */

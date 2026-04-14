@@ -1,0 +1,27 @@
+CHANGELOG — 2026-04-13 (compact, A2A-readable)
+Repo: xinchao-speak-vietnamese
+
+=== Next.js / dashboard images ===
+- apps/landing-web/next.config.ts: images.remotePatterns pathname widened to /storage/v1/object/** (covers Supabase URLs without /public/ segment).
+- images.unoptimized: true to avoid dev/Turbopack "Failed to generate cache key" on Storage URLs.
+
+=== Shared AI constants ===
+- packages/shared/src/constants/ai.ts: AIConfig.GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image' (cover-only; not for text JSON modules).
+
+=== Cover image pipeline (Gemini native image → Supabase Storage) ===
+- apps/landing-web/src/lib/ai/geminiModuleCoverImage.ts: generateModuleCoverImageWithGemini — REST generateContent, responseModalities IMAGE (retry TEXT+IMAGE on 400/404), inlineData → Buffer.
+- MODULE_COVER_ASPECT_RATIO = '3:2' — aligned with apps/mobile/components/ModuleCard.tsx (IMAGE_HEIGHT = CARD_WIDTH * 2/3).
+- Prompt: design system via operatorPrompt only; no module title/category; landscape 3:2; full-bleed; no nested rounded box / phone chrome; no readable text/labels; generationConfig.imageConfig.aspectRatio '3:2'.
+- apps/landing-web/src/lib/survivalImageStorage.ts: export guessExtFromMime for uploads.
+
+=== Server actions ===
+- apps/landing-web/src/app/dashboard/library/ai-actions.ts: regenerateModuleCoverImageAction({ moduleId }) — Gemini cover + uploadSurvivalImageBuffer under prefix/covers; uses SETTING_GEMINI + SETTING_AI_MODULE_SYSTEM_PROMPT.
+
+=== Dashboard UI — Library module editor ===
+- apps/landing-web/src/app/dashboard/panels/SurvivalModuleEditor.tsx: three explicit pipelines — (1) Generate cover image, (2) Generate module draft (Gemini text), (3) Generate audio (ElevenLabs); separate busy + notice state per pipeline; metadata (id/sort/title/category) before AI blocks; Image URL + preview after pipelines.
+
+=== Docs / conventions ===
+- Cover flow is separate from generateModuleDraftAction (text JSON) and generateModuleAudioAction (ElevenLabs).
+
+=== Files touched (summary) ===
+next.config.ts | packages/shared/constants/ai.ts | geminiModuleCoverImage.ts | survivalImageStorage.ts | ai-actions.ts | SurvivalModuleEditor.tsx | (this changelog)

@@ -1,8 +1,26 @@
 {
   "mcpServers": {
+    "notebooklm-mcp-cli": {
+      "command": "/Users/truongtritin/.local/bin/uvx",
+      "args": ["--from", "notebooklm-mcp-cli", "notebooklm-mcp"]
+    },
     "linear": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+      "command": "/usr/local/bin/npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.linear.app/mcp"
+      ]
+    },
+    "notion": {
+      "command": "/usr/local/bin/npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-notion"
+      ],
+      "env": {
+        "NOTION_INTERNAL_INTEGRATION_TOKEN": ""
+      }
     }
   }
 }

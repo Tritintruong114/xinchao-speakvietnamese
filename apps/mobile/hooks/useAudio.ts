@@ -3,6 +3,7 @@
 // npx expo run:ios OR npx expo run:android
 
 import { useEffect, useRef } from 'react';
+import { resolveSurvivalAudioForPlayback } from '../lib/survivalAudioPrefetch';
 import { useToastStore } from '../store/useToastStore';
 
 // Using dynamic import of the native functionality to stay resilient against missing native modules
@@ -44,9 +45,15 @@ export function useAudio() {
         playerRef.current = null;
       }
 
+      // Prefer disk cache for https survival audio (prefetched on home when online).
+      let resolved = source;
+      if (typeof source === 'string' && /^https?:\/\//i.test(source.trim())) {
+        resolved = await resolveSurvivalAudioForPlayback(source.trim());
+      }
+
       // expo-audio comfortably handles both local assets (number) and remote URIs (string)
       // Note: No need for manual { uri: ... } wrapper for strings in expo-audio
-      const player = Audio.createAudioPlayer(source);
+      const player = Audio.createAudioPlayer(resolved);
       playerRef.current = player;
       
       // Explicitly playing once it's created

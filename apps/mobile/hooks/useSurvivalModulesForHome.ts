@@ -1,17 +1,18 @@
-import type { SurvivalModule } from '@xinchao/shared';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { cacheSurvivalLibraryRemoteAssets } from '../lib/survivalLibraryCache';
+import { useNetworkStatus } from './useNetworkStatus';
 import {
   getMergedSurvivalModules,
   groupSurvivalModulesByCategory,
-  SECTION_TITLE,
+  orderedCategoryKeys,
+  sectionTitleForCategory,
 } from '../lib/survivalCatalog';
 import { SurvivalStore } from '../store/survivalStore';
 import { useSurvivalSync } from './useSurvivalSync';
 
-const CATEGORY_ORDER: SurvivalModule['category'][] = ['Beginner', 'Survival', 'Legend'];
-
 export function useSurvivalModulesForHome() {
   const { syncModules, isLoading, error } = useSurvivalSync();
+  const { isOffline } = useNetworkStatus();
   const [revision, setRevision] = useState(0);
 
   const refresh = useCallback(() => setRevision((n) => n + 1), []);
@@ -19,13 +20,21 @@ export function useSurvivalModulesForHome() {
   const modules = getMergedSurvivalModules();
   const grouped = groupSurvivalModulesByCategory(modules);
 
-  const sections = CATEGORY_ORDER.filter((c) => grouped[c].length > 0).map((category) => ({
-    category,
-    title: SECTION_TITLE[category],
-    modules: grouped[category],
-  }));
+  const sections = orderedCategoryKeys(grouped)
+    .filter((c) => grouped[c].length > 0)
+    .map((category) => ({
+      category,
+      title: sectionTitleForCategory(category),
+      modules: grouped[category],
+    }));
 
   const lastSyncedAt = SurvivalStore.getLastSyncedAt();
+
+  useEffect(() => {
+    if (isOffline) return;
+    const modules = getMergedSurvivalModules();
+    void cacheSurvivalLibraryRemoteAssets(modules);
+  }, [revision, isOffline]);
 
   return {
     sections,

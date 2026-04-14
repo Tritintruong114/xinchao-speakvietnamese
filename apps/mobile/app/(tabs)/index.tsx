@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation, useRouter } from 'expo-router';
-import { Flame, Banknote, Camera, Wifi, WifiOff } from 'lucide-react-native';
-import React, { useCallback, useLayoutEffect } from 'react';
+import { BookMarked, Banknote, Camera, Flame, Wifi } from 'lucide-react-native';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { ModuleCard } from '../../components/ModuleCard';
@@ -16,7 +16,9 @@ import { ThemedText } from '../../components/ThemedText';
 import { Colors } from '../../constants/Theme';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { useSurvivalModulesForHome } from '../../hooks/useSurvivalModulesForHome';
-import { resolveSurvivalCoverImage } from '../../lib/localModuleImages';
+import { cacheSurvivalLibraryRemoteAssets } from '../../lib/survivalLibraryCache';
+import { getMergedSurvivalModules } from '../../lib/survivalCatalog';
+import { prefetchSurvivalModuleRemoteImages, resolveSurvivalCoverImage } from '../../lib/localModuleImages';
 import { SurvivalStore } from '../../store/survivalStore';
 import { useAppStore } from '../../store/useAppStore';
 import { useToastStore } from '../../store/useToastStore';
@@ -47,7 +49,11 @@ export default function HomeScreen() {
       void (async () => {
         await SurvivalStore.ensureHydrated();
         if (!active) return;
-        await syncModules();
+        // Warm image cache from last sync before network round-trip so covers pop in faster.
+        void prefetchSurvivalModuleRemoteImages(getMergedSurvivalModules());
+        // Always refetch: LMS/dashboard updates image_url while the 5‑min sync throttle
+        // would otherwise keep stale AsyncStorage covers on the home grid.
+        await syncModules({ force: true });
         if (active) refresh();
       })();
       return () => {
@@ -60,6 +66,15 @@ export default function HomeScreen() {
   /** Skeleton only when online sync would leave grid empty (no bundle/cache yet). */
   const showOnlineSkeleton = isLoading && !isOffline && moduleCount === 0;
   const showEmptyOffline = isOffline && moduleCount === 0;
+
+  const prevOfflineRef = useRef(isOffline);
+  useEffect(() => {
+    const wasOffline = prevOfflineRef.current;
+    prevOfflineRef.current = isOffline;
+    if (wasOffline && !isOffline && moduleCount > 0) {
+      void cacheSurvivalLibraryRemoteAssets(getMergedSurvivalModules());
+    }
+  }, [isOffline, moduleCount]);
 
   const retryNetworkAndSync = useCallback(async () => {
     await refreshNet();
@@ -84,8 +99,8 @@ export default function HomeScreen() {
       ),
       headerRight: () => (
         <StatusBadge
-          label={isOffline ? 'OFFLINE' : 'ONLINE'}
-          icon={isOffline ? WifiOff : Wifi}
+          label={isOffline ? 'LIBRARY' : 'ONLINE'}
+          icon={isOffline ? BookMarked : Wifi}
           backgroundColor={isOffline ? Colors.brandBlue : Colors.brandMint}
           iconFillColor={isOffline ? Colors.white : Colors.brandPrimary}
           textColor={isOffline ? Colors.white : Colors.black}

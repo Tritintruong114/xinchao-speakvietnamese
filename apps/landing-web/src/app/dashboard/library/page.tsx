@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { loadSurvivalModules } from '../data';
+import { loadSurvivalModuleCategories, loadSurvivalModules, sortSurvivalModulesForLibrary } from '../data';
 import { LibrarySectionClient } from './LibrarySectionClient';
 
 function LibrarySectionFallback() {
@@ -14,11 +14,24 @@ function LibrarySectionFallback() {
 }
 
 export default async function LibraryPage() {
-  const result = await loadSurvivalModules();
+  const [modulesResult, categoriesResult] = await Promise.all([
+    loadSurvivalModules(),
+    loadSurvivalModuleCategories(),
+  ]);
+
+  const dbError = modulesResult.error ?? categoriesResult.error;
+  const categoryNames = categoriesResult.rows.map((c) => c.name);
+  const categoryOptions =
+    categoryNames.length > 0 ? categoryNames : ['Beginner', 'Survival', 'Legend'];
+  const sortedModules = sortSurvivalModulesForLibrary(modulesResult.rows, categoriesResult.rows);
 
   return (
     <Suspense fallback={<LibrarySectionFallback />}>
-      <LibrarySectionClient dbError={result.error} modules={result.rows} />
+      <LibrarySectionClient
+        dbError={dbError}
+        modules={sortedModules}
+        categoryOptions={categoryOptions}
+      />
     </Suspense>
   );
 }

@@ -13,6 +13,12 @@ export const AIConfig = {
   DEFAULT_GEMINI_MODEL: 'gemini-3.1-flash-lite-preview',
 
   /**
+   * Native image generation (Nano Banana) for dashboard module covers — do not use for text JSON modules.
+   * @see https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash-image
+   */
+  GEMINI_IMAGE_MODEL: 'gemini-2.5-flash-image',
+
+  /**
    * Base URL for Google Generative AI API
    */
   GEMINI_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta',

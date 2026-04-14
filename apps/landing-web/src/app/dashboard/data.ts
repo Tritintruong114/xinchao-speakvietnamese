@@ -15,6 +15,28 @@ import {
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import type { ContactRow, WaitlistRow } from './types';
 
+export const SURVIVAL_MODULE_CATEGORIES_TABLE = 'survival_module_categories' as const;
+
+export type SurvivalModuleCategoryRecord = {
+  id: string;
+  name: string;
+  sort_order: number;
+};
+
+/** Order modules for library UI: category order first, then `sort_order`. Unknown categories sort last. */
+export function sortSurvivalModulesForLibrary(
+  modules: SurvivalModule[],
+  categories: SurvivalModuleCategoryRecord[],
+): SurvivalModule[] {
+  const rank = new Map(categories.map((c) => [c.name, c.sort_order] as const));
+  return [...modules].sort((a, b) => {
+    const ar = rank.get(a.category) ?? 99999;
+    const br = rank.get(b.category) ?? 99999;
+    if (ar !== br) return ar - br;
+    return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+  });
+}
+
 const SAVED_PHRASES_MIGRATION_HINT =
   'Bảng saved_phrases chưa có trên project Supabase. Chạy file supabase/migrations/20260410120000_saved_phrases.sql trong SQL Editor (hoặc supabase db push sau khi link project), rồi tải lại trang.';
 
@@ -100,6 +122,178 @@ export async function deleteSurvivalModuleById(id: string): Promise<{ error: str
   if (!admin) return { error: 'Database is not configured.' };
   const { error } = await admin.from(SURVIVAL_MODULES_TABLE).delete().eq('id', id);
   if (error) return { error: error.message };
+  return { error: null };
+}
+
+/** Partial update for cover URL after Storage upload (does not touch steps JSON). */
+export async function updateSurvivalModuleImageUrl(
+  id: string,
+  image_url: string,
+): Promise<{ rowsUpdated: number; error: string | null }> {
+  const admin = getSupabaseAdmin();
+  if (!admin) return { rowsUpdated: 0, error: 'Database is not configured.' };
+
+  const { data, error } = await admin
+    .from(SURVIVAL_MODULES_TABLE)
+    .update({ image_url })
+    .eq('id', id)
+    .select('id');
+
+  if (error) return { rowsUpdated: 0, error: error.message };
+  return { rowsUpdated: Array.isArray(data) ? data.length : 0, error: null };
+}
+
+/** Sets `sort_order` to each index (0-based) for the given id list — library table order. */
+export async function setSurvivalModulesSortOrder(orderedIds: string[]): Promise<{ error: string | null }> {
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const updates = orderedIds.map((id, i) =>
+    admin.from(SURVIVAL_MODULES_TABLE).update({ sort_order: i }).eq('id', id),
+  );
+  const results = await Promise.all(updates);
+  for (const r of results) {
+    if (r.error) return { error: r.error.message };
+  }
+  return { error: null };
+}
+
+export async function patchSurvivalModuleCategory(
+  id: string,
+  category: string,
+): Promise<{ error: string | null }> {
+  const trimmed = category.trim();
+  if (!trimmed) return { error: 'Invalid category' };
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const { data: exists, error: qErr } = await admin
+    .from(SURVIVAL_MODULE_CATEGORIES_TABLE)
+    .select('name')
+    .eq('name', trimmed)
+    .maybeSingle();
+  if (qErr) return { error: qErr.message };
+  if (!exists) return { error: 'Unknown category' };
+
+  const { error } = await admin.from(SURVIVAL_MODULES_TABLE).update({ category: trimmed }).eq('id', id);
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+export async function loadSurvivalModuleCategories(): Promise<{
+  rows: SurvivalModuleCategoryRecord[];
+  error: string | null;
+}> {
+  const admin = getSupabaseAdmin();
+  if (!admin) {
+    return { rows: [], error: 'Database is not configured.' };
+  }
+
+  const { data, error } = await admin
+    .from(SURVIVAL_MODULE_CATEGORIES_TABLE)
+    .select('id, name, sort_order')
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('[dashboard survival categories]', error.message);
+    return { rows: [], error: 'Could not load categories.' };
+  }
+
+  const rows = (data ?? []) as SurvivalModuleCategoryRecord[];
+  return { rows, error: null };
+}
+
+export async function createSurvivalModuleCategory(name: string): Promise<{ error: string | null }> {
+  const label = name.trim();
+  if (!label) return { error: 'Name is required.' };
+  if (label.length > 120) return { error: 'Name is too long.' };
+
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const { data: maxRow } = await admin
+    .from(SURVIVAL_MODULE_CATEGORIES_TABLE)
+    .select('sort_order')
+    .order('sort_order', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const nextOrder = (typeof maxRow?.sort_order === 'number' ? maxRow.sort_order : -1) + 1;
+  const { error } = await admin.from(SURVIVAL_MODULE_CATEGORIES_TABLE).insert({
+    name: label,
+    sort_order: nextOrder,
+  });
+  if (error) {
+    if (/duplicate key|unique/i.test(error.message)) return { error: 'That category name already exists.' };
+    return { error: error.message };
+  }
+  return { error: null };
+}
+
+export async function renameSurvivalModuleCategory(
+  id: string,
+  newName: string,
+): Promise<{ error: string | null }> {
+  const label = newName.trim();
+  if (!label) return { error: 'Name is required.' };
+  if (label.length > 120) return { error: 'Name is too long.' };
+
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const { error } = await admin.from(SURVIVAL_MODULE_CATEGORIES_TABLE).update({ name: label }).eq('id', id);
+  if (error) {
+    if (/duplicate key|unique/i.test(error.message)) return { error: 'That category name already exists.' };
+    return { error: error.message };
+  }
+  return { error: null };
+}
+
+export async function deleteSurvivalModuleCategory(id: string): Promise<{ error: string | null }> {
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const { data: row, error: loadErr } = await admin
+    .from(SURVIVAL_MODULE_CATEGORIES_TABLE)
+    .select('name')
+    .eq('id', id)
+    .maybeSingle();
+  if (loadErr) return { error: loadErr.message };
+  const catName = row && typeof row === 'object' && 'name' in row && typeof (row as { name: string }).name === 'string'
+    ? (row as { name: string }).name
+    : null;
+  if (!catName) return { error: 'Category not found.' };
+
+  const { count, error: countErr } = await admin
+    .from(SURVIVAL_MODULES_TABLE)
+    .select('*', { count: 'exact', head: true })
+    .eq('category', catName);
+  if (countErr) return { error: countErr.message };
+  if ((count ?? 0) > 0) {
+    return { error: 'Move or delete modules that use this category first.' };
+  }
+
+  const { error } = await admin.from(SURVIVAL_MODULE_CATEGORIES_TABLE).delete().eq('id', id);
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+export async function setSurvivalModuleCategoriesSortOrder(
+  orderedIds: string[],
+): Promise<{ error: string | null }> {
+  const admin = getSupabaseAdmin();
+  if (!admin) return { error: 'Database is not configured.' };
+
+  const ids = orderedIds.map((x) => x.trim()).filter(Boolean);
+  if (ids.length === 0) return { error: null };
+
+  const updates = ids.map((rowId, i) =>
+    admin.from(SURVIVAL_MODULE_CATEGORIES_TABLE).update({ sort_order: i }).eq('id', rowId),
+  );
+  const results = await Promise.all(updates);
+  for (const r of results) {
+    if (r.error) return { error: r.error.message };
+  }
   return { error: null };
 }
 

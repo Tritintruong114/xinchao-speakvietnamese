@@ -1,7 +1,11 @@
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const SETTING_ELEVENLABS = 'elevenlabs_api_key';
+/** Optional ElevenLabs voice id for dashboard TTS (v1/text-to-speech/:voice_id). */
+export const SETTING_ELEVENLABS_VOICE = 'elevenlabs_voice_id';
 export const SETTING_GEMINI = 'gemini_api_key';
+/** Optional extra system instructions for Library → Generate module (Gemini). */
+export const SETTING_AI_MODULE_SYSTEM_PROMPT = 'ai_module_system_prompt';
 
 export async function getDashboardSetting(key: string): Promise<string | null> {
   const admin = getSupabaseAdmin();

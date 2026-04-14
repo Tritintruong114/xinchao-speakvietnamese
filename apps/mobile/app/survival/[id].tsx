@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { FlashcardItem } from '../../components/FlashcardItem';
 import { ThemedButton } from '../../components/ThemedButton';
@@ -15,6 +15,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAudio } from '../../hooks/useAudio';
 import { SURVIVAL_MODULES } from '../../constants/SurvivalData';
 import { BorderRadius, Colors, Shadow, Stroke } from '../../constants/Theme';
+import {
+  prefetchSurvivalModuleOpenImages,
+  resolveSurvivalTeachingImage,
+} from '../../lib/localModuleImages';
 import { SurvivalStore } from '../../store/survivalStore';
 
 const { width } = Dimensions.get('window');
@@ -32,6 +36,11 @@ export default function SurvivalScreen() {
   const module = resolveSurvivalModule(id);
   const { playSound } = useAudio();
   const [stepIndex, setStepIndex] = useState(0);
+
+  useEffect(() => {
+    if (!module) return;
+    void prefetchSurvivalModuleOpenImages(module);
+  }, [module?.id]);
 
   if (!module) {
     return (
@@ -126,15 +135,18 @@ export default function SurvivalScreen() {
         );
       case 'teaching':
         return (
-          <ScrollView 
+          <ScrollView
             style={styles.scrollView}
-            contentContainerStyle={[styles.scrollContent, { paddingBottom: 100, justifyContent: 'center' }]}
+            contentContainerStyle={[styles.scrollContent, { paddingBottom: 100 }]}
             showsVerticalScrollIndicator={false}
           >
             <SurvivalTeaching
               title={currentStep.title}
               content={currentStep.content || ''}
               visualHighlight={currentStep.visualHighlight}
+              imageSource={resolveSurvivalTeachingImage(module, currentStep)}
+              heroResetKey={`${module.id}-${currentStep.id}-${stepIndex}`}
+              audioUri={currentStep.audioUri}
             />
           </ScrollView>
         );

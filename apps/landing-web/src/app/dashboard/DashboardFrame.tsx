@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, MessageCircle, Settings, UserPlus, WifiOff } from 'lucide-react';
+import { BookOpen, MessageCircle, Settings, Tag, UserPlus, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -18,6 +18,7 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
   const isWaitlist = pathname === '/dashboard' || pathname === '/dashboard/';
   const isContact = segment === 'contact';
   const isLibrary = pathname.startsWith('/dashboard/library');
+  const isCategories = pathname.startsWith('/dashboard/categories');
   const isOffline = pathname.startsWith('/dashboard/offline');
   const isSettings = pathname.startsWith('/dashboard/settings');
 
@@ -58,6 +59,16 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
             className={navButtonClass(isLibrary)}
           >
             <BookOpen className="h-6 w-6 text-text-main pointer-events-none" strokeWidth={2.5} />
+          </Link>
+          <Link
+            href="/dashboard/categories"
+            prefetch
+            title="Categories"
+            aria-label="Survival module categories"
+            aria-current={isCategories ? 'page' : undefined}
+            className={navButtonClass(isCategories)}
+          >
+            <Tag className="h-6 w-6 text-text-main pointer-events-none" strokeWidth={2.5} />
           </Link>
           <Link
             href="/dashboard/offline"

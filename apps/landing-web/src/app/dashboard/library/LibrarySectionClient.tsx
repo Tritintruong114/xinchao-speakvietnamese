@@ -19,9 +19,10 @@ function panelTitle(state: PanelState): string {
 type Props = {
   dbError: string | null;
   modules: SurvivalModule[];
+  categoryOptions: string[];
 };
 
-export function LibrarySectionClient({ dbError, modules }: Props) {
+export function LibrarySectionClient({ dbError, modules, categoryOptions }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -65,7 +66,12 @@ export function LibrarySectionClient({ dbError, modules }: Props) {
     <div className="flex w-full flex-col md:h-[calc(100dvh-5rem)] md:min-h-[22rem] md:flex-row md:overflow-hidden md:items-stretch">
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto md:pr-3">
         {dbError ? <DbErrorBanner message={dbError} /> : null}
-        <SurvivalModulesPanel modules={modules} onNew={openCreate} onEdit={openEdit} />
+        <SurvivalModulesPanel
+          modules={modules}
+          categoryOptions={categoryOptions}
+          onNew={openCreate}
+          onEdit={openEdit}
+        />
       </div>
 
       <DashboardSlidePanel
@@ -79,6 +85,7 @@ export function LibrarySectionClient({ dbError, modules }: Props) {
             mode="create"
             initial={null}
             layout="panel"
+            categoryOptions={categoryOptions}
             onSaved={closePanel}
             onDeleted={closePanel}
           />
@@ -88,6 +95,7 @@ export function LibrarySectionClient({ dbError, modules }: Props) {
             mode="edit"
             initial={panel.module}
             layout="panel"
+            categoryOptions={categoryOptions}
             onSaved={closePanel}
             onDeleted={closePanel}
           />

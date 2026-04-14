@@ -30,10 +30,10 @@ const settingsItems: {
   isLast?: boolean;
 }[] = [
   { key: 'restore', title: 'Restore Purchases', color: Colors.black },
-  { key: 'privacy', title: 'Privacy Policy', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/privacy' },
-  { key: 'terms', title: 'Terms & Conditions', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/terms' },
-  { key: 'cookies', title: 'Cookie Policy', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/cookie-policy' },
-  { key: 'support', title: 'Contact Support', color: Colors.black, url: 'https://xinchao.tuhocproduct.com/contact' },
+  { key: 'privacy', title: 'Privacy Policy', color: Colors.black, url: 'https://www.xinchao.app/privacy' },
+  { key: 'terms', title: 'Terms & Conditions', color: Colors.black, url: 'https://www.xinchao.app/terms' },
+  { key: 'cookies', title: 'Cookie Policy', color: Colors.black, url: 'https://www.xinchao.app/cookie-policy' },
+  { key: 'support', title: 'Contact Support', color: Colors.black, url: 'https://www.xinchao.app/contact' },
   { key: 'delete', title: 'Delete Account', color: Colors.brandPrimary, isLast: true },
 ];
 

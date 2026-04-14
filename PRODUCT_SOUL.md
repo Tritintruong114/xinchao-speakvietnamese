@@ -1,5 +1,5 @@
 # 🇻🇳 PRODUCT SOUL: SURVIVAL VIETNAMESE
-**Document Status:** Approved | **Version:** 1.0 
+**Document Status:** Approved | **Version:** 1.1 *(cập nhật: hiện trạng sản ph��m chưa có offline — không tuyên bố tính năng chưa ship)*  
 **Core Theme:** "The Traveler's Lifebuoy" (Phao cứu sinh của du khách)
 
 ---

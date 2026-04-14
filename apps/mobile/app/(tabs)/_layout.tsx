@@ -34,8 +34,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="pocket"
         options={{
-          title: 'OFFLINE',
-          headerTitle: 'SURVIVAL BAG',
+          title: 'LIBRARY',
+          headerShown: false,
         }}
       />
       <Tabs.Screen

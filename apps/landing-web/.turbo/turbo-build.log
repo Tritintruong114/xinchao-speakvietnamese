@@ -1,31 +1,54 @@
 
-
 > @xinchao/landing-web@0.1.0 build /Users/truongtritin/Github/xinchao-speak-vietnamese/apps/landing-web
 > next build
 
-   [1m[38;2;173;127;168m▲ Next.js 15.1.3[39m[22m
+   ▲ Next.js 15.1.3
+   - Environments: .env
 
- [37m[1m [22m[39m Creating an optimized production build ...
-(node:91748) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/truongtritin/Github/xinchao-speak-vietnamese/packages/config-tailwind/tailwind-preset.ts is not specified and it doesn't parse as CommonJS.
-Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
-To eliminate this warning, add "type": "module" to /Users/truongtritin/Github/xinchao-speak-vietnamese/packages/config-tailwind/package.json.
-(Use `node --trace-warnings ...` to show where the warning was created)
- [32m[1m✓[22m[39m Compiled successfully
-[?25l [37m[1m [22m[39m Linting and checking validity of types  [36m.[39m[2K[1G[1A[2K[1G [37m[1m [22m[39m Linting and checking validity of types  [36m..[39m[2K[1G[1A[2K[1G [37m[1m [22m[39m Linting and checking validity of types  [36m...[39m[2K[1G[1A[2K[1G [37m[1m [22m[39m Linting and checking validity of types  [36m.[39m[2K[1G[1A[2K[1G [37m[1m [22m[39m Linting and checking validity of types  [36m..[39m[2K[1G[1A[2K[1G [37m[1m [22m[39m Linting and checking validity of types  [36m...[39m[2K[1G[1A[2K[1G[?25h [37m[1m [22m[39m Linting and checking validity of types     [32m[1m✓[22m[39m Linting and checking validity of types 
-[?25l [37m[1m [22m[39m Collecting page data  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m..[39m[2K[1G[?25h [37m[1m [22m[39m Collecting page data     [32m[1m✓[22m[39m Collecting page data 
-[?25l [37m[1m [22m[39m Generating static pages (0/13)  [36m[    ][39m[2K[1G[1A[2K[1G[?25h[TypeError: Cannot read properties of null (reading 'useContext')]
-Error occurred prerendering page "/500". Read more: https://nextjs.org/docs/messages/prerender-error
-TypeError: Cannot read properties of null (reading 'useContext')
-    at exports.useContext (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/styled-jsx/node_modules/react/cjs/react.production.js:488:33)
-    at StyleRegistry (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/styled-jsx/dist/index/index.js:450:30)
-    at renderWithHooks (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4189:18)
-    at renderElement (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4327:14)
-    at retryNode (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4871:16)
-    at renderNodeDestructive (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4689:7)
-    at renderElement (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4623:11)
-    at retryNode (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4871:16)
-    at renderNodeDestructive (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4689:7)
-    at renderElement (/Users/truongtritin/Github/xinchao-speak-vietnamese/node_modules/next/node_modules/react-dom/cjs/react-dom-server.edge.production.js:4623:11)
-Export encountered an error on /_error: /500, exiting the build.
- [31m[1m⨯[22m[39m Static worker exited with code: 1 and signal: null
-[?25h[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/18) ...
+   Generating static pages (4/18) 
+   Generating static pages (8/18) 
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "https://xinchao-app.com". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+   Generating static pages (13/18) 
+ ✓ Generating static pages (18/18)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    4.53 kB         126 kB
+├ ○ /_not-found                          979 B           106 kB
+├ ○ /about                               2.19 kB         119 kB
+├ ƒ /api/contact                         139 B           105 kB
+├ ƒ /api/waitlist                        139 B           105 kB
+├ ○ /contact                             4.2 kB          117 kB
+├ ○ /cookie-policy                       2.19 kB         115 kB
+├ ƒ /dashboard                           2.19 kB         115 kB
+├ ƒ /dashboard/contact                   2.19 kB         115 kB
+├ ƒ /dashboard/library                   8.03 kB         129 kB
+├ ƒ /dashboard/login                     2.19 kB         119 kB
+├ ƒ /dashboard/offline                   4.1 kB          125 kB
+├ ƒ /dashboard/settings                  2.19 kB         115 kB
+├ ○ /opengraph-image                     0 B                0 B
+├ ○ /pricing                             2.19 kB         115 kB
+├ ○ /privacy                             2.19 kB         115 kB
+├ ○ /robots.txt                          0 B                0 B
+├ ○ /sitemap.xml                         0 B                0 B
+├ ○ /survival                            2.19 kB         119 kB
+├ ○ /team-member                         2.19 kB         124 kB
+├ ○ /terms                               2.19 kB         115 kB
+└ ○ /twitter-image                       0 B                0 B
++ First Load JS shared by all            105 kB
+  ├ chunks/323-c6409f8bd83c7def.js       50.4 kB
+  ├ chunks/f0a6c2c9-f180323f3b49f49d.js  52.9 kB
+  └ other shared chunks (total)          1.91 kB
+
+
+ƒ Middleware                             32.4 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

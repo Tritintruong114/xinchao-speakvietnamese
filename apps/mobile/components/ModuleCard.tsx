@@ -1,5 +1,6 @@
+import { Image } from 'expo-image';
 import React from 'react';
-import { Dimensions, Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { Colors, Stroke, Shadow, BorderRadius } from '../constants/Theme';
 
@@ -23,10 +24,13 @@ export function ModuleCard({ title, image, backgroundColor, onPress }: ModuleCar
       {/* Card layer */}
       <View style={[styles.card, { backgroundColor }]}>
         <View style={styles.imageContainer}>
-          <Image 
-            source={image} 
+          <Image
+            source={image}
             style={styles.image}
-            resizeMode="cover"
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            priority="high"
+            transition={120}
           />
         </View>
         <View style={styles.textContainer}>
@@ -72,9 +76,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  /** Fixed height for exactly 2 lines (lineHeight 18) + padding — card height does not depend on title length or module metadata (e.g. step count). */
   textContainer: {
-    padding: 12,
-    minHeight: 54,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    height: 60,
     justifyContent: 'center',
   },
   title: {

@@ -12,7 +12,7 @@ export type SurvivalCategory = SurvivalModule['category'];
 export interface SurvivalModuleRow {
   id: string;
   title: string;
-  category: SurvivalCategory | null;
+  category: string | null;
   image_url: string | null;
   sort_order: number | null;
   steps: unknown;
@@ -24,7 +24,7 @@ export interface SurvivalModuleRow {
 export type SurvivalModuleInput = {
   id: string;
   title: string;
-  category: SurvivalCategory;
+  category: string;
   sort_order: number;
   image_url: string | null;
   steps: SurvivalStep[];
@@ -44,8 +44,8 @@ export function parseSurvivalSteps(raw: unknown): SurvivalStep[] {
  * Bundled `image` is absent; consumers use image_url or local fallbacks.
  */
 export function rowToSurvivalModule(row: SurvivalModuleRow): SurvivalModule {
-  const category = row.category;
-  if (category !== 'Beginner' && category !== 'Survival' && category !== 'Legend') {
+  const category = row.category?.trim();
+  if (!category) {
     throw new Error(`Invalid survival_modules.category for id=${row.id}`);
   }
   const steps = parseSurvivalSteps(row.steps);
@@ -65,19 +65,20 @@ export function rowToSurvivalModule(row: SurvivalModuleRow): SurvivalModule {
 export function survivalModuleInputToRow(input: SurvivalModuleInput): Record<string, unknown> {
   if (!input.id?.trim()) throw new Error('id is required');
   if (!input.title?.trim()) throw new Error('title is required');
-  const { category } = input;
-  if (category !== 'Beginner' && category !== 'Survival' && category !== 'Legend') {
+  const category = input.category?.trim();
+  if (!category) {
     throw new Error('Invalid category');
   }
   parseSurvivalSteps(input.steps);
+  // Do not send updated_at: some deployments lack this column (older setup-db / unmigrated DBs).
+  // When the column exists, prefer a DB trigger to set it on UPDATE — see supabase migrations.
   return {
     id: input.id.trim(),
     title: input.title.trim(),
-    category,
+    category: category,
     image_url: input.image_url,
     sort_order: input.sort_order ?? 0,
     steps: input.steps,
-    updated_at: new Date().toISOString(),
   };
 }
 

@@ -1,7 +1,12 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image } from 'expo-image';
+import type { ImageSourcePropType } from 'react-native';
+import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
+import { Volume2 } from 'lucide-react-native';
 import { Colors, BorderRadius, Stroke } from '../../constants/Theme';
+import { SURVIVAL_IMAGE_FALLBACK } from '../../lib/localModuleImages';
+import { useAudio } from '../../hooks/useAudio';
 import { ThemedText } from '../ThemedText';
 
 const BOLD_SEGMENT = /\*\*(.+?)\*\*/g;
@@ -36,13 +41,36 @@ interface SurvivalTeachingProps {
   title: string;
   content: string;
   visualHighlight?: string;
+  /** Resolved URI or bundled asset; typically module cover or step `image_url`. */
+  imageSource: ImageSourcePropType;
+  /** Bumps when the step changes so a failed hero can retry the new source. */
+  heroResetKey?: string;
+  /** Step narration (https, or bundled `require` id) — same shape as `voice_practice`. */
+  audioUri?: string | number;
 }
 
 export const SurvivalTeaching = ({
   title,
   content,
   visualHighlight,
+  imageSource,
+  heroResetKey,
+  audioUri,
 }: SurvivalTeachingProps) => {
+  const { width: windowWidth } = useWindowDimensions();
+  /** Screen minus outer padding (24×2) and teachCard padding (24×2). */
+  const heroW = Math.max(1, windowWidth - 96);
+  const heroH = heroW * (9 / 16);
+
+  const { playSound } = useAudio();
+  const [heroFailed, setHeroFailed] = useState(false);
+  useEffect(() => {
+    setHeroFailed(false);
+  }, [heroResetKey]);
+
+  const heroSource = heroFailed ? SURVIVAL_IMAGE_FALLBACK : imageSource;
+  const canPlay =
+    audioUri !== undefined && audioUri !== null && String(audioUri).length > 0;
   const renderRichContent = () => {
     const lines = content.split('\n');
     return (
@@ -96,29 +124,56 @@ export const SurvivalTeaching = ({
 
   return (
     <View style={styles.container}>
-      <Animated.View entering={FadeIn.delay(300)} style={styles.teachCard}>
-        <ThemedText type="h1" style={styles.titleText}>
-          {title}
-        </ThemedText>
+      <View style={styles.teachCard}>
+        {/* Hero must not sit behind FadeIn.delay — same URI as home grid but delay made it feel slow to load */}
+        <View style={[styles.heroImageWrap, { width: heroW, height: heroH }]}>
+          <Image
+            source={heroSource}
+            style={{ width: heroW, height: heroH }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            priority="high"
+            transition={150}
+            onError={() => setHeroFailed(true)}
+          />
+        </View>
+        <Animated.View entering={FadeIn.duration(220)}>
+          <View style={styles.titleRow}>
+            <ThemedText type="h1" style={styles.titleText}>
+              {title}
+            </ThemedText>
+            {canPlay && (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Play narration"
+                activeOpacity={0.7}
+                style={styles.speakBtn}
+                onPress={() => playSound(audioUri)}
+              >
+                <Volume2 size={22} color={Colors.black} strokeWidth={2.5} />
+              </TouchableOpacity>
+            )}
+          </View>
 
-        {renderRichContent()}
+          {renderRichContent()}
 
-        {visualHighlight && (
-          <Animated.View entering={SlideInRight.delay(600)} style={styles.visualBox}>
-            <ThemedText style={styles.visualLabel}>REMEMBER THIS:</ThemedText>
-            {renderHighlight(visualHighlight)}
-          </Animated.View>
-        )}
-      </Animated.View>
+          {visualHighlight && (
+            <Animated.View entering={SlideInRight.duration(280)} style={styles.visualBox}>
+              <ThemedText style={styles.visualLabel}>REMEMBER THIS:</ThemedText>
+              {renderHighlight(visualHighlight)}
+            </Animated.View>
+          )}
+        </Animated.View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  /** No flex:1 here — inside ScrollView, flex children often get 0 height and the hero Image never lays out. */
   container: {
     padding: 24,
-    flex: 1,
-    justifyContent: 'center',
+    width: '100%',
   },
   teachCard: {
     backgroundColor: Colors.white,
@@ -143,11 +198,38 @@ const styles = StyleSheet.create({
     color: Colors.brandPrimary,
     letterSpacing: 2,
   },
+  heroImageWrap: {
+    alignSelf: 'center',
+    marginBottom: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.black,
+    overflow: 'hidden',
+    backgroundColor: '#F5F5F5',
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    marginBottom: 16,
+  },
   titleText: {
+    flex: 1,
     fontSize: 28,
     lineHeight: 34,
-    marginBottom: 16,
     color: Colors.black,
+  },
+  speakBtn: {
+    marginTop: 2,
+    backgroundColor: Colors.brandSecondary,
+    borderWidth: 2,
+    borderColor: Colors.black,
+    borderRadius: 8,
+    padding: 8,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   richContent: {
     marginBottom: 32,

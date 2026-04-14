@@ -1,9 +1,13 @@
 'use client';
 
-import type { MascotExpression, SurvivalStep, SurvivalStepType } from '@xinchao/shared';
+import type { MascotExpression, SurvivalCategory, SurvivalStep, SurvivalStepType } from '@xinchao/shared';
 import { BrutalButton, BrutalCard } from '@xinchao/ui-web';
 import { ChevronDown, ChevronUp, Plus, RefreshCw, Trash2, Upload, X } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
+import {
+  generateTeachingStepImageAction,
+  regenerateTeachingStepAudioAction,
+} from '../library/ai-actions';
 import { uploadSurvivalAudioAction } from '../library/actions';
 import { DialoguesEditor } from './DialoguesEditor';
 
@@ -220,6 +224,7 @@ function StepCard({
   onRemove,
   onMove,
   uploadPrefix,
+  moduleCategory,
   onSaveModule,
   expanded,
   onExpandChange,
@@ -232,12 +237,60 @@ function StepCard({
   onRemove: () => void;
   onMove: (dir: -1 | 1) => void;
   uploadPrefix: string;
+  moduleCategory: SurvivalCategory;
   onSaveModule: () => Promise<void>;
   expanded: boolean;
   onExpandChange: (expanded: boolean) => void;
 }) {
   const type = step.type;
   const voc = step.vocabulary ?? [];
+  const [teachingImgBusy, setTeachingImgBusy] = useState(false);
+  const [teachingImgErr, setTeachingImgErr] = useState<string | null>(null);
+  const [teachingAudioBusy, setTeachingAudioBusy] = useState(false);
+  const [teachingAudioErr, setTeachingAudioErr] = useState<string | null>(null);
+
+  const onRegenerateTeachingAudio = useCallback(async () => {
+    if (disabled || type !== 'teaching') return;
+    const text = (step.content ?? '').trim();
+    if (!text) return;
+    setTeachingAudioErr(null);
+    setTeachingAudioBusy(true);
+    try {
+      const res = await regenerateTeachingStepAudioAction({
+        moduleId: uploadPrefix,
+        text,
+      });
+      if (res.ok === false) {
+        setTeachingAudioErr(res.error);
+        return;
+      }
+      onPatch({ audioUri: res.audio_url });
+    } finally {
+      setTeachingAudioBusy(false);
+    }
+  }, [disabled, onPatch, step.content, type, uploadPrefix]);
+
+  const onGenerateTeachingImage = useCallback(async () => {
+    if (disabled) return;
+    setTeachingImgErr(null);
+    setTeachingImgBusy(true);
+    try {
+      const res = await generateTeachingStepImageAction({
+        moduleId: uploadPrefix,
+        moduleCategory,
+        stepTitle: step.title,
+        teachingContent: step.content ?? '',
+        visualHighlight: step.visualHighlight,
+      });
+      if (res.ok === false) {
+        setTeachingImgErr(res.error);
+        return;
+      }
+      onPatch({ image_url: res.image_url });
+    } finally {
+      setTeachingImgBusy(false);
+    }
+  }, [disabled, moduleCategory, onPatch, step.content, step.title, step.visualHighlight, uploadPrefix]);
 
   const handleTypeChange = (t: SurvivalStepType) => {
     const patch: Partial<SurvivalStep> = { type: t };
@@ -397,12 +450,34 @@ function StepCard({
         type === 'voice_practice' ||
         type === 'roleplay' ||
         type === 'teaching') && (
-        <StepAudioField
-          value={step.audioUri}
-          onChange={(audioUri) => onPatch({ audioUri })}
-          disabled={disabled}
-          uploadPrefix={uploadPrefix}
-        />
+        <>
+          <StepAudioField
+            value={step.audioUri}
+            onChange={(audioUri) => onPatch({ audioUri })}
+            disabled={disabled}
+            uploadPrefix={uploadPrefix}
+          />
+          {type === 'teaching' && (
+            <div className="space-y-2">
+              <BrutalButton
+                type="button"
+                variant="secondary"
+                disabled={disabled || teachingAudioBusy || !(step.content ?? '').trim()}
+                onClick={() => void onRegenerateTeachingAudio()}
+              >
+                {teachingAudioBusy ? 'Regenerating audio…' : 'Regenerate audio from teaching content'}
+              </BrutalButton>
+              {teachingAudioErr ? (
+                <p className="text-xs font-bold text-red-600" role="alert">
+                  {teachingAudioErr}
+                </p>
+              ) : null}
+              <p className="text-[10px] font-semibold text-text-main/55">
+                ElevenLabs reads the teaching content field below. Save the module to persist the new URL.
+              </p>
+            </div>
+          )}
+        </>
       )}
 
       {type === 'teaching' && (
@@ -425,6 +500,51 @@ function StepCard({
               onChange={(e) => onPatch({ visualHighlight: e.target.value.trim() || undefined })}
             />
           </label>
+          <div className="space-y-2 border-2 border-dashed border-text-main/30 bg-brand-cream/40 p-3">
+            <span className="text-xs font-black uppercase text-text-main/70">Step image (mobile hero)</span>
+            <p className="text-xs font-semibold text-text-main/60">
+              Uses the same Gemini image pipeline as the module cover, but the scene brief is built from this step’s
+              title, teaching content, and visual highlight — matching how the app shows this screen.
+            </p>
+            <label className="block space-y-1">
+              <span className="text-xs font-black uppercase text-text-main/70">Image URL (optional)</span>
+              <input
+                className="w-full border-2 border-text-main bg-white px-3 py-2 font-semibold text-text-main"
+                disabled={disabled}
+                value={step.image_url ?? ''}
+                onChange={(e) => onPatch({ image_url: e.target.value.trim() || undefined })}
+                placeholder="https://… or generate below"
+              />
+            </label>
+            {step.image_url?.startsWith('https://') ? (
+              <div className="border-2 border-text-main/20 bg-white p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={step.image_url}
+                  alt=""
+                  className="max-h-40 w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            ) : null}
+            <BrutalButton
+              type="button"
+              variant="secondary"
+              disabled={
+                disabled ||
+                teachingImgBusy ||
+                (!step.title?.trim() && !(step.content ?? '').trim())
+              }
+              onClick={() => void onGenerateTeachingImage()}
+            >
+              {teachingImgBusy ? 'Generating step image…' : 'Generate image from teaching'}
+            </BrutalButton>
+            {teachingImgErr ? (
+              <p className="text-xs font-bold text-red-600" role="alert">
+                {teachingImgErr}
+              </p>
+            ) : null}
+          </div>
         </>
       )}
 
@@ -590,6 +710,8 @@ export interface ModuleStepsEditorProps {
   disabled?: boolean;
   /** Sanitized module id (or `draft`) — prefixes Storage objects for step audio uploads. */
   uploadPrefix: string;
+  /** Module category — used when generating teaching-step images. */
+  moduleCategory: SurvivalCategory;
   /** Persist full module with current form state; editor stays on this route. */
   onSaveModule: () => Promise<void>;
 }
@@ -599,7 +721,14 @@ function isStepExpanded(map: Record<string, boolean>, stepId: string): boolean {
   return map[stepId] !== false;
 }
 
-export function ModuleStepsEditor({ steps, onChange, disabled, uploadPrefix, onSaveModule }: ModuleStepsEditorProps) {
+export function ModuleStepsEditor({
+  steps,
+  onChange,
+  disabled,
+  uploadPrefix,
+  moduleCategory,
+  onSaveModule,
+}: ModuleStepsEditorProps) {
   const [expandedByStepId, setExpandedByStepId] = useState<Record<string, boolean>>({});
 
   const allExpanded =
@@ -692,6 +821,7 @@ export function ModuleStepsEditor({ steps, onChange, disabled, uploadPrefix, onS
             onRemove={() => remove(index)}
             onMove={(d) => move(index, d)}
             uploadPrefix={uploadPrefix}
+            moduleCategory={moduleCategory}
             onSaveModule={onSaveModule}
             expanded={isStepExpanded(expandedByStepId, step.id)}
             onExpandChange={(v) => setStepExpanded(step.id, v)}

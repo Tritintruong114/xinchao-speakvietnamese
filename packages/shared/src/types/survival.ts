@@ -46,6 +46,7 @@ export interface SurvivalStep {
   targetTranslation?: string;
   successFeedback?: string;
   dialogues?: Dialogue[];
+  /** Remote URL, bundled `require()`, or legacy phrase key — used by voice_practice & teaching narration */
   audioUri?: string;
   reward?: { xp: number; badge: string };
   // Quiz specific
@@ -58,12 +59,15 @@ export interface SurvivalStep {
   // Teaching specific
   content?: string;
   visualHighlight?: string;
+  /** Optional hero image for teaching steps; mobile falls back to module cover when absent */
+  image_url?: string | null;
 }
 
 export interface SurvivalModule {
   id: string;
   title: string;
-  category: 'Beginner' | 'Survival' | 'Legend';
+  /** Display label; must exist in `survival_module_categories` when loaded from DB */
+  category: string;
   /** Bundled asset (e.g. RN require); optional when loaded from DB */
   image?: any;
   /** Remote cover image from survival_modules.image_url */
